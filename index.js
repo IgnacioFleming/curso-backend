@@ -3,14 +3,6 @@ class ProductManager {
     this.products = [];
   }
   addProduct(title, description, price, thumbnail, code, stock) {
-    for (const product of this.products) {
-      if (product.code === code) {
-        console.log(
-          `El codigo del producto ${product.title} ya existe en la base, por favor corregir`
-        );
-        return;
-      }
-    }
     const newproduct = {
       title,
       description,
@@ -19,6 +11,15 @@ class ProductManager {
       code,
       stock,
     };
+
+    for (const product of this.products) {
+      if (product.code === code) {
+        console.log(
+          `El codigo del producto ${newproduct.title} ya existe en la base, por favor corregir`
+        );
+        return;
+      }
+    }
 
     newproduct.id =
       this.products.length === 0
@@ -49,6 +50,8 @@ const guitarrasElectricas = [
   22,
 ];
 
+//Creo producto con code repetido.
+
 const parlantes = [
   "Parlantes Profesionales",
   "Parlantes profesionales para instalar en complejos de recreamiento",
@@ -60,6 +63,7 @@ const parlantes = [
 
 PM1.addProduct(...discos);
 PM1.addProduct(...guitarrasElectricas);
+//Agrego el producto con code repetido para que salte la validacion.
 PM1.addProduct(...parlantes);
 
 console.log(PM1);

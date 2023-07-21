@@ -28,6 +28,10 @@ class ProductManager {
 
     this.products.push(newproduct);
   }
+
+  getProducts() {
+    return this.products;
+  }
 }
 
 const PM1 = new ProductManager();
@@ -66,4 +70,4 @@ PM1.addProduct(...guitarrasElectricas);
 //Agrego el producto con code repetido para que salte la validacion.
 PM1.addProduct(...parlantes);
 
-console.log(PM1);
+console.log(PM1.getProducts());

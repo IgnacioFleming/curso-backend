@@ -1,10 +1,13 @@
 //Desafío Clases con ECMAScript y ECMAScript avanzado
 
+const fs = require("fs");
+
 class ProductManager {
-  constructor() {
+  constructor(path) {
     this.products = [];
+    this.path = path;
   }
-  addProduct(title, description, price, thumbnail, code, stock) {
+  addProduct({ title, description, price, thumbnail, code, stock }) {
     const newproduct = {
       title,
       description,
@@ -27,47 +30,50 @@ class ProductManager {
       this.products.length === 0
         ? 1
         : this.products[this.products.length - 1].id + 1;
-
     this.products.push(newproduct);
+    this.writeNewProduct();
   }
 
-  getProducts() {
-    return this.products;
+  async writeNewProduct() {
+    fs.promises.writeFile(this.path, JSON.stringify(this.products));
   }
 
-  getProductById(productId) {
-    const productFound = this.products.find(
-      (element) => element.id === productId
-    );
-    return productFound || "Not Found";
+  async getProducts() {
+    const result = await fs.promises.readFile(this.path, "utf-8");
+    const resultArray = JSON.parse(result);
+    return resultArray;
+  }
+
+  async getProductById(productId) {
+    const arrayProducts = await fs.promises.readFile(this.path, "utf-8");
+    const arrayProductsParsed = await JSON.parse(arrayProducts);
+    // console.log(arrayProductsParsed);
+    // const productFound = arrayProductsParsed.find(
+    //   (element) => element.id === productId
+    // );
+    // return productFound || "Not Found";
   }
 }
 
 //Testing Entregable
 
-const PM1 = new ProductManager();
+const PM1 = new ProductManager("./productos.txt");
 
-console.log(PM1.getProducts());
+const product1 = {
+  title: "producto prueba",
+  description: "Este es un producto prueba",
+  price: 200,
+  thumbnail: "sin imagen",
+  code: "abc123",
+  stock: 25,
+};
 
-PM1.addProduct(
-  "producto prueba",
-  "Este es un producto prueba",
-  200,
-  "sin imagen",
-  "abc123",
-  25
-);
-
-console.log(PM1.getProducts());
-
-PM1.addProduct(
-  "producto prueba",
-  "Este es un producto prueba",
-  200,
-  "sin imagen",
-  "abc123",
-  25
-);
-
-console.log(PM1.getProductById(1));
-console.log(PM1.getProductById(2));
+PM1.addProduct(product1);
+const showProducts = async (instance) => {
+  console.log(await instance.getProducts());
+};
+const showProductX = async (instance, id) => {
+  console.log(await instance.getProductById(id));
+};
+// showProducts(PM1);
+showProductX(PM1, 1);

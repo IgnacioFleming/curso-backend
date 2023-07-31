@@ -61,7 +61,21 @@ class ProductManager {
     const productFound = arrayProductsParsed.find(
       (element) => element.id === productId
     );
-    const productFoundIndex = arrayProductsParsed.indexOf(productFound);
+    const index = arrayProductsParsed.findIndex((e) => e.id === productId);
+    this.products.splice(index, 1, { ...productFound, ...object });
+    await fs.promises.writeFile(this.path, JSON.stringify(this.products));
+  }
+
+  async deleteProduct(productId) {
+    const arrayProducts = await fs.promises.readFile(this.path, "utf-8");
+    const arrayProductsParsed = await JSON.parse(arrayProducts);
+    const productFound = arrayProductsParsed.find(
+      (element) => element.id === productId
+    );
+    const index = arrayProductsParsed.findIndex((e) => e.id === productId);
+    this.products.splice(index, 1);
+    console.log(this.products);
+    await fs.promises.writeFile(this.path, JSON.stringify(this.products));
   }
 }
 
@@ -85,4 +99,5 @@ const showProducts = async (instance) => {
 
 // showProducts(PM1);
 
-PM1.getProductById(1);
+// PM1.updateProduct(1, { price: 120, pepito: "keasee" });
+PM1.deleteProduct(1);

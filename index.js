@@ -1,4 +1,4 @@
-//Desafío Clases con ECMAScript y ECMAScript avanzado
+//Desafío Manejo de Archivos
 
 const fs = require("fs");
 
@@ -6,6 +6,7 @@ class ProductManager {
   constructor(path) {
     this.products = [];
     this.path = path;
+    fs.writeFileSync(this.path, JSON.stringify(this.products));
   }
   addProduct({ title, description, price, thumbnail, code, stock }) {
     const newproduct = {
@@ -31,73 +32,74 @@ class ProductManager {
         ? 1
         : this.products[this.products.length - 1].id + 1;
     this.products.push(newproduct);
-    this.writeNewProduct();
+    fs.writeFileSync(this.path, JSON.stringify(this.products));
   }
 
-  async writeNewProduct() {
-    fs.promises.writeFile(this.path, JSON.stringify(this.products));
-  }
-
-  async getProducts() {
-    const result = await fs.promises.readFile(this.path, "utf-8");
+  getProducts() {
+    const result = fs.readFileSync(this.path, "utf-8");
     const resultArray = JSON.parse(result);
-    return resultArray;
+    return console.log(resultArray);
   }
 
-  async getProductById(productId) {
-    const arrayProducts = await fs.promises.readFile(this.path, "utf-8");
-    const arrayProductsParsed = await JSON.parse(arrayProducts);
+  getProductById(productId) {
+    const arrayProducts = fs.readFileSync(this.path, "utf-8");
+    const arrayProductsParsed = JSON.parse(arrayProducts);
 
     const productFound = arrayProductsParsed.find(
       (element) => element.id === productId
     );
-    console.log(productFound) || "Not Found";
-    return productFound || "Not Found";
+    return console.log(productFound || "Not Found");
   }
 
-  async updateProduct(productId, object) {
-    const arrayProducts = await fs.promises.readFile(this.path, "utf-8");
-    const arrayProductsParsed = await JSON.parse(arrayProducts);
+  updateProduct(productId, object) {
+    const arrayProducts = fs.readFileSync(this.path, "utf-8");
+    const arrayProductsParsed = JSON.parse(arrayProducts);
     const productFound = arrayProductsParsed.find(
       (element) => element.id === productId
     );
     const index = arrayProductsParsed.findIndex((e) => e.id === productId);
     this.products.splice(index, 1, { ...productFound, ...object });
-    await fs.promises.writeFile(this.path, JSON.stringify(this.products));
+    fs.writeFileSync(this.path, JSON.stringify(this.products));
   }
 
-  async deleteProduct(productId) {
-    const arrayProducts = await fs.promises.readFile(this.path, "utf-8");
-    const arrayProductsParsed = await JSON.parse(arrayProducts);
-    const productFound = arrayProductsParsed.find(
-      (element) => element.id === productId
-    );
+  deleteProduct(productId) {
+    const arrayProducts = fs.readFileSync(this.path, "utf-8");
+    const arrayProductsParsed = JSON.parse(arrayProducts);
     const index = arrayProductsParsed.findIndex((e) => e.id === productId);
+    if (index === -1) {
+      return console.log("El id no correpsonde a un producto");
+    }
     this.products.splice(index, 1);
-    console.log(this.products);
-    await fs.promises.writeFile(this.path, JSON.stringify(this.products));
+    fs.writeFileSync(this.path, JSON.stringify(this.products));
   }
 }
 
 //Testing Entregable
 
+// Instancio la clase y se crea el archivo con un array vacio
 const PM1 = new ProductManager("./productos.txt");
-
-const product1 = {
+//Traemos por consola el array vacio del archivo
+PM1.getProducts();
+//Agrego un producto
+PM1.addProduct({
   title: "producto prueba",
-  description: "Este es un producto prueba",
+  description: "este es un producto prueba",
   price: 200,
   thumbnail: "sin imagen",
   code: "abc123",
   stock: 25,
-};
-
-PM1.addProduct(product1);
-const showProducts = async (instance) => {
-  console.log(await instance.getProducts());
-};
-
-// showProducts(PM1);
-
-// PM1.updateProduct(1, { price: 120, pepito: "keasee" });
+});
+//Traemos la info del archivo con el producto agregado
+PM1.getProducts();
+//Volvemos a traer el producto como objeto
+PM1.getProductById(1);
+//Testeamos probar con un id inexistente, devuelve Not Found
+PM1.getProductById(2);
+//Modificamos el producto sin cambiar su id
+PM1.updateProduct(1, { price: 500 });
+//Traemos el producto modificado
+PM1.getProducts();
+//Testeamos borrar un producto usando id inexistente con lo cual tira un error por consola.
+PM1.deleteProduct(2);
+//Borramos el producto existente.
 PM1.deleteProduct(1);

@@ -4,11 +4,24 @@ const fs = require("fs");
 
 class ProductManager {
   constructor(path) {
-    this.products = [];
     this.path = path;
-    fs.writeFileSync(this.path, JSON.stringify(this.products));
   }
-  addProduct({ title, description, price, thumbnail, code, stock }) {
+  async getProducts() {
+    
+    if(fs.existsSync(this.path)){
+      const result = await fs.promises.readFile(this.path, "utf-8");
+      const resultArray = JSON.parse(result);
+      console.log(resultArray)
+      return resultArray;
+    } else{
+      await fs.promises.writeFile(this.path, "[]")
+      console.log([])
+      return [];
+    }
+  }
+  async addProduct({ title, description, price, thumbnail, code, stock }) {
+    const products = await fs.promises.readFile(this.path, "utf-8");
+    const parsedProducts = JSON.parse(products)
     const newproduct = {
       title,
       description,
@@ -18,7 +31,7 @@ class ProductManager {
       stock,
     };
 
-    for (const product of this.products) {
+    for (const product of parsedProducts) {
       if (product.code === code) {
         console.log(
           `El codigo del producto ${newproduct.title} ya existe en la base, por favor corregir`
@@ -28,49 +41,52 @@ class ProductManager {
     }
 
     newproduct.id =
-      this.products.length === 0
+      parsedProducts.length === 0
         ? 1
-        : this.products[this.products.length - 1].id + 1;
-    this.products.push(newproduct);
-    fs.writeFileSync(this.path, JSON.stringify(this.products));
+        : parsedProducts[parsedProducts.length - 1].id + 1;
+    parsedProducts.push(newproduct);
+    await fs.promises.writeFile(this.path, JSON.stringify(parsedProducts));
   }
 
-  getProducts() {
-    const result = fs.readFileSync(this.path, "utf-8");
-    const resultArray = JSON.parse(result);
-    return console.log(resultArray);
-  }
 
-  getProductById(productId) {
-    const arrayProducts = fs.readFileSync(this.path, "utf-8");
-    const arrayProductsParsed = JSON.parse(arrayProducts);
+  async getProductById(productId) {
 
-    const productFound = arrayProductsParsed.find(
+    const products = await fs.promises.readFile(this.path, "utf-8");
+    const productsParsed = JSON.parse(products);
+
+    const productFound = productsParsed.find(
       (element) => element.id === productId
     );
-    return console.log(productFound || "Not Found");
+    console.log(productFound || "Not Found")
+    return productFound || "Not Found";
   }
 
-  updateProduct(productId, object) {
-    const arrayProducts = fs.readFileSync(this.path, "utf-8");
-    const arrayProductsParsed = JSON.parse(arrayProducts);
-    const productFound = arrayProductsParsed.find(
+  async updateProduct(productId, object) {
+    const products = await fs.promises.readFile(this.path, "utf-8");
+    const productsParsed = JSON.parse(products);
+    if(productsParsed.length === 0){
+      return;
+    }
+    const index = productsParsed.findIndex((e) => e.id === productId);
+    const productFound = productsParsed.find(
       (element) => element.id === productId
     );
-    const index = arrayProductsParsed.findIndex((e) => e.id === productId);
-    this.products.splice(index, 1, { ...productFound, ...object });
-    fs.writeFileSync(this.path, JSON.stringify(this.products));
+    productsParsed.splice(index ,1 ,{...productFound,...object});
+    await fs.promises.writeFile(this.path, JSON.stringify(productsParsed));
   }
 
-  deleteProduct(productId) {
-    const arrayProducts = fs.readFileSync(this.path, "utf-8");
-    const arrayProductsParsed = JSON.parse(arrayProducts);
-    const index = arrayProductsParsed.findIndex((e) => e.id === productId);
+  async deleteProduct(productId) {
+    const products = await fs.promises.readFile(this.path, "utf-8");
+    const productsParsed = JSON.parse(products);
+    console.log("estos son los productsParsed", productsParsed)
+    const index = productsParsed.findIndex((e) => e.id === productId);
+    console.log("este es el index", index)
     if (index === -1) {
       return console.log("El id no correpsonde a un producto");
     }
-    this.products.splice(index, 1);
-    fs.writeFileSync(this.path, JSON.stringify(this.products));
+    productsParsed.splice(index, 1);
+    console.log("este es el productParsed deleted", productsParsed)
+    await fs.promises.writeFile(this.path, JSON.stringify(productsParsed));
   }
 }
 
@@ -89,17 +105,17 @@ PM1.addProduct({
   code: "abc123",
   stock: 25,
 });
-//Traemos la info del archivo con el producto agregado
+// //Traemos la info del archivo con el producto agregado
 PM1.getProducts();
-//Volvemos a traer el producto como objeto
+// //Volvemos a traer el producto como objeto
 PM1.getProductById(1);
-//Testeamos probar con un id inexistente, devuelve Not Found
+// // //Testeamos probar con un id inexistente, devuelve Not Found
 PM1.getProductById(2);
-//Modificamos el producto sin cambiar su id
+// // //Modificamos el producto sin cambiar su id
 PM1.updateProduct(1, { price: 500 });
-//Traemos el producto modificado
+// // //Traemos el producto modificado
 PM1.getProducts();
-//Testeamos borrar un producto usando id inexistente con lo cual tira un error por consola.
-PM1.deleteProduct(2);
-//Borramos el producto existente.
+// // //Testeamos borrar un producto usando id inexistente con lo cual tira un error por consola.
+// PM1.deleteProduct(2);
+// // //Borramos el producto existente.
 PM1.deleteProduct(1);

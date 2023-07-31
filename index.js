@@ -47,11 +47,21 @@ class ProductManager {
   async getProductById(productId) {
     const arrayProducts = await fs.promises.readFile(this.path, "utf-8");
     const arrayProductsParsed = await JSON.parse(arrayProducts);
-    // console.log(arrayProductsParsed);
-    // const productFound = arrayProductsParsed.find(
-    //   (element) => element.id === productId
-    // );
-    // return productFound || "Not Found";
+
+    const productFound = arrayProductsParsed.find(
+      (element) => element.id === productId
+    );
+    console.log(productFound) || "Not Found";
+    return productFound || "Not Found";
+  }
+
+  async updateProduct(productId, object) {
+    const arrayProducts = await fs.promises.readFile(this.path, "utf-8");
+    const arrayProductsParsed = await JSON.parse(arrayProducts);
+    const productFound = arrayProductsParsed.find(
+      (element) => element.id === productId
+    );
+    const productFoundIndex = arrayProductsParsed.indexOf(productFound);
   }
 }
 
@@ -72,8 +82,7 @@ PM1.addProduct(product1);
 const showProducts = async (instance) => {
   console.log(await instance.getProducts());
 };
-const showProductX = async (instance, id) => {
-  console.log(await instance.getProductById(id));
-};
+
 // showProducts(PM1);
-showProductX(PM1, 1);
+
+PM1.getProductById(1);

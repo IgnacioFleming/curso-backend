@@ -1,5 +1,6 @@
 import express from "express";
-const ProductManager = require("ProductManager");
+
+const ProductManager = require("./managerUsuarios.js");
 
 const app = express();
 

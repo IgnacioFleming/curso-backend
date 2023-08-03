@@ -86,3 +86,5 @@ export default class ProductManager {
     await fs.promises.writeFile(this.path, JSON.stringify(productsParsed));
   }
 }
+
+module.exports = ProductManager;

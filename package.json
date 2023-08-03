@@ -1,0 +1,24 @@
+{
+  "name": "curso-coder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "desafio-manejo-de-archivos.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IgnacioFleming/curso-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/IgnacioFleming/curso-backend/issues"
+  },
+  "homepage": "https://github.com/IgnacioFleming/curso-backend#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

@@ -1,8 +1,7 @@
 //Desafío Manejo de Archivos
 
 const fs = require("fs");
-
-export default class ProductManager {
+class ProductManager {
   constructor(path) {
     this.path = path;
   }
@@ -13,14 +12,10 @@ export default class ProductManager {
       console.log(resultArray);
       return resultArray;
     } else {
-      await fs.promises.writeFile(this.path, "[]");
-      console.log([]);
       return [];
     }
   }
   async addProduct({ title, description, price, thumbnail, code, stock }) {
-    const products = await fs.promises.readFile(this.path, "utf-8");
-    const parsedProducts = JSON.parse(products);
     const newproduct = {
       title,
       description,
@@ -29,22 +24,27 @@ export default class ProductManager {
       code,
       stock,
     };
+    if (fs.existsSync(this.path)) {
+      const products = await fs.promises.readFile(this.path, "utf-8");
+      const parsedProducts = JSON.parse(products);
 
-    for (const product of parsedProducts) {
-      if (product.code === code) {
-        console.log(
-          `El codigo del producto ${newproduct.title} ya existe en la base, por favor corregir`
-        );
-        return;
+      for (const product of parsedProducts) {
+        if (product.code === code) {
+          console.log(
+            `El codigo del producto ${newproduct.title} ya existe en la base, por favor corregir`
+          );
+          return;
+        }
       }
+      newproduct.id =
+        parsedProducts.length === 0
+          ? 1
+          : parsedProducts[parsedProducts.length - 1].id + 1;
+      parsedProducts.push(newproduct);
+      await fs.promises.writeFile(this.path, JSON.stringify(parsedProducts));
+    } else {
+      await fs.promises.writeFile(this.path, JSON.stringify([newproduct]));
     }
-
-    newproduct.id =
-      parsedProducts.length === 0
-        ? 1
-        : parsedProducts[parsedProducts.length - 1].id + 1;
-    parsedProducts.push(newproduct);
-    await fs.promises.writeFile(this.path, JSON.stringify(parsedProducts));
   }
 
   async getProductById(productId) {

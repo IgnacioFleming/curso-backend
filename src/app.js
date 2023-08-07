@@ -3,9 +3,9 @@ const fs = require("fs");
 const app = express();
 const ProductManager = require("./managerUsuarios");
 
-app.use(express.urlencoded({ extended: true }));
+const PM = new ProductManager("productos.json");
 app.get("/products", (req, res) => {
-  const PM = new ProductManager("productos.json");
+  app.use(express.urlencoded({ extended: true }));
   const limit = req.query.limit;
   if (!limit) {
     PM.getProducts().then((products) => {
@@ -19,6 +19,20 @@ app.get("/products", (req, res) => {
       products[i] = e[i];
     }
     res.send({ products });
+  });
+});
+
+app.get("/products/:id", (req, res) => {
+  const idProduct = req.params.id;
+  if (!idProduct) {
+    PM.getProducts().then((products) => {
+      res.send({ products });
+    });
+    return;
+  }
+  PM.getProducts().then((products) => {
+    const product = products.find((e) => e.id == idProduct);
+    res.send({ product });
   });
 });
 

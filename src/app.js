@@ -16,6 +16,9 @@ app.get("/products", (req, res) => {
   PM.getProducts().then((e) => {
     const products = [];
     for (let i = 0; i < limit; i++) {
+      if (i >= e.length) {
+        break;
+      }
       products[i] = e[i];
     }
     res.send({ products });
@@ -32,7 +35,10 @@ app.get("/products/:id", (req, res) => {
   }
   PM.getProducts().then((products) => {
     const product = products.find((e) => e.id == idProduct);
-    res.send({ product });
+
+    product
+      ? res.send({ product })
+      : res.send({ error: "El producto buscado no existe en la Base" });
   });
 });
 

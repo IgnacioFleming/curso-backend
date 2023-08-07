@@ -29,6 +29,10 @@ const product3 = {
   stock: 15,
 };
 //Esto sirve para armar el archivo si no lo tengo
-PM.addProduct(product1)
-  .then(PM.addProduct(product2))
-  .then(PM.addProduct(product3));
+PM.addProduct(product1).then(() => {
+  PM.addProduct(product2).then(() => {
+    PM.addProduct(product3).then(() => {
+      console.log("finaliza la carga");
+    });
+  });
+});

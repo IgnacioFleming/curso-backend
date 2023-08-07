@@ -9,7 +9,6 @@ class ProductManager {
     if (fs.existsSync(this.path)) {
       const result = await fs.promises.readFile(this.path, "utf-8");
       const resultArray = JSON.parse(result);
-      console.log(resultArray);
       return resultArray;
     } else {
       return [];
@@ -43,6 +42,7 @@ class ProductManager {
       parsedProducts.push(newproduct);
       await fs.promises.writeFile(this.path, JSON.stringify(parsedProducts));
     } else {
+      newproduct.id = 1;
       await fs.promises.writeFile(this.path, JSON.stringify([newproduct]));
     }
   }

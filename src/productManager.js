@@ -87,11 +87,18 @@ class ProductManager {
     const index = productsParsed.findIndex((e) => e.id === productId);
     console.log("este es el index", index);
     if (index === -1) {
-      return console.log("El id no correpsonde a un producto");
+      return {
+        status: "error",
+        description: "El producto a modificar no existe en la base",
+      };
     }
     productsParsed.splice(index, 1);
     console.log("este es el productParsed deleted", productsParsed);
     await fs.promises.writeFile(this.path, JSON.stringify(productsParsed));
+    return {
+      status: "success",
+      description: "Producto eliminado exitosamente",
+    };
   }
 }
 

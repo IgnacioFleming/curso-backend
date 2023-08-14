@@ -44,7 +44,11 @@ router.post("/", (req, res) => {
     return;
   }
   PM.addProduct(newProduct).then(({ status, description }) => {
-    res.send({ status, description });
+    if (status === "success") {
+      res.send({ status, description });
+    } else {
+      res.status(400).send({ status, description });
+    }
   });
 });
 
@@ -53,7 +57,22 @@ router.put("/:pid", (req, res) => {
   const newProduct = req.body;
   delete newProduct?.id;
   PM.updateProduct(pid, newProduct).then(({ status, description }) => {
-    res.send({ status, description });
+    if (status === "success") {
+      res.send({ status, description });
+    } else {
+      res.status(400).send({ status, description });
+    }
+  });
+});
+
+router.delete("/:pid", (req, res) => {
+  const pid = parseInt(req.params.pid);
+  PM.deleteProduct(pid).then(({ status, description }) => {
+    if (status === "success") {
+      res.send({ status, description });
+    } else {
+      res.status(400).send({ status, description });
+    }
   });
 });
 

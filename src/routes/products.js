@@ -48,11 +48,11 @@ router.post("/", (req, res) => {
     });
     return;
   }
-  PM.addProduct(newProduct).then((result) => {
-    if (result.status === "success") {
-      res.send({ status: result.status, description: result.description });
+  PM.addProduct(newProduct).then(({ status, description }) => {
+    if (status === "success") {
+      res.send({ status, description });
     } else {
-      res.send({ status: result.status, description: result.description });
+      res.send({ status, description });
     }
   });
 });

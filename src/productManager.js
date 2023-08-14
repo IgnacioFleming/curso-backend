@@ -13,32 +13,13 @@ class ProductManager {
       return [];
     }
   }
-  async addProduct({
-    title,
-    description,
-    price,
-    thumbnails,
-    code,
-    status,
-    stock,
-    category,
-  }) {
-    const newproduct = {
-      title,
-      description,
-      price,
-      thumbnails,
-      code,
-      stock,
-      status,
-      category,
-    };
+  async addProduct(newproduct) {
     if (fs.existsSync(this.path)) {
       const products = await fs.promises.readFile(this.path, "utf-8");
       const parsedProducts = JSON.parse(products);
 
       for (const product of parsedProducts) {
-        if (product.code === code) {
+        if (product.code === newproduct.code) {
           return {
             status: "error",
             description: `El codigo del producto ${newproduct.title} ya existe en la base, por favor corregir`,

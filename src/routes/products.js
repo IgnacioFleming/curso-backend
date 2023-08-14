@@ -30,17 +30,12 @@ router.get("/:pid", (req, res) => {
 
 router.post("/", (req, res) => {
   const newProduct = req.body;
-  newProduct.status || (newProduct.status = true);
+  let { title, description, price, code, stock, status, category } = newProduct;
+  status || (status = true);
   newProduct.thumbnails || (newProduct.thumbnails = []);
   const newProductValidation =
-    newProduct.title &&
-    newProduct.description &&
-    newProduct.price &&
-    newProduct.code &&
-    newProduct.stock &&
-    newProduct.status &&
-    newProduct.category;
-  console.log(newProduct);
+    title && description && price && code && stock && status && category;
+
   if (!newProductValidation) {
     res.status(400).send({
       status: "error",

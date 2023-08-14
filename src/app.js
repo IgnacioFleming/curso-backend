@@ -1,46 +1,14 @@
-const express = require("express");
-const fs = require("fs");
+import express from "express";
+import ProductManager from "./productManager.js";
+import productsRouter from "./routes/products.js";
+import cartsRouter from "./routes/carts.js";
+
 const app = express();
-const ProductManager = require("./managerUsuarios");
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const PM = new ProductManager("productos.json");
-app.get("/products", (req, res) => {
-  app.use(express.urlencoded({ extended: true }));
-  const limit = req.query.limit;
-  if (!limit) {
-    PM.getProducts().then((products) => {
-      res.send({ products });
-    });
-    return;
-  }
-  PM.getProducts().then((e) => {
-    const products = [];
-    for (let i = 0; i < limit; i++) {
-      if (i >= e.length) {
-        break;
-      }
-      products[i] = e[i];
-    }
-    res.send({ products });
-  });
-});
-
-app.get("/products/:id", (req, res) => {
-  const idProduct = req.params.id;
-  if (!idProduct) {
-    PM.getProducts().then((products) => {
-      res.send({ products });
-    });
-    return;
-  }
-  PM.getProducts().then((products) => {
-    const product = products.find((e) => e.id == idProduct);
-
-    product
-      ? res.send({ product })
-      : res.send({ error: "El producto buscado no existe en la Base" });
-  });
-});
+app.get("api/products", productsRouter);
+app.get("api/carts", cartsRouter);
 
 app.listen(8080, () => {
   console.log("Levantado el servidor 8080");

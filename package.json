@@ -19,5 +19,6 @@
   "homepage": "https://github.com/IgnacioFleming/curso-backend#readme",
   "dependencies": {
     "express": "^4.18.2"
-  }
+  },
+  "type": "module"
 }

@@ -36,7 +36,7 @@ class ProductManager {
       newproduct.id = 1;
       await fs.promises.writeFile(this.path, JSON.stringify([newproduct]));
     }
-    return { status: "success", description: "Producto agregado" };
+    return { status: "success", description: "Producto agregado exitosamente" };
   }
 
   async getProductById(productId) {
@@ -53,14 +53,31 @@ class ProductManager {
     const products = await fs.promises.readFile(this.path, "utf-8");
     const productsParsed = JSON.parse(products);
     if (productsParsed.length === 0) {
-      return;
+      return {
+        status: "error",
+        description: "El producto a modificar no existe en la base",
+      };
     }
     const index = productsParsed.findIndex((e) => e.id === productId);
     const productFound = productsParsed.find(
       (element) => element.id === productId
     );
-    productsParsed.splice(index, 1, { ...productFound, ...object });
+    if (!productFound) {
+      return {
+        status: "error",
+        description: "El producto a modificar no existe en la base",
+      };
+    }
+    productsParsed.splice(index, 1, {
+      ...productFound,
+      ...object,
+      id: productFound.id,
+    });
     await fs.promises.writeFile(this.path, JSON.stringify(productsParsed));
+    return {
+      status: "success",
+      description: "Producto modificado exitosamente",
+    };
   }
 
   async deleteProduct(productId) {

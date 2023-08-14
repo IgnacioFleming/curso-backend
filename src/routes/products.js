@@ -44,11 +44,16 @@ router.post("/", (req, res) => {
     return;
   }
   PM.addProduct(newProduct).then(({ status, description }) => {
-    if (status === "success") {
-      res.send({ status, description });
-    } else {
-      res.send({ status, description });
-    }
+    res.send({ status, description });
+  });
+});
+
+router.put("/:pid", (req, res) => {
+  const pid = parseInt(req.params.pid);
+  const newProduct = req.body;
+  delete newProduct?.id;
+  PM.updateProduct(pid, newProduct).then(({ status, description }) => {
+    res.send({ status, description });
   });
 });
 

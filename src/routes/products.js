@@ -23,9 +23,38 @@ router.get("/:pid", (req, res) => {
 
   PM.getProductById(pid).then((product) =>
     product === "Not Found"
-      ? res.send({ status: "error", product })
+      ? res.status(400).send({ status: "error", product })
       : res.send({ status: "success", product })
   );
+});
+
+router.post("/", (req, res) => {
+  const newProduct = req.body;
+  newProduct.status || (newProduct.status = true);
+  newProduct.thumbnails || (newProduct.thumbnails = []);
+  const newProductValidation =
+    newProduct.title &&
+    newProduct.description &&
+    newProduct.price &&
+    newProduct.code &&
+    newProduct.stock &&
+    newProduct.status &&
+    newProduct.category;
+  console.log(newProduct);
+  if (!newProductValidation) {
+    res.status(400).send({
+      status: "error",
+      error: "Faltan campos en el producto, por favor completar los mismos",
+    });
+    return;
+  }
+  PM.addProduct(newProduct).then((result) => {
+    if (result.status === "success") {
+      res.send({ status: result.status, description: result.description });
+    } else {
+      res.send({ status: result.status, description: result.description });
+    }
+  });
 });
 
 export default router;

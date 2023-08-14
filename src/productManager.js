@@ -13,14 +13,25 @@ class ProductManager {
       return [];
     }
   }
-  async addProduct({ title, description, price, thumbnail, code, stock }) {
+  async addProduct({
+    title,
+    description,
+    price,
+    thumbnails,
+    code,
+    status,
+    stock,
+    category,
+  }) {
     const newproduct = {
       title,
       description,
       price,
-      thumbnail,
+      thumbnails,
       code,
       stock,
+      status,
+      category,
     };
     if (fs.existsSync(this.path)) {
       const products = await fs.promises.readFile(this.path, "utf-8");
@@ -28,10 +39,10 @@ class ProductManager {
 
       for (const product of parsedProducts) {
         if (product.code === code) {
-          console.log(
-            `El codigo del producto ${newproduct.title} ya existe en la base, por favor corregir`
-          );
-          return;
+          return {
+            status: "error",
+            description: `El codigo del producto ${newproduct.title} ya existe en la base, por favor corregir`,
+          };
         }
       }
       newproduct.id =
@@ -44,6 +55,7 @@ class ProductManager {
       newproduct.id = 1;
       await fs.promises.writeFile(this.path, JSON.stringify([newproduct]));
     }
+    return { status: "success", description: "Producto agregado" };
   }
 
   async getProductById(productId) {

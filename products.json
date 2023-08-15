@@ -136,5 +136,27 @@
       "C:\\Users\\Ignacio\\OneDrive\\Escritorio\\backend\\curso-coder\\src\\public\\images\\epic-castle.jpg"
     ],
     "id": 12
+  },
+  {
+    "title": "con imagen",
+    "description": "proyector de alta definición",
+    "price": 7000,
+    "category": "electrónica",
+    "code": "i00zz1",
+    "stock": 3,
+    "status": true,
+    "thumbnails": [],
+    "id": 13
+  },
+  {
+    "title": "con imagen",
+    "description": "proyector de alta definición",
+    "price": 7000,
+    "category": "electrónica",
+    "code": "i00zssz1",
+    "stock": 3,
+    "status": true,
+    "thumbnails": [],
+    "id": 14
   }
 ]

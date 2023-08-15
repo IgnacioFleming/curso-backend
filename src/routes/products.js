@@ -37,13 +37,12 @@ router.post("/", uploader.array("files", 3), (req, res) => {
   const newProduct = req.body;
 
   console.log("el req file es", req.files);
-  if (!req.files) {
-    res.status(400).send({
-      status: "error",
-      description: "No se puedo enviar las imagenes",
-    });
-    return;
-  }
+  // if (!req.files) {
+  //   res.status(400).send({
+  //     status: "error",
+  //     description: "No se puedo enviar las imagenes",
+  //   });
+  // }
   if (req.files) {
     newProduct.thumbnails = [];
     req.files.forEach((e) => {

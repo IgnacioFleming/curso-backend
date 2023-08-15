@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
       return;
     }
     const filteredProducts = products.slice(0, limit);
-    res.send({ status: "success", products });
+    res.send({ status: "success", products: filteredProducts });
   });
 });
 

@@ -3,8 +3,6 @@ import productsRouter from "./routes/products.js";
 import cartsRouter from "./routes/carts.js";
 import __dirname from "./utils.js";
 
-console.log("el dirname es ", __dirname);
-
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

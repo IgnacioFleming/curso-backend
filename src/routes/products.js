@@ -35,6 +35,8 @@ router.get("/:pid", (req, res) => {
 
 router.post("/", uploader.single("file"), (req, res) => {
   const newProduct = req.body;
+
+  console.log("el req file es", req.file);
   if (!req.file) {
     res.status(400).send({
       status: "error",
@@ -42,9 +44,9 @@ router.post("/", uploader.single("file"), (req, res) => {
     });
     return;
   }
-  console.log(req.file);
   if (req.file) {
     newProduct.thumbnails = [req.file.path];
+    console.log("el nuevo producto es", newProduct);
   }
   let { title, description, price, code, stock, status, category } = newProduct;
   const statusValidation = status ?? "Sin status";

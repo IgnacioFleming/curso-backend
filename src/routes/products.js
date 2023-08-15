@@ -33,19 +33,23 @@ router.get("/:pid", (req, res) => {
   );
 });
 
-router.post("/", uploader.single("file"), (req, res) => {
+router.post("/", uploader.array("files", 3), (req, res) => {
   const newProduct = req.body;
 
-  console.log("el req file es", req.file);
-  if (!req.file) {
+  console.log("el req file es", req.files);
+  if (!req.files) {
     res.status(400).send({
       status: "error",
       description: "No se puedo enviar las imagenes",
     });
     return;
   }
-  if (req.file) {
-    newProduct.thumbnails = [req.file.path];
+  if (req.files) {
+    newProduct.thumbnails = [];
+    req.files.forEach((e) => {
+      console.log("el path del thumbnail", e.path);
+      newProduct.thumbnails.push(e.path);
+    });
     console.log("el nuevo producto es", newProduct);
   }
   let { title, description, price, code, stock, status, category } = newProduct;

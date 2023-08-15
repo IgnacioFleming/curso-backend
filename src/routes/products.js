@@ -1,5 +1,6 @@
 import { Router } from "express";
 import ProductManager from "../productManager.js";
+import { uploader } from "../utils.js";
 
 const router = Router();
 
@@ -32,8 +33,19 @@ router.get("/:pid", (req, res) => {
   );
 });
 
-router.post("/", (req, res) => {
+router.post("/", uploader.single("file"), (req, res) => {
   const newProduct = req.body;
+  if (!req.file) {
+    res.status(400).send({
+      status: "error",
+      description: "No se puedo enviar las imagenes",
+    });
+    return;
+  }
+  console.log(req.file);
+  if (req.file) {
+    newProduct.thumbnails = [req.file.path];
+  }
   let { title, description, price, code, stock, status, category } = newProduct;
   const statusValidation = status ?? "Sin status";
   if (statusValidation === "Sin status") {

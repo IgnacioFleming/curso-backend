@@ -104,7 +104,6 @@ class CartManager {
       };
     }
     const productsOfCart = parsedCarts[cartIndex].products;
-    console.log("los productos de mi carrito son", productsOfCart);
     const productValidation = productsOfCart.findIndex(
       (e) => e.product === productId
     );

@@ -85,9 +85,8 @@ class ProductManager {
   async deleteProduct(productId) {
     const products = await fs.promises.readFile(this.path, "utf-8");
     const productsParsed = JSON.parse(products);
-    console.log("estos son los productsParsed", productsParsed);
     const index = productsParsed.findIndex((e) => e.id === productId);
-    console.log("este es el index", index);
+
     if (index === -1) {
       return {
         status: "error",
@@ -95,7 +94,7 @@ class ProductManager {
       };
     }
     productsParsed.splice(index, 1);
-    console.log("este es el productParsed deleted", productsParsed);
+
     await fs.promises.writeFile(this.path, JSON.stringify(productsParsed));
     return {
       status: "success",

@@ -11,7 +11,7 @@ router.post("/", (req, res) => {
 });
 
 router.get("/:cid", (req, res) => {
-  const cid = JSON.parse(req.params.cid);
+  const cid = parseInt(req.params.cid);
 
   CM.getCartById(cid).then(({ status, description }) => {
     if (status === "success") {

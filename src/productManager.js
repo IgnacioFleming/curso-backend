@@ -40,12 +40,14 @@ class ProductManager {
   }
 
   async getProductById(productId) {
+    if (!fs.existsSync(this.path)) {
+      return "Not Found";
+    }
     const products = await fs.promises.readFile(this.path, "utf-8");
     const productsParsed = JSON.parse(products);
     const productFound = productsParsed.find(
       (element) => element.id === productId
     );
-    console.log("el producto buscado es", productFound || "Not Found");
     return productFound || "Not Found";
   }
 

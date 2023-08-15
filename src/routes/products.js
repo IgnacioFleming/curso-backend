@@ -20,10 +20,14 @@ router.get("/", (req, res) => {
 
 router.get("/:pid", (req, res) => {
   const pid = parseInt(req.params.pid);
+  if (isNaN(pid)) {
+    res.send({ status: "error", description: "El id debe ser un numero" });
+    return;
+  }
 
   PM.getProductById(pid).then((product) =>
     product === "Not Found"
-      ? res.status(400).send({ status: "error", product })
+      ? res.status(400).send({ status: "error", description: product })
       : res.send({ status: "success", product })
   );
 });
@@ -31,18 +35,23 @@ router.get("/:pid", (req, res) => {
 router.post("/", (req, res) => {
   const newProduct = req.body;
   let { title, description, price, code, stock, status, category } = newProduct;
-  status || (status = true);
-  newProduct.thumbnails || (newProduct.thumbnails = []);
-  const newProductValidation =
-    title && description && price && code && stock && status && category;
-
-  if (!newProductValidation) {
+  const statusValidation = status ?? "Sin status";
+  if (statusValidation === "Sin status") {
     res.status(400).send({
       status: "error",
       error: "Faltan campos en el producto, por favor completar los mismos",
     });
     return;
   }
+  if (!(title && description && price && code && stock && category)) {
+    res.status(400).send({
+      status: "error",
+      error: "Faltan campos en el producto, por favor completar los mismos",
+    });
+    return;
+  }
+  newProduct.status || (newProduct.status = true);
+  newProduct.thumbnails || (newProduct.thumbnails = []);
   PM.addProduct(newProduct).then(({ status, description }) => {
     if (status === "success") {
       res.send({ status, description });
@@ -54,6 +63,10 @@ router.post("/", (req, res) => {
 
 router.put("/:pid", (req, res) => {
   const pid = parseInt(req.params.pid);
+  if (isNaN(pid)) {
+    res.send({ status: "error", description: "El id debe ser un numero" });
+    return;
+  }
   const newProduct = req.body;
   delete newProduct?.id;
   PM.updateProduct(pid, newProduct).then(({ status, description }) => {
@@ -67,6 +80,10 @@ router.put("/:pid", (req, res) => {
 
 router.delete("/:pid", (req, res) => {
   const pid = parseInt(req.params.pid);
+  if (isNaN(pid)) {
+    res.send({ status: "error", description: "El id debe ser un numero" });
+    return;
+  }
   PM.deleteProduct(pid).then(({ status, description }) => {
     if (status === "success") {
       res.send({ status, description });

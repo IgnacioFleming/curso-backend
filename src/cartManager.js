@@ -32,8 +32,15 @@ class CartManager {
   };
 
   getCartById = async (cartId) => {
+    if (isNaN(cartId)) {
+      return {
+        status: "error",
+        description: "El id provisto debe ser un numero",
+      };
+    }
+
     const carts = await fs.promises.readFile(this.path, "utf-8");
-    if (isNaN(cartId) || cartId < 0 || cartId > carts.length) {
+    if (cartId < 0 || cartId > carts.length) {
       return { status: "error", description: "El id provisto es invalido" };
     }
     const parsedCarts = JSON.parse(carts);
@@ -52,13 +59,13 @@ class CartManager {
     if (isNaN(cartId)) {
       return {
         status: "error",
-        description: "El id del carrito provisto es invalido",
+        description: "El id del carrito debe ser un numero",
       };
     }
     if (isNaN(productId)) {
       return {
         status: "error",
-        description: "El id del producto provisto es invalido",
+        description: "El id del producto debe ser un numero",
       };
     }
     const PM = new ProductManager("products.json");

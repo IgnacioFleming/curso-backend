@@ -5,8 +5,21 @@ const router = Router();
 const CM = new CartManager("carts.json");
 
 router.post("/", (req, res) => {
-  CM.createCart();
-  res.send({ status: "success", description: "Nuevo Carrito creado" });
+  CM.createCart().then(({ status, description }) =>
+    res.send({ status, description })
+  );
+});
+
+router.get("/:cid", (req, res) => {
+  const cid = JSON.parse(req.params.cid);
+
+  CM.getCartById(cid).then(({ status, description }) => {
+    if (status === "success") {
+      res.send({ status, description });
+    } else {
+      res.status(400).send({ status, description });
+    }
+  });
 });
 
 export default router;

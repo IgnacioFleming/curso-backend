@@ -28,6 +28,23 @@ class CartManager {
       };
     }
   };
+
+  getCartById = async (cartId) => {
+    const carts = await fs.promises.readFile(this.path, "utf-8");
+    if (isNaN(cartId) || cartId < 0 || cartId > carts.length) {
+      return { status: "error", description: "El id provisto es invalido" };
+    }
+    const parsedCarts = JSON.parse(carts);
+    const cartFound = parsedCarts.find((cart) => cart.id === cartId);
+    if (!cartFound) {
+      return {
+        status: "error",
+        description:
+          "El id provisto no corresponde a un carrito existente en la base de datos",
+      };
+    }
+    return { status: "success", description: cartFound };
+  };
 }
 
 export default CartManager;

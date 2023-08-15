@@ -1,8 +1,9 @@
 import fs from "fs";
 
 class CartManager {
-  constructor(path) {
+  constructor(path, productsFile) {
     this.path = path;
+    this.file = productsFile;
   }
 
   createCart = async () => {
@@ -44,6 +45,30 @@ class CartManager {
       };
     }
     return { status: "success", description: cartFound };
+  };
+
+  addProductToCart = async (cartId, productId) => {
+    if (isNaN(productId)) {
+      return { status: "error", description: "El id provisto es invalido" };
+    }
+    c;
+    const cart = this.getCartById(cartId).then(({ status, description }) => {
+      if (status === "error") {
+        return undefined;
+      }
+      return cart.description;
+    });
+    const products = await fs.promises.readFile(this.file, "utf-8");
+    const parsedProducts = JSON.parse(products);
+    const productFound = parsedProducts.find(
+      (product) => product.id === productId
+    );
+    if (!productFound) {
+      return {
+        status: "error",
+        description: `El id provisto no corresponde a un producto existente en el archivo ${this.file}`,
+      };
+    }
   };
 }
 

@@ -1,4 +1,5 @@
 import fs from "fs";
+import ProductManager from "./productManager.js";
 
 class CartManager {
   constructor(path, productsFile) {
@@ -48,27 +49,68 @@ class CartManager {
   };
 
   addProductToCart = async (cartId, productId) => {
-    if (isNaN(productId)) {
-      return { status: "error", description: "El id provisto es invalido" };
+    if (isNaN(cartId)) {
+      return {
+        status: "error",
+        description: "El id del carrito provisto es invalido",
+      };
     }
-    c;
-    const cart = this.getCartById(cartId).then(({ status, description }) => {
-      if (status === "error") {
-        return undefined;
+    if (isNaN(productId)) {
+      return {
+        status: "error",
+        description: "El id del producto provisto es invalido",
+      };
+    }
+    const PM = new ProductManager("products.json");
+    const cart = await this.getCartById(cartId).then(
+      ({ status, description }) => {
+        if (status === "error") {
+          return null;
+        }
+        return description;
       }
-      return cart.description;
-    });
-    const products = await fs.promises.readFile(this.file, "utf-8");
-    const parsedProducts = JSON.parse(products);
-    const productFound = parsedProducts.find(
-      (product) => product.id === productId
     );
-    if (!productFound) {
+    if (!cart) {
+      return {
+        status: "error",
+        description: `El id provisto no corresponde a un carrito existente en el archivo ${this.path}`,
+      };
+    }
+
+    const carts = await fs.promises.readFile(this.path, "utf-8");
+    const parsedCarts = JSON.parse(carts);
+    const cartIndex = parsedCarts.findIndex((e) => e.id === cartId);
+
+    if (cartIndex === -1) {
+      return {
+        status: "error",
+        description: `El id provisto no corresponde a un carrito existente en el archivo ${this.path}`,
+      };
+    }
+
+    const product = await PM.getProductById(productId);
+
+    if (product === "Not Found") {
       return {
         status: "error",
         description: `El id provisto no corresponde a un producto existente en el archivo ${this.file}`,
       };
     }
+    const productsOfCart = parsedCarts[cartIndex].products;
+    console.log("los productos de mi carrito son", productsOfCart);
+    const productValidation = productsOfCart.findIndex(
+      (e) => e.product === productId
+    );
+    if (productValidation === -1) {
+      productsOfCart.push({ product: productId, quantity: 1 });
+    } else {
+      productsOfCart[productValidation].quantity += 1;
+    }
+    await fs.promises.writeFile(this.path, JSON.stringify(parsedCarts));
+    return {
+      status: "success",
+      description: `El producto con id ${productId} fue agregado exitosamente al carrito id ${cartId}`,
+    };
   };
 }
 

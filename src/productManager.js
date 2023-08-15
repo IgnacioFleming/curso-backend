@@ -45,7 +45,7 @@ class ProductManager {
     const productFound = productsParsed.find(
       (element) => element.id === productId
     );
-    console.log(productFound || "Not Found");
+    console.log("el producto buscado es", productFound || "Not Found");
     return productFound || "Not Found";
   }
 

@@ -59,6 +59,8 @@ newProduct.addEventListener("submit", (e) => {
   newProduct.reset();
 });
 
+//Formulario para eliminar Producto
+
 const deleteProduct = document.getElementById("deleteProduct");
 const id = document.getElementById("id");
 deleteProduct.addEventListener("submit", (e) => {

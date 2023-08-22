@@ -28,6 +28,7 @@ const socketServer = new Server(server);
 const PM = new ProductManager("./products.json");
 
 socketServer.on("connection", (socket) => {
+  console.log("Cliente Conectado");
   PM.getProducts().then((products) => {
     socketServer.emit("log", products);
   });

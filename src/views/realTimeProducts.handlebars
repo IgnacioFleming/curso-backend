@@ -1,0 +1,46 @@
+<div id="forms">
+  <div>
+
+    <h1>Formulario para Crear Productos</h1>
+    <form
+      action="/realTimeProducts"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <label for="title">Titulo</label>
+      <input type="text" name="title" />
+      <br />
+      <br />
+      <label for="description">Descripción</label>
+      <input type="text" name="description" />
+      <br /><br />
+      <label for="price">Precio</label>
+      <input type="text" name="price" /><br /><br />
+      <label for="category">Categoría</label>
+      <input type="text" name="category" /><br /><br />
+      <label for="code">Código</label>
+      <input type="text" name="code" /><br /><br />
+      <label for="stock">Stock</label>
+      <input type="text" name="stock" /><br /><br />
+      <label for="status">Status</label>
+      <input type="checkbox" name="status" /><br /><br />
+      <label for="images">Imágenes</label>
+      <input type="file" name="images" /><br /><br />
+      <button type="submit">Crear Producto</button>
+    </form>
+  </div>
+  <div>
+
+    <h1>Formulario para Eliminar Productos</h1>
+    <form action="">
+      <label for="id">ID del producto a eliminar</label><br /><br />
+      <input type="text" name="id" /><br /><br />
+      <button type="submit">Eliminar Producto</button>
+    </form>
+  </div>
+</div>
+
+<h1>Lista de Productos</h1>
+<div id="list"></div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realTimeProducts.js"></script>

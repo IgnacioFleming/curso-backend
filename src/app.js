@@ -29,7 +29,6 @@ const PM = new ProductManager("./products.json");
 
 socketServer.on("connection", (socket) => {
   PM.getProducts().then((products) => {
-    console.log("los productos son:", products);
     socketServer.emit("log", products);
   });
 });

@@ -35,14 +35,6 @@ router.get("/:pid", (req, res) => {
 
 router.post("/", uploader.array("files", 3), (req, res) => {
   const newProduct = req.body;
-
-  console.log("el req file es", req.files);
-  // if (!req.files) {
-  //   res.status(400).send({
-  //     status: "error",
-  //     description: "No se puedo enviar las imagenes",
-  //   });
-  // }
   if (req.files) {
     newProduct.thumbnails = [];
     req.files.forEach((e) => {
@@ -50,22 +42,6 @@ router.post("/", uploader.array("files", 3), (req, res) => {
       newProduct.thumbnails.push(e.path);
     });
     console.log("el nuevo producto es", newProduct);
-  }
-  let { title, description, price, code, stock, status, category } = newProduct;
-  const statusValidation = status ?? "Sin status";
-  if (statusValidation === "Sin status") {
-    res.status(400).send({
-      status: "error",
-      error: "Faltan campos en el producto, por favor completar los mismos",
-    });
-    return;
-  }
-  if (!(title && description && price && code && stock && category)) {
-    res.status(400).send({
-      status: "error",
-      error: "Faltan campos en el producto, por favor completar los mismos",
-    });
-    return;
   }
   newProduct.status || (newProduct.status = true);
   newProduct.thumbnails || (newProduct.thumbnails = []);
@@ -97,10 +73,6 @@ router.put("/:pid", (req, res) => {
 
 router.delete("/:pid", (req, res) => {
   const pid = parseInt(req.params.pid);
-  if (isNaN(pid)) {
-    res.send({ status: "error", description: "El id debe ser un numero" });
-    return;
-  }
   PM.deleteProduct(pid).then(({ status, description }) => {
     if (status === "success") {
       res.send({ status, description });

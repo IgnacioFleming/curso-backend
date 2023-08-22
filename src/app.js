@@ -31,4 +31,12 @@ socketServer.on("connection", (socket) => {
   PM.getProducts().then((products) => {
     socketServer.emit("log", products);
   });
+  socket.on("addProduct", (data) => {
+    data.thumbnails = [];
+    PM.addProduct(data);
+  });
+  socket.on("deleteProduct", (data) => {
+    console.log("la data es", data);
+    PM.deleteProduct(data).then((result) => console.log(result));
+  });
 });

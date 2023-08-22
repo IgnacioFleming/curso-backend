@@ -2,39 +2,35 @@
   <div>
 
     <h1>Formulario para Crear Productos</h1>
-    <form
-      action="/realTimeProducts"
-      method="POST"
-      enctype="multipart/form-data"
-    >
+    <form id="newProduct" enctype="multipart/form-data">
       <label for="title">Titulo</label>
-      <input type="text" name="title" />
+      <input type="text" name="title" id="title" />
       <br />
       <br />
       <label for="description">Descripción</label>
-      <input type="text" name="description" />
+      <input type="text" name="description" id="description" />
       <br /><br />
       <label for="price">Precio</label>
-      <input type="text" name="price" /><br /><br />
+      <input type="text" name="price" id="price" /><br /><br />
       <label for="category">Categoría</label>
-      <input type="text" name="category" /><br /><br />
+      <input type="text" name="category" id="category" /><br /><br />
       <label for="code">Código</label>
-      <input type="text" name="code" /><br /><br />
+      <input type="text" name="code" id="code" /><br /><br />
       <label for="stock">Stock</label>
-      <input type="text" name="stock" /><br /><br />
+      <input type="text" name="stock" id="stock" /><br /><br />
       <label for="status">Status</label>
-      <input type="checkbox" name="status" /><br /><br />
+      <input type="checkbox" name="status" id="status" /><br /><br />
       <label for="imagen">Imágenes</label>
-      <input type="file" name="file" /><br /><br />
+      <input type="file" name="file" id="file" /><br /><br />
       <button type="submit">Crear Producto</button>
     </form>
   </div>
   <div>
 
     <h1>Formulario para Eliminar Productos</h1>
-    <form action="">
+    <form id="deleteProduct">
       <label for="id">ID del producto a eliminar</label><br /><br />
-      <input type="text" name="id" /><br /><br />
+      <input type="text" name="id" id="id" /><br /><br />
       <button type="submit">Eliminar Producto</button>
     </form>
   </div>

@@ -14,6 +14,21 @@ class ProductManager {
     }
   }
   async addProduct(newproduct) {
+    let { title, description, price, code, stock, status, category } =
+      newproduct;
+    const statusValidation = status ?? "Sin status";
+    if (statusValidation === "Sin status") {
+      return {
+        status: "error",
+        error: "Faltan campos en el producto, por favor completar los mismos",
+      };
+    }
+    if (!(title && description && price && code && stock && category)) {
+      return {
+        status: "error",
+        error: "Faltan campos en el producto, por favor completar los mismos",
+      };
+    }
     if (fs.existsSync(this.path)) {
       const products = await fs.promises.readFile(this.path, "utf-8");
       const parsedProducts = JSON.parse(products);
@@ -83,10 +98,13 @@ class ProductManager {
   }
 
   async deleteProduct(productId) {
+    if (isNaN(productId)) {
+      return { status: "error", description: "El id debe ser un numero" };
+    }
+    const id = parseInt(productId);
     const products = await fs.promises.readFile(this.path, "utf-8");
     const productsParsed = JSON.parse(products);
-    const index = productsParsed.findIndex((e) => e.id === productId);
-
+    const index = productsParsed.findIndex((e) => e.id === id);
     if (index === -1) {
       return {
         status: "error",

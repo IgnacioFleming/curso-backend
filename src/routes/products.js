@@ -21,10 +21,6 @@ router.get("/", (req, res) => {
 
 router.get("/:pid", (req, res) => {
   const pid = parseInt(req.params.pid);
-  if (isNaN(pid)) {
-    res.send({ status: "error", description: "El id debe ser un numero" });
-    return;
-  }
 
   PM.getProductById(pid).then((product) =>
     product === "Not Found"
@@ -56,10 +52,7 @@ router.post("/", uploader.array("files", 3), (req, res) => {
 
 router.put("/:pid", (req, res) => {
   const pid = parseInt(req.params.pid);
-  if (isNaN(pid)) {
-    res.send({ status: "error", description: "El id debe ser un numero" });
-    return;
-  }
+
   const newProduct = req.body;
   delete newProduct?.id;
   PM.updateProduct(pid, newProduct).then(({ status, description }) => {

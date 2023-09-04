@@ -6,6 +6,7 @@ import __dirname from "./utils.js";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
 import ProductManager from "./productManager.js";
+import mongoose from "mongoose";
 
 const app = express();
 app.engine("handlebars", handlebars.engine());
@@ -19,6 +20,8 @@ app.use(express.static(__dirname + "/public"));
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
+
+const connection = 
 
 const server = app.listen(8080, () => {
   console.log("Levantado el servidor 8080");

@@ -1,11 +1,11 @@
 import express from "express";
-import productsRouter from "./routes/products.js";
-import cartsRouter from "./routes/carts.js";
-import viewsRouter from "./routes/views.js";
+import productsRouter from "./routes/FileSystem/products.fs.js";
+import cartsRouter from "./routes/FileSystem/carts.fs.js";
+import viewsRouter from "./routes/FileSystem/views.fs.js";
 import __dirname from "./utils.js";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
-import ProductManager from "./productManager.js";
+import ProductManager from "./dao/FileSystem/productManager.fs.js";
 import mongoose from "mongoose";
 
 const app = express();
@@ -21,7 +21,9 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 
-const connection = 
+const connection = mongoose.connect(
+  "mongodb+srv://ifleming816:Ricardo55,.@codercluster.zf1jrhg.mongodb.net/ecommerce"
+);
 
 const server = app.listen(8080, () => {
   console.log("Levantado el servidor 8080");

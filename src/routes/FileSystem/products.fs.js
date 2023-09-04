@@ -1,6 +1,6 @@
 import { Router } from "express";
-import ProductManager from "../productManager.js";
-import { uploader } from "../utils.js";
+import ProductManager from "../../dao/FileSystem/productManager.fs.js";
+import { uploader } from "../../utils.js";
 
 const router = Router();
 

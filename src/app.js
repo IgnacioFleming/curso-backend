@@ -7,6 +7,7 @@ import { Server } from "socket.io";
 import handlebars from "express-handlebars";
 import ProductManager from "./dao/FileSystem/productManager.fs.js";
 import mongoose from "mongoose";
+import { messageModel } from "./models/message.model.js";
 
 const app = express();
 app.engine("handlebars", handlebars.engine());
@@ -44,5 +45,14 @@ socketServer.on("connection", (socket) => {
   socket.on("deleteProduct", (data) => {
     console.log("la data es", data);
     PM.deleteProduct(data).then((result) => console.log(result));
+  });
+});
+
+socketServer.on("connection", async (socket) => {
+  console.log("Cliente chat conectado");
+  socket.on("new-message", async (data) => {
+    await messageModel.create(data);
+    const messages = await messageModel.find();
+    socketServer.emit("log-messages", messages);
   });
 });

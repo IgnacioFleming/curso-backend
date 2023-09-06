@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
-const messageCollection = "carts";
+const messagesCollection = "messages";
 
-const messageSchema = new mongoose.Schema({
+const messagesSchema = new mongoose.Schema({
   user: String,
   message: String,
 });
 
-export const messageModel = mongoose.model(messageCollection, messageSchema);
+export const messagesModel = mongoose.model(messagesCollection, messagesSchema);

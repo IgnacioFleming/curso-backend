@@ -9,7 +9,7 @@ router.post("/", async (req, res) => {
     const { status, payload } = await CM.createCart();
     res.send({ status, payload });
   } catch (error) {
-    res.status(500).send({ status: "error", description: error });
+    res.status(500).send({ status: "error", description: error.toString() });
   }
 });
 
@@ -24,7 +24,7 @@ router.get("/:cid", async (req, res) => {
       res.status(400).send({ status, description });
     }
   } catch (error) {
-    res.status(500).send({ status: "error", description: error });
+    res.status(500).send({ status: "error", description: error.toString() });
   }
 });
 
@@ -42,7 +42,7 @@ router.post("/:cid/products/:pid", async (req, res) => {
       res.status(400).send({ status, description });
     }
   } catch (error) {
-    res.status(500).send({ status: "error", description: error });
+    res.status(500).send({ status: "error", description: error.toString() });
   }
 });
 

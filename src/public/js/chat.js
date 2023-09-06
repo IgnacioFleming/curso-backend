@@ -14,9 +14,10 @@ chatInput.addEventListener("submit", (evt) => {
 const logs = document.getElementById("logs");
 
 socket.on("log-messages", (data) => {
+  console.log(data);
   let messages = "";
-  data.logs.array.forEach((log) => {
-    messages += `<p>El usuario ${log.user} dice: ${log.message}</p><br/>`;
+  data.forEach((log) => {
+    messages += `<p>El usuario ${log.user} dice: ${log.message}</p>`;
   });
   logs.innerHTML = messages;
 });

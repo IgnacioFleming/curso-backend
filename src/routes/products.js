@@ -17,29 +17,31 @@ router.get("/", async (req, res) => {
     const filteredProducts = payload.slice(0, limit);
     res.send({ status, payload: filteredProducts });
   } catch (error) {
-    res.status(500).send({ status: "error", description: error });
+    res.status(500).send({ status: "error", description: error.toString() });
   }
 });
 
 router.get("/:pid", async (req, res) => {
   try {
-    const pid = parseInt(req.params.pid);
+    const { pid } = req.params;
     const { status, payload, description } = await PM.getProductById(pid);
     status === "error"
       ? res.status(400).send({ status, description })
       : res.send({ status, payload });
   } catch (error) {
-    res.status(500).send({ status: "error", description: error });
+    res.status(500).send({ status: "error", description: error.toString() });
   }
 });
 
-router.post("/", uploader.single("file"), async (req, res) => {
+router.post("/", uploader.single("thumbnails"), async (req, res) => {
+  console.log("entro en el router");
   try {
+    console.log("pase por el try");
     const newProduct = req.body;
+    console.log("el req.file es ", req.file);
     if (req.file) {
-      newProduct.thumbnails = [req.file];
+      newProduct.thumbnails = [req.file.path];
     }
-    newProduct.thumbnails || (newProduct.thumbnails = []);
     const { status, description, payload } = await PM.addProduct(newProduct);
     if (status === "success") {
       res.send({ status, payload });
@@ -47,13 +49,13 @@ router.post("/", uploader.single("file"), async (req, res) => {
       res.status(400).send({ status, description });
     }
   } catch (error) {
-    res.status(500).send({ status: "error", description: error });
+    res.status(500).send({ status: "error", description: error.toString() });
   }
 });
 
 router.put("/:pid", async (req, res) => {
   try {
-    const pid = parseInt(req.params.pid);
+    const { pid } = req.params;
     const newProduct = req.body;
     delete newProduct?.id;
     const { status, description, payload } = await PM.updateProduct(
@@ -67,21 +69,24 @@ router.put("/:pid", async (req, res) => {
       res.status(400).send({ status, description });
     }
   } catch (error) {
-    res.status(500).send({ status: "error", description: error });
+    res.status(500).send({ status: "error", description: error.toString() });
   }
 });
 
-router.delete("/:pid", (req, res) => {
+router.delete("/:pid", async (req, res) => {
   try {
-    const pid = parseInt(req.params.pid);
-    const { status, description, payload } = PM.deleteProduct(pid);
+    const { pid } = req.params;
+    const { status, payload } = await PM.deleteProduct(pid);
     if (status === "success") {
       res.send({ status, payload });
     } else {
-      res.status(400).send({ status, description });
+      res.status(400).send({
+        status,
+        description: "Error al intentar eliminar el producto",
+      });
     }
   } catch (error) {
-    res.status(500).send({ status: "error", description: error });
+    res.status(500).send({ status: "error", description: error.toString() });
   }
 });
 

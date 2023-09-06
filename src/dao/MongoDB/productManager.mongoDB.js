@@ -21,9 +21,6 @@ class ProductManager {
 
   async getProductById(productId) {
     try {
-      if (isNaN(productId)) {
-        return { status: "error", description: "El id debe ser un numero" };
-      }
       const product = await productModel.findOne({ _id: productId });
       return { status: "success", payload: product };
     } catch (error) {
@@ -33,10 +30,6 @@ class ProductManager {
 
   async updateProduct(productId, object) {
     try {
-      if (isNaN(productId)) {
-        return { status: "error", description: "El id debe ser un numero" };
-      }
-
       const updatedProduct = await productModel.updateOne(
         { _id: productId },
         object
@@ -49,10 +42,6 @@ class ProductManager {
 
   async deleteProduct(productId) {
     try {
-      if (isNaN(productId)) {
-        return { status: "error", description: "El id debe ser un numero" };
-      }
-
       const deletedProduct = await productModel.deleteOne({ _id: productId });
       return { status: "success", payload: deletedProduct };
     } catch (error) {

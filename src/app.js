@@ -5,7 +5,9 @@ import viewsRouter from "./routes/views.js";
 import __dirname from "./utils.js";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
-import ProductManager from "./productManager.js";
+import ProductManager from "./dao/FileSystem/productManager.fs.js";
+import mongoose from "mongoose";
+import { messagesModel } from "./models/message.model.js";
 
 const app = express();
 app.engine("handlebars", handlebars.engine());
@@ -20,13 +22,17 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 
+const connection = mongoose.connect(
+  "mongodb+srv://ifleming816:Ricardo55,.@codercluster.zf1jrhg.mongodb.net/ecommerce"
+);
+
 const server = app.listen(8080, () => {
   console.log("Levantado el servidor 8080");
 });
 
 const socketServer = new Server(server);
 const PM = new ProductManager("./products.json");
-
+//Servicio Real Time Products
 socketServer.on("connection", (socket) => {
   console.log("Cliente Conectado");
   PM.getProducts().then((products) => {
@@ -39,5 +45,17 @@ socketServer.on("connection", (socket) => {
   socket.on("deleteProduct", (data) => {
     console.log("la data es", data);
     PM.deleteProduct(data).then((result) => console.log(result));
+  });
+});
+//Servicio de chat
+socketServer.on("connection", async (socket) => {
+  const messages = await messagesModel.find();
+  socketServer.emit("log-messages", messages);
+  console.log("Cliente chat conectado");
+  socket.on("new-message", async (data) => {
+    await messagesModel.create(data);
+    const messages = await messagesModel.find();
+    console.log("los mensajes de la db son", messages);
+    socketServer.emit("log-messages", messages);
   });
 });

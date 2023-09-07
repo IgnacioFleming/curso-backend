@@ -58,6 +58,9 @@ class ProductManager {
     if (!fs.existsSync(this.path)) {
       return "Not Found";
     }
+    if (isNaN(productId)) {
+      return { status: "error", description: "El id debe ser un numero" };
+    }
     const products = await fs.promises.readFile(this.path, "utf-8");
     const productsParsed = JSON.parse(products);
     const productFound = productsParsed.find(
@@ -67,6 +70,9 @@ class ProductManager {
   }
 
   async updateProduct(productId, object) {
+    if (isNaN(productId)) {
+      return { status: "error", description: "El id debe ser un numero" };
+    }
     const products = await fs.promises.readFile(this.path, "utf-8");
     const productsParsed = JSON.parse(products);
     if (productsParsed.length === 0) {

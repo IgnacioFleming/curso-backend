@@ -1,37 +1,49 @@
 import { Router } from "express";
-import CartManager from "../cartManager.js";
+import CartManager from "../dao/MongoDB/cartManager.mongoDB.js";
 
 const router = Router();
-const CM = new CartManager("carts.json", "products.json");
+const CM = new CartManager();
 
-router.post("/", (req, res) => {
-  CM.createCart().then(({ status, description }) =>
-    res.send({ status, description })
-  );
+router.post("/", async (req, res) => {
+  try {
+    const { status, payload } = await CM.createCart();
+    res.send({ status, payload });
+  } catch (error) {
+    res.status(500).send({ status: "error", description: error.toString() });
+  }
 });
 
-router.get("/:cid", (req, res) => {
-  const cid = parseInt(req.params.cid);
+router.get("/:cid", async (req, res) => {
+  try {
+    const { cid } = req.params;
+    const { status, description, payload } = await CM.getCartById(cid);
 
-  CM.getCartById(cid).then(({ status, description }) => {
     if (status === "success") {
-      res.send({ status, description });
+      res.send({ status, payload });
     } else {
       res.status(400).send({ status, description });
     }
-  });
+  } catch (error) {
+    res.status(500).send({ status: "error", description: error.toString() });
+  }
 });
 
-router.post("/:cid/products/:pid", (req, res) => {
-  const cid = parseInt(req.params.cid);
-  const pid = parseInt(req.params.pid);
-  CM.addProductToCart(cid, pid).then(({ status, description }) => {
+router.post("/:cid/products/:pid", async (req, res) => {
+  try {
+    const { cid } = req.params;
+    const { pid } = req.params;
+    const { status, description, payload } = await CM.addProductToCart(
+      cid,
+      pid
+    );
     if (status === "success") {
-      res.send({ status, description });
+      res.send({ status, payload });
     } else {
       res.status(400).send({ status, description });
     }
-  });
+  } catch (error) {
+    res.status(500).send({ status: "error", description: error.toString() });
+  }
 });
 
 export default router;

@@ -16,12 +16,6 @@ class CartManager {
 
   getCartById = async (cartId) => {
     try {
-      if (isNaN(cartId)) {
-        return {
-          status: "error",
-          description: "El id provisto debe ser un numero",
-        };
-      }
       const cart = await cartModel.findOne({ _id: cartId });
       return { status: "success", payload: cart };
     } catch (error) {
@@ -31,18 +25,6 @@ class CartManager {
 
   addProductToCart = async (cartId, productId) => {
     try {
-      if (isNaN(cartId)) {
-        return {
-          status: "error",
-          description: "El id del carrito debe ser un numero",
-        };
-      }
-      if (isNaN(productId)) {
-        return {
-          status: "error",
-          description: "El id del producto debe ser un numero",
-        };
-      }
       const PM = new ProductManager();
       const product = await PM.getProductById(productId);
       if (product.status === "error") {
@@ -53,8 +35,20 @@ class CartManager {
         };
       }
       const cart = await cartModel.findOne({ _id: cartId });
-      cart.products.push(product);
-      const updatedCart = await cartModel.updateOne({ _id: cartId, cart });
+      const productIndex = cart.products.findIndex(
+        (e) => e.product === productId
+      );
+      if (productIndex === -1) {
+        cart.products.push({ product: productId, quantity: 1 });
+      } else {
+        cart.products[productIndex].quantity++;
+      }
+      const updatedCart = await cartModel.updateOne(
+        {
+          _id: cartId,
+        },
+        cart
+      );
       return { status: "success", payload: updatedCart };
     } catch (error) {
       throw new Error(error);

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import CartManager from "../dao/FileSystem/cartManager.fs.js";
+import CartManager from "../dao/MongoDB/cartManager.mongoDB.js";
 
 const router = Router();
 const CM = new CartManager();
@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
 
 router.get("/:cid", async (req, res) => {
   try {
-    const cid = parseInt(req.params.cid);
+    const { cid } = req.params;
     const { status, description, payload } = await CM.getCartById(cid);
 
     if (status === "success") {
@@ -30,8 +30,8 @@ router.get("/:cid", async (req, res) => {
 
 router.post("/:cid/products/:pid", async (req, res) => {
   try {
-    const cid = parseInt(req.params.cid);
-    const pid = parseInt(req.params.pid);
+    const { cid } = req.params;
+    const { pid } = req.params;
     const { status, description, payload } = await CM.addProductToCart(
       cid,
       pid

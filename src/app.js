@@ -32,7 +32,7 @@ const server = app.listen(8080, () => {
 
 const socketServer = new Server(server);
 const PM = new ProductManager("./products.json");
-
+//Servicio Real Time Products
 socketServer.on("connection", (socket) => {
   console.log("Cliente Conectado");
   PM.getProducts().then((products) => {

@@ -8,15 +8,33 @@ const PM = new ProductManager();
 
 router.get("/", async (req, res) => {
   try {
-    const { limit, page, sort, query } = req.query;
-    const { status, payload, description } = await PM.getProducts(
-      limit,
+    const { limit, queryPage, sort, query } = req.query;
+    const {
+      status,
+      payload,
+      description,
       page,
-      sort,
-      query
-    );
+      nextPage,
+      prevPage,
+      hasNextPage,
+      hasPrevPage,
+      prevLink,
+      nextLink,
+      totalPages,
+    } = await PM.getProducts(limit, queryPage, sort, query);
     if (status === "success") {
-      res.send({ status, payload });
+      res.send({
+        status,
+        payload,
+        totalPages,
+        prevPage,
+        nextPage,
+        page,
+        hasPrevPage,
+        hasNextPage,
+        prevLink,
+        nextLink,
+      });
     } else {
       res.status(400).send({ status, description });
     }

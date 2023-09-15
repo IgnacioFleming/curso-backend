@@ -1,7 +1,7 @@
 import { productModel } from "../../dao/models/product.model.js";
 class ProductManager {
   constructor() {}
-  async getProducts(limit = 10, page = 1, sort, query = {}) {
+  async getProducts(limit = 10, queryPage = 1, sort, query) {
     try {
       if (isNaN(limit) || limit <= 0) {
         return {
@@ -9,20 +9,53 @@ class ProductManager {
           description: "El limite debe ser un número positivo",
         };
       }
-      if (query) {
+      if (!query) {
+        query = {};
+      } else {
         query = JSON.parse(query);
       }
-      if (typeof query !== "object") {
+      if (!("category" in query || "status" in query)) {
         return {
           status: "error",
           description:
-            "El parametro query debe ser un objeto en formato json con una clave correspondiente al campo y un valor a buscar",
+            "El parametro query debe ser un objeto en formato json con una clave category o status y un valor a buscar",
         };
       }
-      const options = { limit, page };
+      const options = { limit, queryPage };
       sort && (options.sort = { price: sort });
-      const { docs } = await productModel.paginate(query, options);
-      return { status: "success", payload: docs };
+      const {
+        docs,
+        totalPages,
+        page,
+        prevPage,
+        nextPage,
+        hasPrevPage,
+        hasNextPage,
+      } = await productModel.paginate(query, options);
+      let prevLink;
+      if (hasPrevPage) {
+        prevLink = `/api/products?limit=${limit}&page=${prevPage}&sort=${sort}&query=${query}`;
+      } else {
+        prevLink = null;
+      }
+      let nextLink;
+      if (hasNextPage) {
+        nextLink = `/api/products?limit=${limit}&page=${nextPage}&sort=${sort}&query=${query}`;
+      } else {
+        nextLink = null;
+      }
+      return {
+        status: "success",
+        payload: docs,
+        totalPages,
+        prevPage,
+        nextPage,
+        page,
+        hasPrevPage,
+        hasNextPage,
+        prevLink,
+        nextLink,
+      };
     } catch (error) {
       throw new Error(error);
     }

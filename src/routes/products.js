@@ -8,35 +8,26 @@ const PM = new ProductManager();
 
 router.get("/", async (req, res) => {
   try {
-    const { limit, queryPage, sort, query } = req.query;
-    const {
-      status,
-      payload,
-      description,
-      page,
-      nextPage,
-      prevPage,
-      hasNextPage,
-      hasPrevPage,
-      prevLink,
-      nextLink,
-      totalPages,
-    } = await PM.getProducts(limit, queryPage, sort, query);
-    if (status === "success") {
+    const { limit, sort, query } = req.query;
+    const queryPage = req.query.page;
+    const result = await PM.getProducts(limit, queryPage, sort, query);
+    if (result.status === "success") {
       res.send({
-        status,
-        payload,
-        totalPages,
-        prevPage,
-        nextPage,
-        page,
-        hasPrevPage,
-        hasNextPage,
-        prevLink,
-        nextLink,
+        status: result.status,
+        payload: result.payload,
+        totalPages: result.totalPages,
+        prevPage: result.prevPage,
+        nextPage: result.nextPage,
+        page: result.page,
+        hasPrevPage: result.hasPrevPage,
+        hasNextPage: result.hasNextPage,
+        prevLink: result.prevLink,
+        nextLink: result.nextLink,
       });
     } else {
-      res.status(400).send({ status, description });
+      res
+        .status(400)
+        .send({ status: result.status, description: result.description });
     }
   } catch (error) {
     res.status(500).send({ status: "error", description: error.toString() });
@@ -56,9 +47,7 @@ router.get("/:pid", async (req, res) => {
 });
 
 router.post("/", uploader.single("thumbnails"), async (req, res) => {
-  console.log("entro en el router");
   try {
-    console.log("pase por el try");
     const newProduct = req.body;
     console.log("el req.file es ", req.file);
     if (req.file) {

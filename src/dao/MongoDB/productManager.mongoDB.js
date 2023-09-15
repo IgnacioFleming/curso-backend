@@ -3,6 +3,7 @@ class ProductManager {
   constructor() {}
   async getProducts(limit = 10, queryPage = 1, sort, query) {
     try {
+      console.log("paso por el try");
       if (isNaN(limit) || limit <= 0) {
         return {
           status: "error",
@@ -13,15 +14,15 @@ class ProductManager {
         query = {};
       } else {
         query = JSON.parse(query);
+        if (!("category" in query || "status" in query)) {
+          return {
+            status: "error",
+            description:
+              "El parametro query debe ser un objeto en formato json con una clave category o status y un valor a buscar",
+          };
+        }
       }
-      if (!("category" in query || "status" in query)) {
-        return {
-          status: "error",
-          description:
-            "El parametro query debe ser un objeto en formato json con una clave category o status y un valor a buscar",
-        };
-      }
-      const options = { limit, queryPage };
+      const options = { limit, page: queryPage };
       sort && (options.sort = { price: sort });
       const {
         docs,
@@ -32,15 +33,24 @@ class ProductManager {
         hasPrevPage,
         hasNextPage,
       } = await productModel.paginate(query, options);
+
       let prevLink;
+      const stringQuery = JSON.stringify(query);
+      console.log(stringQuery);
       if (hasPrevPage) {
-        prevLink = `/api/products?limit=${limit}&page=${prevPage}&sort=${sort}&query=${query}`;
+        prevLink =
+          `/api/products?page=${prevPage}&limit=${limit}` +
+          (sort ? `&sort=${sort}` : "") +
+          (stringQuery !== "{}" ? `&query=${stringQuery}` : "");
       } else {
         prevLink = null;
       }
       let nextLink;
       if (hasNextPage) {
-        nextLink = `/api/products?limit=${limit}&page=${nextPage}&sort=${sort}&query=${query}`;
+        nextLink =
+          `/api/products?page=${nextPage}&limit=${limit}` +
+          (sort ? `&sort=${sort}` : "") +
+          (stringQuery !== "{}" ? `&query=${stringQuery}` : "");
       } else {
         nextLink = null;
       }

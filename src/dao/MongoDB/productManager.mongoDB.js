@@ -1,10 +1,28 @@
-import { productModel } from "../../models/product.model.js";
+import { productModel } from "../../dao/models/product.model.js";
 class ProductManager {
   constructor() {}
-  async getProducts() {
+  async getProducts(limit = 10, page = 1, sort, query = {}) {
     try {
-      const products = await productModel.find();
-      return { status: "success", payload: products };
+      if (isNaN(limit) || limit <= 0) {
+        return {
+          status: "error",
+          description: "El limite debe ser un número positivo",
+        };
+      }
+      if (query) {
+        query = JSON.parse(query);
+      }
+      if (typeof query !== "object") {
+        return {
+          status: "error",
+          description:
+            "El parametro query debe ser un objeto en formato json con una clave correspondiente al campo y un valor a buscar",
+        };
+      }
+      const options = { limit, page };
+      sort && (options.sort = { price: sort });
+      const { docs } = await productModel.paginate(query, options);
+      return { status: "success", payload: docs };
     } catch (error) {
       throw new Error(error);
     }

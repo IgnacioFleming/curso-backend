@@ -8,14 +8,18 @@ const PM = new ProductManager();
 
 router.get("/", async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit);
-    const { status, payload } = await PM.getProducts();
-    if (isNaN(limit) || limit < 0 || limit > status.length) {
-      res.send({ status, products: payload });
-      return;
+    const { limit, page, sort, query } = req.query;
+    const { status, payload, description } = await PM.getProducts(
+      limit,
+      page,
+      sort,
+      query
+    );
+    if (status === "success") {
+      res.send({ status, payload });
+    } else {
+      res.status(400).send({ status, description });
     }
-    const filteredProducts = payload.slice(0, limit);
-    res.send({ status, payload: filteredProducts });
   } catch (error) {
     res.status(500).send({ status: "error", description: error.toString() });
   }

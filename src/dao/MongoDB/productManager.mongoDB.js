@@ -3,7 +3,6 @@ class ProductManager {
   constructor() {}
   async getProducts(limit = 10, queryPage = 1, sort, query) {
     try {
-      console.log("paso por el try");
       if (isNaN(limit) || limit <= 0) {
         return {
           status: "error",
@@ -36,10 +35,9 @@ class ProductManager {
 
       let prevLink;
       const stringQuery = JSON.stringify(query);
-      console.log(stringQuery);
       if (hasPrevPage) {
         prevLink =
-          `/api/products?page=${prevPage}&limit=${limit}` +
+          `/products?page=${prevPage}&limit=${limit}` +
           (sort ? `&sort=${sort}` : "") +
           (stringQuery !== "{}" ? `&query=${stringQuery}` : "");
       } else {
@@ -48,7 +46,7 @@ class ProductManager {
       let nextLink;
       if (hasNextPage) {
         nextLink =
-          `/api/products?page=${nextPage}&limit=${limit}` +
+          `/products?page=${nextPage}&limit=${limit}` +
           (sort ? `&sort=${sort}` : "") +
           (stringQuery !== "{}" ? `&query=${stringQuery}` : "");
       } else {

@@ -16,7 +16,9 @@ class CartManager {
 
   getCartById = async (cartId) => {
     try {
-      const cart = await cartModel.findOne({ _id: cartId });
+      const cart = await cartModel
+        .findOne({ _id: cartId })
+        .populate("products.product");
       return { status: "success", payload: cart };
     } catch (error) {
       throw new Error(error);
@@ -38,8 +40,10 @@ class CartManager {
       const productIndex = cart.products.findIndex(
         (e) => e.product === productId
       );
+
       if (productIndex === -1) {
-        cart.products.push({ product: productId, quantity: 1 });
+        const newProduct = { product: productId, quantity: 1 };
+        cart.products.push(newProduct);
       } else {
         cart.products[productIndex].quantity++;
       }
@@ -84,11 +88,47 @@ class CartManager {
       } else {
         cart.products.splice(productIndex, 1);
       }
-      if (cart.products.length === 0) {
-        const result = await cartModel.deleteOne({ _id: cartId });
-        return { status: "success", payload: result };
-      }
+      const result = await cartModel.updateOne({ _id: cartId }, cart);
+      return { status: "success", payload: result };
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 
+  updateProductsOfCart = async (cartId, products) => {
+    try {
+      const cart = await cartModel.findOne({ _id: cartId });
+      cart.products = [...products];
+      const result = await cartModel.updateOne({ _id: cartId }, cart);
+      return { status: "success", payload: result };
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+  updateProductOfCartQuantity = async (cartId, productId, quantity) => {
+    try {
+      const cart = await cartModel.findOne({ _id: cartId });
+      const productIndex = cart.products.findIndex(
+        (e) => e.product === productId
+      );
+      if (productIndex === -1) {
+        return {
+          status: "error",
+          description: "El producto a modificar no existe en el carrito",
+        };
+      }
+      console.log(cart.products);
+      cart.products[productIndex].quantity = quantity.quantity;
+      const result = await cartModel.updateOne({ _id: cartId }, cart);
+      return { status: "success", payload: result };
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+  deleteAllProductsFromCart = async (cartId) => {
+    try {
+      const cart = await cartModel.findOne({ _id: cartId });
+      cart.products = [];
       const result = await cartModel.updateOne({ _id: cartId }, cart);
       return { status: "success", payload: result };
     } catch (error) {

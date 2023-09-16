@@ -84,11 +84,17 @@ class CartManager {
       } else {
         cart.products.splice(productIndex, 1);
       }
-      if (cart.products.length === 0) {
-        const result = await cartModel.deleteOne({ _id: cartId });
-        return { status: "success", payload: result };
-      }
+      const result = await cartModel.updateOne({ _id: cartId }, cart);
+      return { status: "success", payload: result };
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 
+  updateProductsOfCart = async (cartId, products) => {
+    try {
+      const cart = await cartModel.findOne({ _id: cartId });
+      cart.products = [...products];
       const result = await cartModel.updateOne({ _id: cartId }, cart);
       return { status: "success", payload: result };
     } catch (error) {

@@ -1,0 +1,16 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  margin-top: 100px;
+  padding: 30px;
+  border: solid 1px black;
+}
+.container {
+  display: flex;
+  justify-content: center;
+}
+.registros {
+  margin-top: 30px;
+}

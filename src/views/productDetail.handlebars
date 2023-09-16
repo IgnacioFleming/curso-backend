@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="card">
+    <h1>Detalle del Producto</h1>
+    <div>Producto: {{title}}</div>
+    <div>Descripción: {{description}}</div>
+    <div>Precio: ${{price}}</div>
+    <div>Categoría: {{category}}</div>
+    <div>Código: {{code}}</div>
+    <div>Stock: {{stock}}</div>
+    {{#if status}}
+      <div>Status: Disponible</div>
+      <button id="addToCart" data-product-id="{{_id}}">Agregar al Carrito</button>
+    {{else}}
+      <div>Status: No Disponible</div>
+    {{/if}}
+    <a href="/products"><button>Volver</button></a>
+  </div>
+</div>
+<script src="/js/product.js"></script>

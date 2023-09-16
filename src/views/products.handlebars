@@ -1,0 +1,40 @@
+<h1>Lista de Productos</h1>
+{{#each products}}
+  <div id="container">
+    <p>
+      Producto:
+      {{this.title}}
+    </p>
+    <p>Stock: {{this.stock}}</p>
+    <p>Codigo: {{this.code}}</p>
+    <p>Precio: {{this.price}}</p>
+    <p>Categoria: {{this.category}}</p>
+    {{#if this.status}}
+      <p>Disponible</p>
+    {{else}}
+      <p>No Disponible</p>
+
+    {{/if}}
+    <a href="/product?pid={{this._id}}"> <button>Ver Detalle</button></a>
+  </div>
+{{/each}}
+
+<div>
+  {{#if hasPrevPage}}
+    <span><a href="{{prevLink}}"><button>Anterior</button></a></span>
+  {{/if}}
+  Pagina
+  {{page}}
+  de
+  {{totalPages}}
+  {{#if hasNextPage}}
+    <span><a href="{{nextLink}}"><button>Siguiente</button></a></span>
+  {{/if}}
+</div>
+<div class="registros">
+  {{#if limit}}
+    <div>Registros por Pagina: {{limit}}</div>
+  {{else}}
+    <div>Registros por Pagina: 10</div>
+  {{/if}}
+</div>

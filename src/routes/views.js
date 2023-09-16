@@ -1,8 +1,10 @@
 import { Router } from "express";
 import ProductManager from "../dao/MongoDB/productManager.mongoDB.js";
+import CartManager from "../dao/MongoDB/cartManager.mongoDB.js";
 
 const router = Router();
 const PM = new ProductManager();
+const CM = new CartManager();
 
 router.get("/", (req, res) => {
   res.render("home", {});
@@ -30,7 +32,6 @@ router.get("/products", async (req, res) => {
       category: product.category,
     };
   });
-  console.log(result.nextLink);
   res.render("products", {
     products,
     style: "products.css",
@@ -47,9 +48,8 @@ router.get("/products", async (req, res) => {
     query,
   });
 });
-router.get("/product", async (req, res) => {
-  const { pid } = req.query;
-  console.log(pid);
+router.get("/products/:pid", async (req, res) => {
+  const { pid } = req.params;
   const product = await PM.getProductById(pid);
   const { title, description, price, category, code, stock, status, _id } =
     product.payload;
@@ -65,6 +65,21 @@ router.get("/product", async (req, res) => {
     _id,
     style: "productDetail.css",
   });
+});
+
+router.get("/carts/:cid", async (req, res) => {
+  const { cid } = req.params;
+  const result = await CM.getCartById(cid);
+
+  const products = result.payload.products.map((element) => {
+    return {
+      product: element.product.title,
+      price: element.product.price,
+      code: element.product.code,
+      quantity: element.quantity,
+    };
+  });
+  res.render("cart", { style: "cart.css", products });
 });
 
 export default router;

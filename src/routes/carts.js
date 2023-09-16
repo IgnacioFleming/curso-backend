@@ -46,4 +46,22 @@ router.post("/:cid/products/:pid", async (req, res) => {
   }
 });
 
+router.delete("/:cid/products/:pid", async (req, res) => {
+  try {
+    const { cid } = req.params;
+    const { pid } = req.params;
+    const { status, description, payload } = await CM.deleteProductFromCart(
+      cid,
+      pid
+    );
+    if (status === "success") {
+      res.send({ status, payload });
+    } else {
+      res.status(400).send({ status, description });
+    }
+  } catch (error) {
+    res.status(500).send({ status: "error", description: error.toString() });
+  }
+});
+
 export default router;

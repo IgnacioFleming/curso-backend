@@ -1,4 +1,4 @@
-import { cartModel } from "../../models/cart.model.js";
+import { cartModel } from "../../dao/models/cart.model.js";
 import ProductManager from "./productManager.mongoDB.js";
 
 class CartManager {
@@ -31,7 +31,7 @@ class CartManager {
         return {
           status: "error",
           description:
-            "El id provisto no corresponde a un carrito existente en la base de datos",
+            "El id provisto no corresponde a un producto existente en la base de datos",
         };
       }
       const cart = await cartModel.findOne({ _id: cartId });
@@ -50,6 +50,47 @@ class CartManager {
         cart
       );
       return { status: "success", payload: updatedCart };
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  deleteProductFromCart = async (cartId, productId) => {
+    try {
+      const PM = new ProductManager();
+      const product = await PM.getProductById(productId);
+      if (product.status === "error") {
+        return {
+          status: "error",
+          description:
+            "El id provisto no corresponde a un producto existente en la base de datos",
+        };
+      }
+      const cart = await cartModel.findOne({ _id: cartId });
+      const productIndex = cart.products.findIndex(
+        (e) => e.product === productId
+      );
+      if (productIndex === -1) {
+        return {
+          status: "error",
+          description:
+            "El id provisto no corresponde a un producto existente en el carrito",
+        };
+      }
+
+      let productQuantity = cart.products[productIndex].quantity;
+      if (productQuantity > 1) {
+        cart.products[productIndex].quantity--;
+      } else {
+        cart.products.splice(productIndex, 1);
+      }
+      if (cart.products.length === 0) {
+        const result = await cartModel.deleteOne({ _id: cartId });
+        return { status: "success", payload: result };
+      }
+
+      const result = await cartModel.updateOne({ _id: cartId }, cart);
+      return { status: "success", payload: result };
     } catch (error) {
       throw new Error(error);
     }

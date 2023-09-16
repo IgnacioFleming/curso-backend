@@ -7,7 +7,7 @@ import { Server } from "socket.io";
 import handlebars from "express-handlebars";
 import ProductManager from "./dao/FileSystem/productManager.fs.js";
 import mongoose from "mongoose";
-import { messagesModel } from "./models/message.model.js";
+import { messagesModel } from "./dao/models/message.model.js";
 
 const app = express();
 app.engine("handlebars", handlebars.engine());

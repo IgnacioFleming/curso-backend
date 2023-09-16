@@ -1,10 +1,71 @@
-import { productModel } from "../../models/product.model.js";
+import { productModel } from "../../dao/models/product.model.js";
 class ProductManager {
   constructor() {}
-  async getProducts() {
+  async getProducts(limit = 10, queryPage = 1, sort, query) {
     try {
-      const products = await productModel.find();
-      return { status: "success", payload: products };
+      console.log("paso por el try");
+      if (isNaN(limit) || limit <= 0) {
+        return {
+          status: "error",
+          description: "El limite debe ser un número positivo",
+        };
+      }
+      if (!query) {
+        query = {};
+      } else {
+        query = JSON.parse(query);
+        if (!("category" in query || "status" in query)) {
+          return {
+            status: "error",
+            description:
+              "El parametro query debe ser un objeto en formato json con una clave category o status y un valor a buscar",
+          };
+        }
+      }
+      const options = { limit, page: queryPage };
+      sort && (options.sort = { price: sort });
+      const {
+        docs,
+        totalPages,
+        page,
+        prevPage,
+        nextPage,
+        hasPrevPage,
+        hasNextPage,
+      } = await productModel.paginate(query, options);
+
+      let prevLink;
+      const stringQuery = JSON.stringify(query);
+      console.log(stringQuery);
+      if (hasPrevPage) {
+        prevLink =
+          `/api/products?page=${prevPage}&limit=${limit}` +
+          (sort ? `&sort=${sort}` : "") +
+          (stringQuery !== "{}" ? `&query=${stringQuery}` : "");
+      } else {
+        prevLink = null;
+      }
+      let nextLink;
+      if (hasNextPage) {
+        nextLink =
+          `/api/products?page=${nextPage}&limit=${limit}` +
+          (sort ? `&sort=${sort}` : "") +
+          (stringQuery !== "{}" ? `&query=${stringQuery}` : "");
+      } else {
+        nextLink = null;
+      }
+      return {
+        status: "success",
+        payload: docs,
+        totalPages,
+        prevPage,
+        nextPage,
+        page,
+        hasPrevPage,
+        hasNextPage,
+        prevLink,
+        nextLink,
+      };
     } catch (error) {
       throw new Error(error);
     }

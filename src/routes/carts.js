@@ -82,4 +82,20 @@ router.put("/:cid", async (req, res) => {
   }
 });
 
+router.put("/:cid/products/:pid", async (req, res) => {
+  try {
+    const { cid, pid } = req.params;
+    const newQuantity = req.body;
+    const { status, payload, description } =
+      await CM.updateProductOfCartQuantity(cid, pid, newQuantity);
+    if (status === "success") {
+      res.send({ status, payload });
+    } else {
+      res.status(400).send({ status, description });
+    }
+  } catch (error) {
+    res.status(500).send({ status: "error", description: error.toString() });
+  }
+});
+
 export default router;

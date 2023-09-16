@@ -101,6 +101,26 @@ class CartManager {
       throw new Error(error);
     }
   };
+  updateProductOfCartQuantity = async (cartId, productId, quantity) => {
+    try {
+      const cart = await cartModel.findOne({ _id: cartId });
+      const productIndex = cart.products.findIndex(
+        (e) => e.product === productId
+      );
+      if (productIndex === -1) {
+        return {
+          status: "error",
+          description: "El producto a modificar no existe en el carrito",
+        };
+      }
+      console.log(cart.products);
+      cart.products[productIndex].quantity = quantity.quantity;
+      const result = await cartModel.updateOne({ _id: cartId }, cart);
+      return { status: "success", payload: result };
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 }
 
 export default CartManager;

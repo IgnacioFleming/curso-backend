@@ -121,6 +121,16 @@ class CartManager {
       throw new Error(error);
     }
   };
+  deleteAllProductsFromCart = async (cartId) => {
+    try {
+      const cart = await cartModel.findOne({ _id: cartId });
+      cart.products = [];
+      const result = await cartModel.updateOne({ _id: cartId }, cart);
+      return { status: "success", payload: result };
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 }
 
 export default CartManager;

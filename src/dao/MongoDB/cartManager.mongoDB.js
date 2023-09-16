@@ -16,7 +16,9 @@ class CartManager {
 
   getCartById = async (cartId) => {
     try {
-      const cart = await cartModel.findOne({ _id: cartId });
+      const cart = await cartModel
+        .findOne({ _id: cartId })
+        .populate("products.product");
       return { status: "success", payload: cart };
     } catch (error) {
       throw new Error(error);

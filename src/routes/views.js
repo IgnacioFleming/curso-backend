@@ -70,7 +70,6 @@ router.get("/products/:pid", async (req, res) => {
 router.get("/carts/:cid", async (req, res) => {
   const { cid } = req.params;
   const result = await CM.getCartById(cid);
-
   const products = result.payload.products.map((element) => {
     return {
       product: element.product.title,

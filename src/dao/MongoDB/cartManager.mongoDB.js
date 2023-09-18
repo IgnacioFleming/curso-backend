@@ -38,9 +38,10 @@ class CartManager {
       }
       const cart = await cartModel.findOne({ _id: cartId });
       const productIndex = cart.products.findIndex(
-        (e) => e.product === productId
+        (e) => e.product.toString() === productId
       );
-
+      console.log(productIndex);
+      console.log(productId);
       if (productIndex === -1) {
         const newProduct = { product: productId, quantity: 1 };
         cart.products.push(newProduct);

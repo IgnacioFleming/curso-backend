@@ -8,6 +8,8 @@ import handlebars from "express-handlebars";
 import ProductManager from "./dao/FileSystem/productManager.fs.js";
 import mongoose from "mongoose";
 import { messagesModel } from "./dao/models/message.model.js";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
 const app = express();
 app.engine("handlebars", handlebars.engine());
@@ -17,7 +19,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(__dirname + "/public"));
-
+app.use(
+  session({
+    store: MongoStore.create({
+      mongoUrl:
+        "mongodb+srv://ifleming816:Ricardo55,.@codercluster.zf1jrhg.mongodb.net/ecommerce",
+      mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
+      ttl: 200,
+    }),
+    secret: "d8!e-v7j2m$!%6wn*g9+yzv)abn#007f$%ivcomu_2!+(+cu$c",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);

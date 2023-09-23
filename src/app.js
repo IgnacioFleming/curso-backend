@@ -7,9 +7,10 @@ import { Server } from "socket.io";
 import handlebars from "express-handlebars";
 import ProductManager from "./dao/FileSystem/productManager.fs.js";
 import mongoose from "mongoose";
-import { messagesModel } from "./dao/models/message.model.js";
+import { messagesModel } from "./models/message.model.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import sessionRouter from "./routes/sessions.js";
 
 const app = express();
 app.engine("handlebars", handlebars.engine());
@@ -35,6 +36,7 @@ app.use(
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
+app.use("/api/session", sessionRouter);
 
 const connection = mongoose.connect(
   "mongodb+srv://ifleming816:Ricardo55,.@codercluster.zf1jrhg.mongodb.net/ecommerce"

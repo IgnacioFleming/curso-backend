@@ -81,4 +81,37 @@ router.get("/carts/:cid", async (req, res) => {
   res.render("cart", { style: "cart.css", products });
 });
 
+const publicRoute = (req, res, next) => {
+  console.log(req.session);
+  const sessionValidation = req.session.user?.status === "active";
+  if (!sessionValidation) {
+    return res.redirect("/login");
+  }
+  next();
+};
+
+const privateRoute = (req, res, next) => {
+  const sessionValidation = req.session.user?.status === "active";
+  if (sessionValidation) {
+    return res.redirect("/profile");
+  }
+  next();
+};
+
+router.get("/register", privateRoute, (req, res) => {
+  res.render("register");
+});
+
+router.get("/login", privateRoute, (req, res) => {
+  res.render("login");
+});
+
+router.get("/profile", publicRoute, async (req, res) => {
+  const user = await userModel.findOne({ email: req.session.user.email });
+  const data = JSON.stringify(user);
+  const userData = JSON.parse(data);
+  console.log(typeof userData);
+  res.render("profile", userData);
+});
+
 export default router;

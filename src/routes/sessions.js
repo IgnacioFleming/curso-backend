@@ -1,15 +1,35 @@
 import { Router } from "express";
-import { userModel } from "../models/user.js";
+import { userModel } from "../models/user.model.js";
 
 const router = Router();
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  const validation = (await userModel.findOne({ email, password }))
-    ? true
-    : false;
+  if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
+    req.session.user = {
+      email,
+      status: "active",
+      role: "admin",
+      first_name: "Admin_User",
+    };
+    res.send({
+      status: "success",
+      description: "Usuario logueado correctamente",
+    });
+    return;
+  }
+  const user = await userModel.findOne({ email, password });
+  const validation = user ? true : false;
   if (validation) {
-    req.session.user = { email, status: "active" };
+    const { first_name, last_name, role, age, email } = user;
+    req.session.user = {
+      email,
+      status: "active",
+      role,
+      first_name,
+      last_name,
+      age,
+    };
     res.send({
       status: "success",
       description: "Usuario logueado correctamente",
@@ -27,6 +47,7 @@ router.post("/register", async (req, res) => {
   const mailValidation = (await userModel.findOne({ email: newUser.email }))
     ? true
     : false;
+  newUser.role = "usuario";
 
   if (mailValidation) {
     res.status(400).send({
@@ -43,7 +64,6 @@ router.post("/register", async (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-  console.log("pase por aca");
   req.session.destroy();
   res.redirect("/login");
 });

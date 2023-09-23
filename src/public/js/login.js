@@ -15,9 +15,10 @@ form.addEventListener("submit", (e) => {
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
       if (data.status === "success") {
-        window.location.href = "/profile";
+        return (window.location.href = "/products");
       }
+      alert(data.error);
+      form.reset();
     });
 });

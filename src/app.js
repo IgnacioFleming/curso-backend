@@ -26,7 +26,7 @@ app.use(
       mongoUrl:
         "mongodb+srv://ifleming816:Ricardo55,.@codercluster.zf1jrhg.mongodb.net/ecommerce",
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
-      ttl: 200,
+      ttl: 1000,
     }),
     secret: "d8!e-v7j2m$!%6wn*g9+yzv)abn#007f$%ivcomu_2!+(+cu$c",
     resave: false,
@@ -36,7 +36,7 @@ app.use(
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
-app.use("/api/session", sessionRouter);
+app.use("/api/sessions", sessionRouter);
 
 const connection = mongoose.connect(
   "mongodb+srv://ifleming816:Ricardo55,.@codercluster.zf1jrhg.mongodb.net/ecommerce"

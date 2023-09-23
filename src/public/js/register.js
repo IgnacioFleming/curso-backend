@@ -14,5 +14,13 @@ form.addEventListener("submit", (e) => {
     },
   })
     .then((res) => res.json())
-    .then((data) => console.log(data));
+    .then((data) => {
+      if (data.status === "success") {
+        window.location.href = "/login";
+        return;
+      }
+      alert(data.error);
+      form.reset();
+    })
+    .catch((err) => alert(err));
 });

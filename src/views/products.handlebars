@@ -1,3 +1,14 @@
+<h1>Bienvenido {{first_name}} {{last_name}}!</h1>
+<h2>Tu rol es: {{role}}</h2>
+{{#if isAdmin}}
+  <p>Tu usuario tiene permiso de administrador</p>
+{{else}}
+  <p>Te mostramos aquí los productos de nuestra tienda</p>
+{{/if}}
+
+<p>Podés cerrar tu sesión desde aquí:</p>
+
+<button onclick="window.location.href = '/api/sessions/logout'">Logout</button>
 <h1>Lista de Productos</h1>
 {{#each products}}
   <div id="container">

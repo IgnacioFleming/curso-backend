@@ -6,7 +6,7 @@ import { userModel } from "../models/user.model.js";
 const router = Router();
 const PM = new ProductManager();
 const CM = new CartManager();
-const publicRoute = (req, res, next) => {
+const privateRoute = (req, res, next) => {
   const sessionValidation = req.session.user?.status === "active";
   if (!sessionValidation) {
     return res.redirect("/login");
@@ -14,7 +14,7 @@ const publicRoute = (req, res, next) => {
   next();
 };
 
-const privateRoute = (req, res, next) => {
+const publicRoute = (req, res, next) => {
   const sessionValidation = req.session.user?.status === "active";
   if (sessionValidation) {
     return res.redirect("/products");
@@ -22,19 +22,19 @@ const privateRoute = (req, res, next) => {
   next();
 };
 
-router.get("/", publicRoute, (req, res) => {
+router.get("/", privateRoute, (req, res) => {
   res.render("home", {});
 });
 
-router.get("/realTimeProducts", publicRoute, (req, res) => {
+router.get("/realTimeProducts", privateRoute, (req, res) => {
   res.render("realTimeProducts", { style: "realTimeProducts.css" });
 });
 
-router.get("/chat", publicRoute, (req, res) => {
+router.get("/chat", privateRoute, (req, res) => {
   res.render("chat", {});
 });
 
-router.get("/products", publicRoute, async (req, res) => {
+router.get("/products", privateRoute, async (req, res) => {
   const { limit, page, sort, query } = req.query;
   const result = await PM.getProducts(limit, page, sort, query);
   const products = result.payload.map((product) => {
@@ -72,7 +72,7 @@ router.get("/products", publicRoute, async (req, res) => {
     role,
   });
 });
-router.get("/products/:pid", publicRoute, async (req, res) => {
+router.get("/products/:pid", privateRoute, async (req, res) => {
   const { pid } = req.params;
   const product = await PM.getProductById(pid);
   const { title, description, price, category, code, stock, status, _id } =
@@ -91,7 +91,7 @@ router.get("/products/:pid", publicRoute, async (req, res) => {
   });
 });
 
-router.get("/carts/:cid", publicRoute, async (req, res) => {
+router.get("/carts/:cid", privateRoute, async (req, res) => {
   const { cid } = req.params;
   const result = await CM.getCartById(cid);
   const products = result.payload.products.map((element) => {
@@ -105,15 +105,15 @@ router.get("/carts/:cid", publicRoute, async (req, res) => {
   res.render("cart", { style: "cart.css", products });
 });
 
-router.get("/register", privateRoute, (req, res) => {
+router.get("/register", publicRoute, (req, res) => {
   res.render("register");
 });
 
-router.get("/login", privateRoute, (req, res) => {
+router.get("/login", publicRoute, (req, res) => {
   res.render("login");
 });
 
-router.get("/profile", publicRoute, async (req, res) => {
+router.get("/profile", privateRoute, async (req, res) => {
   const user = req.session.user;
   res.render("profile", user);
 });

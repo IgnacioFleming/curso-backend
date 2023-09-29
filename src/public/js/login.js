@@ -18,6 +18,7 @@ form.addEventListener("submit", (e) => {
       if (data.status === "success") {
         return (window.location.href = "/products");
       }
+      console.log(data);
       alert(data.error);
       form.reset();
     });

@@ -2,6 +2,9 @@ import passport from "passport";
 import local from "passport-local";
 import { userModel } from "../models/user.model.js";
 import { createHash, isValidPassword } from "../utils.js";
+import mongoose from "mongoose";
+
+const ObjectId = mongoose.Types.ObjectId;
 
 const LocalStrategy = local.Strategy;
 const initializePassport = () => {
@@ -33,27 +36,26 @@ const initializePassport = () => {
       { usernameField: "email" },
       async (username, password, done) => {
         try {
-          //   if (
-          //     username === "adminCoder@coder.com" &&
-          //     password === "adminCod3r123"
-          //   ) {
-          //     const user = {
-          //       email: username,
-          //       status: "active",
-          //       role: "admin",
-          //       first_name: "Admin_User",
-          //       //   _id: "1",
-          //     };
-          //     return done(null, user);
-          //   }
+          if (
+            username === "adminCoder@coder.com" &&
+            password === "adminCod3r123"
+          ) {
+            const user = {
+              email: username,
+              status: "active",
+              role: "admin",
+              first_name: "Admin_User",
+              _id: new ObjectId(),
+            };
+            return done(null, user);
+          }
           const user = await userModel.findOne({ email: username });
           if (!user) return done(null, false);
           const validation = isValidPassword(password, user);
-          console.log("la validacion es", validation);
+
           if (!validation) return done(null, false);
           return done(null, user);
         } catch (error) {
-          //   console.log("pase por el catch");
           done(error);
         }
       }

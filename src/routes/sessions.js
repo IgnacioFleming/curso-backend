@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { userModel } from "../models/user.model.js";
+import { createHash, isValidPassword } from "../utils.js";
 
 const router = Router();
 
@@ -18,9 +19,10 @@ router.post("/login", async (req, res) => {
     });
     return;
   }
-  const user = await userModel.findOne({ email, password });
-  const validation = user ? true : false;
-  if (validation) {
+  const user = await userModel.findOne({ email });
+  const userValidation = user ? true : false;
+  const pwdValidation = isValidPassword(password, user);
+  if (userValidation && pwdValidation) {
     const { first_name, last_name, role, age, email } = user;
     req.session.user = {
       email,
@@ -56,6 +58,8 @@ router.post("/register", async (req, res) => {
     });
     return;
   }
+  newUser.password = createHash(newUser.password);
+  console.log("la pass hasheada es ", newUser.password);
   const result = await userModel.create(newUser);
   res.send({
     status: "success",

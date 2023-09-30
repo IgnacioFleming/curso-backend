@@ -3,6 +3,7 @@ import local from "passport-local";
 import { userModel } from "../models/user.model.js";
 import { createHash, isValidPassword } from "../utils.js";
 import mongoose from "mongoose";
+import GitHubStrategy from "passport-github2";
 
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -57,6 +58,38 @@ const initializePassport = () => {
           return done(null, user);
         } catch (error) {
           done(error);
+        }
+      }
+    )
+  );
+
+  passport.use(
+    "github",
+    new GitHubStrategy(
+      {
+        clientID: "Iv1.6acb6e7a1c75117b",
+        clientSecret: "fe39861080a4aa5652eb8a815ae484dfdc852003",
+        callbackURL: "http://localhost:8080/api/sessions/githubCallback",
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        try {
+          const user = await userModel.findOne({ email: profile._json.email });
+          if (!user) {
+            const newUser = {
+              first_name: profile._json.name,
+              last_name: "",
+              age: "",
+              email: profile._json.email,
+              password: "",
+              role: "usuario",
+            };
+            const result = await userModel.create(newUser);
+            return done(null, result);
+          } else {
+            return done(null, user);
+          }
+        } catch (error) {
+          return done(error);
         }
       }
     )

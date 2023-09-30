@@ -73,6 +73,7 @@ router.get("/products", privateRoute, async (req, res) => {
   });
 });
 router.get("/products/:pid", privateRoute, async (req, res) => {
+  console.log(req.user);
   const { pid } = req.params;
   const product = await PM.getProductById(pid);
   const { title, description, price, category, code, stock, status, _id } =

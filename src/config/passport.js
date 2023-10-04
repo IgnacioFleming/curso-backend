@@ -4,6 +4,7 @@ import { userModel } from "../models/user.model.js";
 import { createHash, isValidPassword } from "../utils.js";
 import mongoose from "mongoose";
 import GitHubStrategy from "passport-github2";
+import jwt from "passport-jwt";
 
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -51,10 +52,12 @@ const initializePassport = () => {
             return done(null, user);
           }
           const user = await userModel.findOne({ email: username });
-          if (!user) return done(null, false);
+          if (!user)
+            return done(null, false, { message: "No se encontró el usuario" });
           const validation = isValidPassword(password, user);
 
-          if (!validation) return done(null, false);
+          if (!validation)
+            return done(null, false, { message: "Contraseña invalida" });
           return done(null, user);
         } catch (error) {
           done(error);

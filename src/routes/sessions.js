@@ -1,23 +1,21 @@
 import { Router } from "express";
+import jwt from "jsonwebtoken";
 import passport from "passport";
+import { passportCall } from "../utils.js";
 
 const router = Router();
 
 router.post(
   "/login",
-  passport.authenticate("login", {
-    failureRedirect: "/api/sessions/failedLogin",
-  }),
+  passportCall("login", "/api/sessions/failedLogin"),
   async (req, res) => {
     const { user } = req;
-    req.session.user = {
-      email: user.email,
-      status: "active",
-      role: user.role,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      age: user.age,
-    };
+    const token = jwt.sign(user, "JWTSecretKey", {
+      session: false,
+      expiresIn: "1h",
+    });
+    res.cookie("sessionCookie", token, { maxAge: 3600000 });
+
     res.send({
       status: "success",
       description: "Usuario logueado correctamente",

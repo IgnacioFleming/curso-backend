@@ -5,10 +5,13 @@ import { createHash, isValidPassword } from "../utils.js";
 import mongoose from "mongoose";
 import GitHubStrategy from "passport-github2";
 import jwt from "passport-jwt";
+import { cookieExtractor } from "../utils.js";
 
 const ObjectId = mongoose.Types.ObjectId;
 
 const LocalStrategy = local.Strategy;
+const JWTStrategy = jwt.Strategy;
+const ExtractJWT = jwt.ExtractJwt;
 const initializePassport = () => {
   passport.use(
     "register",
@@ -51,7 +54,7 @@ const initializePassport = () => {
             };
             return done(null, user);
           }
-          const user = await userModel.findOne({ email: username });
+          const user = await userModel.findOne({ email: username }).lean();
           if (!user)
             return done(null, false, { message: "No se encontró el usuario" });
           const validation = isValidPassword(password, user);
@@ -91,6 +94,23 @@ const initializePassport = () => {
           } else {
             return done(null, user);
           }
+        } catch (error) {
+          return done(error);
+        }
+      }
+    )
+  );
+
+  passport.use(
+    "jwt",
+    new JWTStrategy(
+      {
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+        secretOrKey: "JWTSecretKey",
+      },
+      async (jwt_payload, done) => {
+        try {
+          return done(null, jwt_payload);
         } catch (error) {
           return done(error);
         }

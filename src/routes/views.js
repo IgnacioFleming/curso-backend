@@ -1,40 +1,25 @@
 import { Router } from "express";
 import ProductManager from "../dao/MongoDB/productManager.mongoDB.js";
 import CartManager from "../dao/MongoDB/cartManager.mongoDB.js";
-import { userModel } from "../models/user.model.js";
+import { passportCall } from "../utils.js";
 
 const router = Router();
 const PM = new ProductManager();
 const CM = new CartManager();
-const privateRoute = (req, res, next) => {
-  const sessionValidation = req.session.user?.status === "active";
-  if (!sessionValidation) {
-    return res.redirect("/login");
-  }
-  next();
-};
 
-const publicRoute = (req, res, next) => {
-  const sessionValidation = req.session.user?.status === "active";
-  if (sessionValidation) {
-    return res.redirect("/products");
-  }
-  next();
-};
-
-router.get("/", privateRoute, (req, res) => {
+router.get("/", passportCall("jwt"), (req, res) => {
   res.render("home", {});
 });
 
-router.get("/realTimeProducts", privateRoute, (req, res) => {
+router.get("/realTimeProducts", passportCall("jwt"), (req, res) => {
   res.render("realTimeProducts", { style: "realTimeProducts.css" });
 });
 
-router.get("/chat", privateRoute, (req, res) => {
+router.get("/chat", passportCall("jwt"), (req, res) => {
   res.render("chat", {});
 });
 
-router.get("/products", privateRoute, async (req, res) => {
+router.get("/products", passportCall("jwt"), async (req, res) => {
   const { limit, page, sort, query } = req.query;
   const result = await PM.getProducts(limit, page, sort, query);
   const products = result.payload.map((product) => {
@@ -49,7 +34,7 @@ router.get("/products", privateRoute, async (req, res) => {
     };
   });
 
-  const { first_name, last_name, role } = req.session.user;
+  const { first_name, last_name, role } = req.user;
   const isAdmin = role === "admin";
 
   res.render("products", {
@@ -72,7 +57,7 @@ router.get("/products", privateRoute, async (req, res) => {
     role,
   });
 });
-router.get("/products/:pid", privateRoute, async (req, res) => {
+router.get("/products/:pid", passportCall("jwt"), async (req, res) => {
   console.log(req.user);
   const { pid } = req.params;
   const product = await PM.getProductById(pid);
@@ -92,7 +77,7 @@ router.get("/products/:pid", privateRoute, async (req, res) => {
   });
 });
 
-router.get("/carts/:cid", privateRoute, async (req, res) => {
+router.get("/carts/:cid", passportCall("jwt"), async (req, res) => {
   const { cid } = req.params;
   const result = await CM.getCartById(cid);
   const products = result.payload.products.map((element) => {
@@ -106,15 +91,15 @@ router.get("/carts/:cid", privateRoute, async (req, res) => {
   res.render("cart", { style: "cart.css", products });
 });
 
-router.get("/register", publicRoute, (req, res) => {
+router.get("/register", (req, res) => {
   res.render("register");
 });
 
-router.get("/login", publicRoute, (req, res) => {
+router.get("/login", (req, res) => {
   res.render("login");
 });
 
-router.get("/profile", privateRoute, async (req, res) => {
+router.get("/profile", passportCall("jwt"), async (req, res) => {
   const user = req.session.user;
   res.render("profile", user);
 });

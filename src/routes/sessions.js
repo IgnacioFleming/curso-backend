@@ -5,23 +5,23 @@ import { passportCall } from "../utils.js";
 
 const router = Router();
 
-router.post(
-  "/login",
-  passportCall("login", "/api/sessions/failedLogin"),
-  async (req, res) => {
-    const { user } = req;
-    const token = jwt.sign(user, "JWTSecretKey", {
-      session: false,
-      expiresIn: "1h",
-    });
-    res.cookie("sessionCookie", token, { maxAge: 3600000 });
+router.post("/login", passportCall("login"), async (req, res) => {
+  const { user } = req;
+  console.log("paso por aqui");
+  const token = jwt.sign(user, "JWTSecretKey", {
+    expiresIn: "1h",
+  });
+  res.cookie("sessionCookie", token, { maxAge: 3600000, httpOnly: true });
 
-    res.send({
-      status: "success",
-      description: "Usuario logueado correctamente",
-    });
-  }
-);
+  res.send({
+    status: "success",
+    description: "Usuario logueado correctamente",
+  });
+});
+
+router.get("/current", passportCall("jwt"), async (req, res) => {
+  res.send(req.user);
+});
 
 router.get("/failedLogin", async (req, res) => {
   res.send({ error: "Login Failed" });
@@ -62,8 +62,7 @@ router.get("/failedRegister", async (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-  req.session.destroy();
-  res.redirect("/login");
+  res.clearCookie("sessionCookie").redirect("/login");
 });
 
 export default router;

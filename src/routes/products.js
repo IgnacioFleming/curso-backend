@@ -49,7 +49,6 @@ router.get("/:pid", async (req, res) => {
 router.post("/", uploader.single("thumbnails"), async (req, res) => {
   try {
     const newProduct = req.body;
-    console.log("el req.file es ", req.file);
     if (req.file) {
       newProduct.thumbnails = [req.file.path];
     }

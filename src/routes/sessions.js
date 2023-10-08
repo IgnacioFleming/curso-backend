@@ -7,7 +7,6 @@ const router = Router();
 
 router.post("/login", passportCall("login"), async (req, res) => {
   const { user } = req;
-  console.log("paso por aqui");
   const token = jwt.sign(user, "JWTSecretKey", {
     expiresIn: "1h",
   });

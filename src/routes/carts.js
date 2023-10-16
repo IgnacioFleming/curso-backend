@@ -1,117 +1,21 @@
 import { Router } from "express";
 import CartManager from "../dao/MongoDB/cartManager.mongoDB.js";
+import cartsController from "../controllers/carts.js";
 
 const router = Router();
-const CM = new CartManager();
 
-router.post("/", async (req, res) => {
-  try {
-    const { status, payload } = await CM.createCart();
-    res.send({ status, payload });
-  } catch (error) {
-    res.status(500).send({ status: "error", description: error.toString() });
-  }
-});
+router.post("/", cartsController.createCart);
 
-router.get("/:cid", async (req, res) => {
-  try {
-    const { cid } = req.params;
-    const { status, description, payload } = await CM.getCartById(cid);
+router.get("/:cid", cartsController.getCartById);
 
-    if (status === "success") {
-      res.send({ status, payload });
-    } else {
-      res.status(400).send({ status, description });
-    }
-  } catch (error) {
-    res.status(500).send({ status: "error", description: error.toString() });
-  }
-});
+router.post("/:cid/products/:pid", cartsController.addProductToCart);
 
-router.post("/:cid/products/:pid", async (req, res) => {
-  try {
-    const { cid } = req.params;
-    const { pid } = req.params;
-    const { status, description, payload } = await CM.addProductToCart(
-      cid,
-      pid
-    );
-    if (status === "success") {
-      res.send({ status, payload });
-    } else {
-      res.status(400).send({ status, description });
-    }
-  } catch (error) {
-    res.status(500).send({ status: "error", description: error.toString() });
-  }
-});
+router.delete("/:cid/products/:pid", cartsController.deleteProductFromCart);
 
-router.delete("/:cid/products/:pid", async (req, res) => {
-  try {
-    const { cid } = req.params;
-    const { pid } = req.params;
-    const { status, description, payload } = await CM.deleteProductFromCart(
-      cid,
-      pid
-    );
-    if (status === "success") {
-      res.send({ status, payload });
-    } else {
-      res.status(400).send({ status, description });
-    }
-  } catch (error) {
-    res.status(500).send({ status: "error", description: error.toString() });
-  }
-});
+router.put("/:cid", cartsController.updateProductsOfCart);
 
-router.put("/:cid", async (req, res) => {
-  try {
-    const { cid } = req.params;
-    const products = req.body;
-    const { status, payload, description } = await CM.updateProductsOfCart(
-      cid,
-      products
-    );
-    if (status === "success") {
-      res.send({ status, payload });
-    } else {
-      res.status(400).send({ status, description });
-    }
-  } catch (error) {
-    res.status(500).send({ status: "error", description: error.toString() });
-  }
-});
+router.put("/:cid/products/:pid", cartsController.updateProductQuantityFromCart);
 
-router.put("/:cid/products/:pid", async (req, res) => {
-  try {
-    const { cid, pid } = req.params;
-    const newQuantity = req.body;
-    const { status, payload, description } =
-      await CM.updateProductOfCartQuantity(cid, pid, newQuantity);
-    if (status === "success") {
-      res.send({ status, payload });
-    } else {
-      res.status(400).send({ status, description });
-    }
-  } catch (error) {
-    res.status(500).send({ status: "error", description: error.toString() });
-  }
-});
-
-router.delete("/:cid", async (req, res) => {
-  try {
-    const { cid } = req.params;
-    const { status, payload, description } = await CM.deleteAllProductsFromCart(
-      cid
-    );
-    if (status === "success") {
-      res.send({ status, payload });
-    } else {
-      res.status(400).send({ status, description });
-    }
-  } catch (error) {
-    res.status(500).send({ status: "error", description: error.toString() });
-  }
-});
+router.delete("/:cid", cartsController.resetCart);
 
 export default router;

@@ -1,3 +1,5 @@
+import ProductManager from "../dao/MongoDB/productManager.mongoDB.js";
+
 const PM = new ProductManager();
 const getProducts = async (req, res) => {
   try {

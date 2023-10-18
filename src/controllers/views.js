@@ -1,3 +1,6 @@
+import CartManager from "../dao/MongoDB/cartManager.mongoDB.js";
+import ProductManager from "../dao/MongoDB/productManager.mongoDB.js";
+
 const PM = new ProductManager();
 const CM = new CartManager();
 const renderHome = (req, res) => {

@@ -1,4 +1,4 @@
-import { productModel } from "../../models/product.model.js";
+import { productModel } from "../models/product.model.js";
 class ProductManager {
   constructor() {}
   async getProducts(limit = 10, queryPage = 1, sort, query) {
@@ -16,39 +16,24 @@ class ProductManager {
         if (!("category" in query || "status" in query)) {
           return {
             status: "error",
-            description:
-              "El parametro query debe ser un objeto en formato json con una clave category o status y un valor a buscar",
+            description: "El parametro query debe ser un objeto en formato json con una clave category o status y un valor a buscar",
           };
         }
       }
       const options = { limit, page: queryPage };
       sort && (options.sort = { price: sort });
-      const {
-        docs,
-        totalPages,
-        page,
-        prevPage,
-        nextPage,
-        hasPrevPage,
-        hasNextPage,
-      } = await productModel.paginate(query, options);
+      const { docs, totalPages, page, prevPage, nextPage, hasPrevPage, hasNextPage } = await productModel.paginate(query, options);
 
       let prevLink;
       const stringQuery = JSON.stringify(query);
       if (hasPrevPage) {
-        prevLink =
-          `/products?page=${prevPage}&limit=${limit}` +
-          (sort ? `&sort=${sort}` : "") +
-          (stringQuery !== "{}" ? `&query=${stringQuery}` : "");
+        prevLink = `/products?page=${prevPage}&limit=${limit}` + (sort ? `&sort=${sort}` : "") + (stringQuery !== "{}" ? `&query=${stringQuery}` : "");
       } else {
         prevLink = null;
       }
       let nextLink;
       if (hasNextPage) {
-        nextLink =
-          `/products?page=${nextPage}&limit=${limit}` +
-          (sort ? `&sort=${sort}` : "") +
-          (stringQuery !== "{}" ? `&query=${stringQuery}` : "");
+        nextLink = `/products?page=${nextPage}&limit=${limit}` + (sort ? `&sort=${sort}` : "") + (stringQuery !== "{}" ? `&query=${stringQuery}` : "");
       } else {
         nextLink = null;
       }
@@ -89,10 +74,7 @@ class ProductManager {
 
   async updateProduct(productId, object) {
     try {
-      const updatedProduct = await productModel.updateOne(
-        { _id: productId },
-        object
-      );
+      const updatedProduct = await productModel.updateOne({ _id: productId }, object);
       return { status: "success", payload: updatedProduct };
     } catch (error) {
       throw new Error(error);

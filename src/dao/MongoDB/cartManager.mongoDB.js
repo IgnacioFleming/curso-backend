@@ -1,4 +1,4 @@
-import { cartModel } from "../../models/cart.model.js";
+import { cartModel } from "../models/cart.model.js";
 import ProductManager from "./productManager.mongoDB.js";
 
 class CartManager {
@@ -16,9 +16,7 @@ class CartManager {
 
   getCartById = async (cartId) => {
     try {
-      const cart = await cartModel
-        .findOne({ _id: cartId })
-        .populate("products.product");
+      const cart = await cartModel.findOne({ _id: cartId }).populate("products.product");
       return { status: "success", payload: cart };
     } catch (error) {
       throw new Error(error);
@@ -32,14 +30,11 @@ class CartManager {
       if (product.status === "error") {
         return {
           status: "error",
-          description:
-            "El id provisto no corresponde a un producto existente en la base de datos",
+          description: "El id provisto no corresponde a un producto existente en la base de datos",
         };
       }
       const cart = await cartModel.findOne({ _id: cartId });
-      const productIndex = cart.products.findIndex(
-        (e) => e.product.toString() === productId
-      );
+      const productIndex = cart.products.findIndex((e) => e.product.toString() === productId);
       console.log(productIndex);
       console.log(productId);
       if (productIndex === -1) {
@@ -67,19 +62,15 @@ class CartManager {
       if (product.status === "error") {
         return {
           status: "error",
-          description:
-            "El id provisto no corresponde a un producto existente en la base de datos",
+          description: "El id provisto no corresponde a un producto existente en la base de datos",
         };
       }
       const cart = await cartModel.findOne({ _id: cartId });
-      const productIndex = cart.products.findIndex(
-        (e) => e.product === productId
-      );
+      const productIndex = cart.products.findIndex((e) => e.product === productId);
       if (productIndex === -1) {
         return {
           status: "error",
-          description:
-            "El id provisto no corresponde a un producto existente en el carrito",
+          description: "El id provisto no corresponde a un producto existente en el carrito",
         };
       }
 
@@ -109,9 +100,7 @@ class CartManager {
   updateProductOfCartQuantity = async (cartId, productId, quantity) => {
     try {
       const cart = await cartModel.findOne({ _id: cartId });
-      const productIndex = cart.products.findIndex(
-        (e) => e.product === productId
-      );
+      const productIndex = cart.products.findIndex((e) => e.product === productId);
       if (productIndex === -1) {
         return {
           status: "error",

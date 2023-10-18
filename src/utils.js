@@ -7,11 +7,9 @@ import passport from "passport";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export const createHash = (password) =>
-  bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+export const createHash = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
-export const isValidPassword = (password, user) =>
-  bcrypt.compareSync(password, user.password);
+export const isValidPassword = (password, user) => bcrypt.compareSync(password, user.password);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -26,11 +24,13 @@ export const passportCall = (strategy) => {
   return async (req, res, next) => {
     passport.authenticate(strategy, { session: false }, (err, user, info) => {
       if (err) return next(err);
-      if (!user)
-        return res.status(401).send({
+      if (!user) {
+        console.log({
           status: "error",
           error: info.message ? info.message : info.toString(),
         });
+        return res.redirect("/login");
+      }
       req.user = user;
       next();
     })(req, res, next);

@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
+import config from "../config/config.js";
 const handleLogin = async (req, res) => {
   const { user } = req;
-  const token = jwt.sign(user, "JWTSecretKey", {
+  const token = jwt.sign(user, config.jwt_secret_key, {
     expiresIn: "1h",
   });
   res.cookie("sessionCookie", token, { maxAge: 3600000, httpOnly: true });

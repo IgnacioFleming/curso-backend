@@ -1,9 +1,7 @@
-import CartManager from "../dao/MongoDB/cartManager.mongoDB.js";
-
-const CM = new CartManager();
+import { cartsService } from "../dao/repositories/index.js";
 const createCart = async (req, res) => {
   try {
-    const { status, payload } = await CM.createCart();
+    const { status, payload } = await cartsService.createCart();
     res.send({ status, payload });
   } catch (error) {
     res.status(500).send({ status: "error", description: error.toString() });
@@ -13,7 +11,7 @@ const createCart = async (req, res) => {
 const getCartById = async (req, res) => {
   try {
     const { cid } = req.params;
-    const { status, description, payload } = await CM.getCartById(cid);
+    const { status, description, payload } = await cartsService.getCartById(cid);
 
     if (status === "success") {
       res.send({ status, payload });
@@ -29,7 +27,7 @@ const addProductToCart = async (req, res) => {
   try {
     const { cid } = req.params;
     const { pid } = req.params;
-    const { status, description, payload } = await CM.addProductToCart(cid, pid);
+    const { status, description, payload } = await cartsService.addProductToCart(cid, pid);
     if (status === "success") {
       res.send({ status, payload });
     } else {
@@ -44,7 +42,7 @@ const deleteProductFromCart = async (req, res) => {
   try {
     const { cid } = req.params;
     const { pid } = req.params;
-    const { status, description, payload } = await CM.deleteProductFromCart(cid, pid);
+    const { status, description, payload } = await cartsService.deleteProductFromCart(cid, pid);
     if (status === "success") {
       res.send({ status, payload });
     } else {
@@ -59,7 +57,7 @@ const updateProductsOfCart = async (req, res) => {
   try {
     const { cid } = req.params;
     const products = req.body;
-    const { status, payload, description } = await CM.updateProductsOfCart(cid, products);
+    const { status, payload, description } = await cartsService.updateProductsOfCart(cid, products);
     if (status === "success") {
       res.send({ status, payload });
     } else {
@@ -74,7 +72,7 @@ const updateProductQuantityFromCart = async (req, res) => {
   try {
     const { cid, pid } = req.params;
     const newQuantity = req.body;
-    const { status, payload, description } = await CM.updateProductOfCartQuantity(cid, pid, newQuantity);
+    const { status, payload, description } = await cartsService.updateProductOfCartQuantity(cid, pid, newQuantity);
     if (status === "success") {
       res.send({ status, payload });
     } else {
@@ -88,7 +86,7 @@ const updateProductQuantityFromCart = async (req, res) => {
 const resetCart = async (req, res) => {
   try {
     const { cid } = req.params;
-    const { status, payload, description } = await CM.deleteAllProductsFromCart(cid);
+    const { status, payload, description } = await cartsService.deleteAllProductsFromCart(cid);
     if (status === "success") {
       res.send({ status, payload });
     } else {

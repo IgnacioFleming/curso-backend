@@ -29,8 +29,6 @@ app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 app.use("/api/sessions", sessionRouter);
 
-const connection = mongoose.connect(config.mongo_url);
-
 const server = app.listen(8080, () => {
   console.log("Levantado el servidor 8080");
 });

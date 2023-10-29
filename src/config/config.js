@@ -1,6 +1,10 @@
 import dotenv from "dotenv";
+import options from "./commander.js";
 
 dotenv.config();
+if (options.mode === "file") {
+  process.env.PERSISTENCE = "FILE";
+}
 
 export default {
   mongo_url: process.env.MONGO_URL,
@@ -10,4 +14,5 @@ export default {
   clientId: process.env.clientId,
   clientSecret: process.env.clientSecret,
   callbackURL: process.env.callbackURL,
+  persistence: process.env.PERSISTENCE,
 };

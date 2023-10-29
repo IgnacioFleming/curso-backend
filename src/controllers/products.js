@@ -1,11 +1,9 @@
-import ProductManager from "../dao/MongoDB/productManager.mongoDB.js";
-
-const PM = new ProductManager();
+import { productsService } from "../dao/repositories/index.js";
 const getProducts = async (req, res) => {
   try {
     const { limit, sort, query } = req.query;
     const queryPage = req.query.page;
-    const result = await PM.getProducts(limit, queryPage, sort, query);
+    const result = await productsService.getProducts(limit, queryPage, sort, query);
     if (result.status === "success") {
       res.send({
         status: result.status,
@@ -30,7 +28,7 @@ const getProducts = async (req, res) => {
 const getProductById = async (req, res) => {
   try {
     const { pid } = req.params;
-    const { status, payload, description } = await PM.getProductById(pid);
+    const { status, payload, description } = await productsService.getProductById(pid);
     status === "error" ? res.status(400).send({ status, description }) : res.send({ status, payload });
   } catch (error) {
     res.status(500).send({ status: "error", description: error.toString() });
@@ -43,7 +41,7 @@ const addProduct = async (req, res) => {
     if (req.file) {
       newProduct.thumbnails = [req.file.path];
     }
-    const { status, description, payload } = await PM.addProduct(newProduct);
+    const { status, description, payload } = await productsService.addProduct(newProduct);
     if (status === "success") {
       res.send({ status, payload });
     } else {
@@ -59,7 +57,7 @@ const updateProduct = async (req, res) => {
     const { pid } = req.params;
     const newProduct = req.body;
     delete newProduct?.id;
-    const { status, description, payload } = await PM.updateProduct(pid, newProduct);
+    const { status, description, payload } = await productsService.updateProduct(pid, newProduct);
 
     if (status === "success") {
       res.send({ status, payload });
@@ -74,7 +72,7 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const { pid } = req.params;
-    const { status, payload } = await PM.deleteProduct(pid);
+    const { status, payload } = await productsService.deleteProduct(pid);
     if (status === "success") {
       res.send({ status, payload });
     } else {

@@ -14,6 +14,7 @@ const handleLogin = async (req, res) => {
 };
 
 const showCurrentUser = async (req, res) => {
+  console.log(req.user);
   res.send(req.user);
 };
 

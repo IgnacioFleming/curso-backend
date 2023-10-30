@@ -45,6 +45,24 @@ export const cookieExtractor = (req) => {
   return token;
 };
 
+export const adminAuthorizations = async (req, res, next) => {
+  if (!req.user) return res.status(401).send({ status: "error", error: "Unauthorized" });
+  if (req.user.role === "admin") {
+    return next();
+  } else {
+    return res.status(403).send({ status: "error", error: "No permissions" });
+  }
+};
+
+export const userAuthorizations = async (req, res, next) => {
+  if (!req.user) return res.status(401).send({ status: "error", error: "Unauthorized" });
+  if (req.user.role === "usuario") {
+    return next();
+  } else {
+    return res.status(403).send({ status: "error", error: "No permissions" });
+  }
+};
+
 export const uploader = multer({ storage });
 
 export default __dirname;

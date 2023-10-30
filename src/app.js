@@ -5,14 +5,13 @@ import viewsRouter from "./routes/views.js";
 import __dirname from "./utils.js";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
+import { productsService } from "./dao/repositories/index.js";
 import ProductManager from "./dao/FileSystem/productManager.fs.js";
-import mongoose from "mongoose";
 import { messagesModel } from "./dao/models/message.model.js";
 import sessionRouter from "./routes/sessions.js";
 import passport from "passport";
 import initializePassport from "./config/passport.js";
 import cookieParser from "cookie-parser";
-import config from "./config/config.js";
 
 const app = express();
 app.engine("handlebars", handlebars.engine());
@@ -34,20 +33,19 @@ const server = app.listen(8080, () => {
 });
 
 const socketServer = new Server(server);
-const PM = new ProductManager("./products.json");
 //Servicio Real Time Products
 socketServer.on("connection", (socket) => {
   console.log("Cliente Conectado");
-  PM.getProducts().then((products) => {
+  productsService.getProducts().then((products) => {
     socketServer.emit("log", products);
   });
   socket.on("addProduct", (data) => {
     data.thumbnails = [];
-    PM.addProduct(data);
+    productsService.addProduct(data);
   });
   socket.on("deleteProduct", (data) => {
     console.log("la data es", data);
-    PM.deleteProduct(data).then((result) => console.log(result));
+    productsService.deleteProduct(data).then((result) => console.log(result));
   });
 });
 //Servicio de chat

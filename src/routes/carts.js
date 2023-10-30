@@ -1,6 +1,6 @@
 import { Router } from "express";
-import CartManager from "../dao/MongoDB/cartManager.mongoDB.js";
 import cartsController from "../controllers/carts.js";
+import { passportCall, userAuthorizations } from "../utils.js";
 
 const router = Router();
 
@@ -8,14 +8,14 @@ router.post("/", cartsController.createCart);
 
 router.get("/:cid", cartsController.getCartById);
 
-router.post("/:cid/products/:pid", cartsController.addProductToCart);
+router.post("/:cid/products/:pid", passportCall("jwt"), userAuthorizations, cartsController.addProductToCart);
 
-router.delete("/:cid/products/:pid", cartsController.deleteProductFromCart);
+router.delete("/:cid/products/:pid", passportCall("jwt"), userAuthorizations, cartsController.deleteProductFromCart);
 
-router.put("/:cid", cartsController.updateProductsOfCart);
+router.put("/:cid", passportCall("jwt"), userAuthorizations, cartsController.updateProductsOfCart);
 
-router.put("/:cid/products/:pid", cartsController.updateProductQuantityFromCart);
+router.put("/:cid/products/:pid", passportCall("jwt"), userAuthorizations, cartsController.updateProductQuantityFromCart);
 
-router.delete("/:cid", cartsController.resetCart);
+router.delete("/:cid", passportCall("jwt"), userAuthorizations, cartsController.resetCart);
 
 export default router;

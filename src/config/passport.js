@@ -7,6 +7,7 @@ import GitHubStrategy from "passport-github2";
 import jwt from "passport-jwt";
 import { cookieExtractor } from "../utils.js";
 import config from "./config.js";
+import UserDto from "../dao/dto/user.dto.js";
 const ObjectId = mongoose.Types.ObjectId;
 
 const LocalStrategy = local.Strategy;
@@ -99,7 +100,8 @@ const initializePassport = () => {
       },
       async (jwt_payload, done) => {
         try {
-          return done(null, jwt_payload);
+          const user = new UserDto(jwt_payload);
+          return done(null, user);
         } catch (error) {
           return done(error);
         }

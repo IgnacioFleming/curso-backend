@@ -97,6 +97,12 @@ const resetCart = async (req, res) => {
   }
 };
 
+const confirmPurchase = async (req, res) => {
+  const { cid } = req.params;
+  await cartsService.confirmPurchase(cid);
+  process.exit();
+};
+
 export default {
   createCart,
   getCartById,
@@ -105,4 +111,5 @@ export default {
   updateProductsOfCart,
   updateProductQuantityFromCart,
   resetCart,
+  confirmPurchase,
 };

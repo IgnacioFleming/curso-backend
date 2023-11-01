@@ -1,5 +1,5 @@
 import { cartModel } from "../models/cart.model.js";
-import ProductManager from "./productManager.mongoDB.js";
+import { productsService } from "../repositories/index.js";
 
 class CartManager {
   constructor() {}
@@ -16,6 +16,7 @@ class CartManager {
 
   getCartById = async (cartId) => {
     try {
+      console.log("paso por get cart");
       const cart = await cartModel.findOne({ _id: cartId }).populate("products.product");
       return { status: "success", payload: cart };
     } catch (error) {
@@ -25,8 +26,7 @@ class CartManager {
 
   addProductToCart = async (cartId, productId) => {
     try {
-      const PM = new ProductManager();
-      const product = await PM.getProductById(productId);
+      const product = await productsService.getProductById(productId);
       if (product.status === "error") {
         return {
           status: "error",
@@ -57,8 +57,7 @@ class CartManager {
 
   deleteProductFromCart = async (cartId, productId) => {
     try {
-      const PM = new ProductManager();
-      const product = await PM.getProductById(productId);
+      const product = await productsService.getProductById(productId);
       if (product.status === "error") {
         return {
           status: "error",
@@ -124,6 +123,14 @@ class CartManager {
     } catch (error) {
       throw new Error(error);
     }
+  };
+
+  confirmPurchase = async (cartId) => {
+    const { payload: cart } = await this.getCartById(cartId);
+    cart.products.map((e) => {
+      if (e.quantity <= e.product.stock) {
+      }
+    });
   };
 }
 

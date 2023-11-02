@@ -1,6 +1,5 @@
 import { cartModel } from "../models/cart.model.js";
-import { productsService } from "../repositories/index.js";
-
+const { productsService } = import("../repositories/index.js");
 class CartManager {
   constructor() {}
 
@@ -16,7 +15,6 @@ class CartManager {
 
   getCartById = async (cartId) => {
     try {
-      console.log("paso por get cart");
       const cart = await cartModel.findOne({ _id: cartId }).populate("products.product");
       return { status: "success", payload: cart };
     } catch (error) {
@@ -127,10 +125,25 @@ class CartManager {
 
   confirmPurchase = async (cartId) => {
     const { payload: cart } = await this.getCartById(cartId);
-    cart.products.map((e) => {
-      if (e.quantity <= e.product.stock) {
-      }
-    });
+    let amount = 0;
+    const remainingCart = [];
+    await Promise.all(
+      cart.products.map(async (e) => {
+        if (e.quantity <= e.product.stock) {
+          console.log("este es el id", e.product._id.toString());
+          amount += e.quantity * e.product.price;
+          const result = await this.updateProductOfCartQuantity(cartId, e.product._id.toString(), e.quantity - e.product.quantity);
+          //fixear esto
+          console.log(result);
+          return;
+        } else {
+          remainingCart.push(e);
+          return;
+        }
+      })
+    );
+    console.log(amount);
+    return { status: "success", payload: remainingCart };
   };
 }
 

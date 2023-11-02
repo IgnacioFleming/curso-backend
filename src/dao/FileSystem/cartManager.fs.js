@@ -12,9 +12,7 @@ class CartManager {
     if (fs.existsSync(this.path)) {
       const data = await fs.promises.readFile(this.path, "utf-8");
       const fileProducts = JSON.parse(data);
-      fileProducts.length === 0
-        ? (cart.id = 1)
-        : (cart.id = fileProducts[fileProducts.length - 1].id + 1);
+      fileProducts.length === 0 ? (cart.id = 1) : (cart.id = fileProducts[fileProducts.length - 1].id + 1);
       fileProducts.push(cart);
       await fs.promises.writeFile(this.path, JSON.stringify(fileProducts));
       return {
@@ -48,8 +46,7 @@ class CartManager {
     if (!cartFound) {
       return {
         status: "error",
-        description:
-          "El id provisto no corresponde a un carrito existente en la base de datos",
+        description: "El id provisto no corresponde a un carrito existente en la base de datos",
       };
     }
     return { status: "success", description: cartFound };
@@ -69,14 +66,12 @@ class CartManager {
       };
     }
     const PM = new ProductManager("products.json");
-    const cart = await this.getCartById(cartId).then(
-      ({ status, description }) => {
-        if (status === "error") {
-          return null;
-        }
-        return description;
+    const cart = await this.getCartById(cartId).then(({ status, description }) => {
+      if (status === "error") {
+        return null;
       }
-    );
+      return description;
+    });
     if (!cart) {
       return {
         status: "error",
@@ -104,9 +99,7 @@ class CartManager {
       };
     }
     const productsOfCart = parsedCarts[cartIndex].products;
-    const productValidation = productsOfCart.findIndex(
-      (e) => e.product === productId
-    );
+    const productValidation = productsOfCart.findIndex((e) => e.product === productId);
     if (productValidation === -1) {
       productsOfCart.push({ product: productId, quantity: 1 });
     } else {

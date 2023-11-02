@@ -1,8 +1,9 @@
-import CartManager from "../dao/MongoDB/cartManager.mongoDB.js";
-import ProductManager from "../dao/MongoDB/productManager.mongoDB.js";
-
-const PM = new ProductManager();
-const CM = new CartManager();
+// import CartManager from "../dao/MongoDB/cartManager.mongoDB.js";
+// import ProductManager from "../dao/MongoDB/productManager.mongoDB.js";
+import { cartsService } from "../dao/repositories/index.js";
+import { productsService } from "../dao/repositories/index.js";
+// const PM = new ProductManager();
+// const CM = new CartManager();
 const renderHome = (req, res) => {
   res.render("home", {});
 };
@@ -17,7 +18,7 @@ const renderChat = (req, res) => {
 
 const renderProducts = async (req, res) => {
   const { limit, page, sort, query } = req.query;
-  const result = await PM.getProducts(limit, page, sort, query);
+  const result = await productsService.getProducts(limit, page, sort, query);
   const products = result.payload.map((product) => {
     return {
       title: product.title,
@@ -56,7 +57,7 @@ const renderProducts = async (req, res) => {
 
 const renderProductDetail = async (req, res) => {
   const { pid } = req.params;
-  const product = await PM.getProductById(pid);
+  const product = await productsService.getProductById(pid);
   const { title, description, price, category, code, stock, status, _id } = product.payload;
 
   res.render("productDetail", {
@@ -74,7 +75,7 @@ const renderProductDetail = async (req, res) => {
 
 const renderCart = async (req, res) => {
   const { cid } = req.params;
-  const result = await CM.getCartById(cid);
+  const result = await cartsService.getCartById(cid);
   const products = result.payload.products.map((element) => {
     return {
       product: element.product.title,

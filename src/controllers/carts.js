@@ -99,8 +99,8 @@ const resetCart = async (req, res) => {
 
 const confirmPurchase = async (req, res) => {
   const { cid } = req.params;
-  await cartsService.confirmPurchase(cid);
-  process.exit();
+  const { status, payload } = await cartsService.confirmPurchase(cid);
+  res.send({ status, payload });
 };
 
 export default {

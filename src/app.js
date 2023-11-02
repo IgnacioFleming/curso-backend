@@ -6,7 +6,6 @@ import __dirname from "./utils.js";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
 import { productsService } from "./dao/repositories/index.js";
-import ProductManager from "./dao/FileSystem/productManager.fs.js";
 import { messagesModel } from "./dao/models/message.model.js";
 import sessionRouter from "./routes/sessions.js";
 import passport from "passport";
@@ -14,6 +13,7 @@ import initializePassport from "./config/passport.js";
 import cookieParser from "cookie-parser";
 
 const app = express();
+
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");

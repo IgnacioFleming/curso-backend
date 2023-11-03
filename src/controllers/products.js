@@ -1,4 +1,5 @@
 import { productsService } from "../dao/repositories/index.js";
+
 const getProducts = async (req, res) => {
   try {
     const { limit, sort, query } = req.query;

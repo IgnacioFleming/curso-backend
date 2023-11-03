@@ -22,11 +22,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.use(cookieParser());
 initializePassport();
-app.use(passport.initialize());
-app.use("/api/products", productsRouter);
-app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
+app.use("/api/carts", cartsRouter);
+app.use(passport.initialize());
 app.use("/api/sessions", sessionRouter);
+app.use("/api/products", productsRouter);
 
 const server = app.listen(8080, () => {
   console.log("Levantado el servidor 8080");

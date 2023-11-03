@@ -1,5 +1,18 @@
 import { cartModel } from "../models/cart.model.js";
-const { productsService } = import("../repositories/index.js");
+import { ticketModel } from "../models/ticket.model.js";
+import config from "../../config/config.js";
+import mongoose from "mongoose";
+let productsService;
+switch (config.persistence) {
+  case "MONGO":
+    const { default: ProductsMongo } = await import("./productManager.mongoDB.js");
+    productsService = new ProductsMongo();
+    break;
+  case "FILE":
+    const { default: ProductsFile } = await import("../FileSystem/productManager.fs.js");
+    productsService = new ProductsFile();
+    break;
+}
 class CartManager {
   constructor() {}
 
@@ -132,8 +145,9 @@ class CartManager {
         if (e.quantity <= e.product.stock) {
           console.log("este es el id", e.product._id.toString());
           amount += e.quantity * e.product.price;
-          const result = await this.updateProductOfCartQuantity(cartId, e.product._id.toString(), e.quantity - e.product.quantity);
-          //fixear esto
+          e.product.stock -= e.quantity;
+          const result = await productsService.updateProduct(e.product._id.toString(), e.product);
+
           console.log(result);
           return;
         } else {
@@ -143,7 +157,28 @@ class CartManager {
       })
     );
     console.log(amount);
-    return { status: "success", payload: remainingCart };
+    if (remainingCart.length !== 0) {
+      const newTicket = {
+        code: new mongoose.Types.ObjectId(),
+        purchase_datetime: new Date().toString(),
+        amount,
+        purchaser: "User",
+      };
+      const result = await ticketModel.create(newTicket);
+      await this.updateProductsOfCart(cartId, remainingCart);
+      const ids = remainingCart.map((e) => e.product._id);
+      return { status: "success", payload: ids };
+    }
+    const newTicket = {
+      code: new mongoose.Types.ObjectId(),
+      purchase_datetime: new Date().toString(),
+      amount,
+      purchaser: "User",
+    };
+    console.log(newTicket);
+    const result = await ticketModel.create(newTicket);
+    console.log("el ticket es", result);
+    return { status: "success", payload: "La compra se procesó correctamente" };
   };
 }
 

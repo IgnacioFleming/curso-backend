@@ -1,5 +1,4 @@
 import { Router } from "express";
-import ProductManager from "../dao/MongoDB/productManager.mongoDB.js";
 import { adminAuthorizations, passportCall, uploader } from "../utils.js";
 import productsController from "../controllers/products.js";
 

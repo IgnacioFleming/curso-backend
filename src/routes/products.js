@@ -6,6 +6,8 @@ const router = Router();
 
 router.get("/", productsController.getProducts);
 
+router.get("/mockingproducts", productsController.mockingProducts);
+
 router.get("/:pid", productsController.getProductById);
 
 router.post("/", passportCall("jwt"), adminAuthorizations, uploader.single("thumbnails"), productsController.addProduct);

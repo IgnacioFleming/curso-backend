@@ -11,6 +11,7 @@ import sessionRouter from "./routes/sessions.js";
 import passport from "passport";
 import initializePassport from "./config/passport.js";
 import cookieParser from "cookie-parser";
+import errorHandler from "./middlewares/errors/index.js";
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use("/api/carts", cartsRouter);
 app.use(passport.initialize());
 app.use("/api/sessions", sessionRouter);
 app.use("/api/products", productsRouter);
+app.use(errorHandler);
 
 const server = app.listen(8080, () => {
   console.log("Levantado el servidor 8080");

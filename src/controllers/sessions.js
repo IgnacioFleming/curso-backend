@@ -9,7 +9,7 @@ const handleLogin = async (req, res) => {
 
   res.send({
     status: "success",
-    description: "Usuario logueado correctamente",
+    description: { message: "Usuario logueado correctamente", token },
   });
 };
 

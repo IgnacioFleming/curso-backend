@@ -1,5 +1,8 @@
 import { productsService } from "../dao/repositories/index.js";
 import { generateMockedProduct } from "../mocks/products.js";
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/enums.js";
+import { generateProductsError } from "../services/errors/info.js";
 
 const getProducts = async (req, res) => {
   try {
@@ -37,9 +40,20 @@ const getProductById = async (req, res) => {
   }
 };
 
-const addProduct = async (req, res) => {
+const addProduct = async (req, res, next) => {
   try {
     const newProduct = req.body;
+    const { title, description: productDescription, price, category, code, stock } = newProduct;
+    const statusValidation = Object.keys(newProduct).includes("status");
+
+    if (!title || !productDescription || !price || !category || !code || !stock || !statusValidation) {
+      CustomError.createError({
+        name: "Error al crear el producto",
+        cause: generateProductsError(newProduct),
+        message: "Hubo un error al crear el producto, alguno de los campos requeridos no existe o no es valido",
+        code: EErrors.INVALID_TYPES_ERROR,
+      });
+    }
     if (req.file) {
       newProduct.thumbnails = [req.file.path];
     }
@@ -50,7 +64,7 @@ const addProduct = async (req, res) => {
       res.status(400).send({ status, description });
     }
   } catch (error) {
-    res.status(500).send({ status: "error", description: error.toString() });
+    next(error);
   }
 };
 

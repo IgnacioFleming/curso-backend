@@ -9,3 +9,11 @@ export const generateProductsError = (product) => {
     * status: debe recibir un Boolean y recibió ${product.status}.
     `;
 };
+
+export const generateCartsError = (cartId, productId) => {
+  return `Uno o todos los parametros enviados fueron numericos.
+    Se esperaba:
+    * :cid: debe recibir un ObjectId. cid es un ObjectId? :  ${cartId}.
+    * :pid: debe recibir un ObjectId. pid es un ObjectId? :  ${productId}.
+    `;
+};

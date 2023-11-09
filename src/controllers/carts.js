@@ -1,4 +1,8 @@
 import { cartsService } from "../dao/repositories/index.js";
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/enums.js";
+import { generateCartsError } from "../services/errors/info.js";
+import mongoose from "mongoose";
 const createCart = async (req, res) => {
   try {
     const { status, payload } = await cartsService.createCart();
@@ -23,10 +27,30 @@ const getCartById = async (req, res) => {
   }
 };
 
-const addProductToCart = async (req, res) => {
+const objectIdValidation = (id) => {
+  try {
+    const ObjectId = mongoose.Types.ObjectId;
+    const objectId = new ObjectId(id);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+const addProductToCart = async (req, res, next) => {
   try {
     const { cid } = req.params;
     const { pid } = req.params;
+
+    if (objectIdValidation(cid) === false || objectIdValidation(pid) === false) {
+      console.log("paso por el if");
+      CustomError.createError({
+        name: "Parametro numerico",
+        cause: generateCartsError(objectIdValidation(cid), objectIdValidation(pid)),
+        message: "Alguno o todos los parametros enviados son un numero, debes enviar string",
+        code: EErrors.INVALID_PARAMS_ERROR,
+      });
+    }
     const { status, description, payload } = await cartsService.addProductToCart(cid, pid);
     if (status === "success") {
       res.send({ status, payload });
@@ -34,7 +58,7 @@ const addProductToCart = async (req, res) => {
       res.status(400).send({ status, description });
     }
   } catch (error) {
-    res.status(500).send({ status: "error", description: error.toString() });
+    next(error);
   }
 };
 

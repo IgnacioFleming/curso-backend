@@ -1,11 +1,10 @@
 import passport from "passport";
 import local from "passport-local";
 import { userModel } from "../dao/models/user.model.js";
-import { createHash, isValidPassword } from "../utils.js";
+import { createHash, isValidPassword, cookieExtractor } from "../utils.js";
 import mongoose from "mongoose";
 import GitHubStrategy from "passport-github2";
 import jwt from "passport-jwt";
-import { cookieExtractor } from "../utils.js";
 import config from "./config.js";
 import UserDto from "../dao/dto/user.dto.js";
 const ObjectId = mongoose.Types.ObjectId;

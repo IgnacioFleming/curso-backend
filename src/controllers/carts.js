@@ -18,11 +18,16 @@ const getCartById = async (req, res) => {
     const { status, description, payload } = await cartsService.getCartById(cid);
 
     if (status === "success") {
+      req.logger.http(`Proceso exitoso getCartById con parametro ${cid}`);
+      req.logger.info(`getCartById exitoso`);
       res.send({ status, payload });
     } else {
+      req.logger.error(`Falló el GET. Revisar parametro ${cid}`);
       res.status(400).send({ status, description });
     }
   } catch (error) {
+    req.logger.fatal(`Ocurrió un error fatal en la ejecucion del proceso. 
+    message:${error}`);
     res.status(500).send({ status: "error", description: error.toString() });
   }
 };
@@ -33,6 +38,8 @@ const objectIdValidation = (id) => {
     const objectId = new ObjectId(id);
     return true;
   } catch (error) {
+    req.logger.fatal(`Ocurrió un error fatal en la ejecucion del proceso. 
+    message:${error}`);
     return false;
   }
 };
@@ -43,7 +50,7 @@ const addProductToCart = async (req, res, next) => {
     const { pid } = req.params;
 
     if (objectIdValidation(cid) === false || objectIdValidation(pid) === false) {
-      console.log("paso por el if");
+      req.logger.debug("paso por el if de objectIdValidation");
       CustomError.createError({
         name: "Parametro numerico",
         cause: generateCartsError(objectIdValidation(cid), objectIdValidation(pid)),
@@ -53,11 +60,16 @@ const addProductToCart = async (req, res, next) => {
     }
     const { status, description, payload } = await cartsService.addProductToCart(cid, pid);
     if (status === "success") {
+      req.logger.http(`Proceso exitoso addProductToCart con parametro ${cid} y ${pid}`);
+      req.logger.info(`addProductToCart exitoso`);
       res.send({ status, payload });
     } else {
+      req.logger.error(`Falló el GET. Revisar parametros ${cid} y ${pid}`);
       res.status(400).send({ status, description });
     }
   } catch (error) {
+    req.logger.fatal(`Ocurrió un error fatal en la ejecucion del proceso. 
+    message:${error}`);
     next(error);
   }
 };
@@ -68,11 +80,16 @@ const deleteProductFromCart = async (req, res) => {
     const { pid } = req.params;
     const { status, description, payload } = await cartsService.deleteProductFromCart(cid, pid);
     if (status === "success") {
+      req.logger.http(`Proceso exitoso deleteProductFromCart con parametro ${cid} y ${pid}`);
+      req.logger.info(`deleteProductFromCart exitoso`);
       res.send({ status, payload });
     } else {
+      req.logger.error(`Falló el GET. Revisar parametros cid:${cid} y pid:${pid}`);
       res.status(400).send({ status, description });
     }
   } catch (error) {
+    req.logger.fatal(`Ocurrió un error fatal en la ejecucion del proceso. 
+    message:${error}`);
     res.status(500).send({ status: "error", description: error.toString() });
   }
 };
@@ -83,11 +100,16 @@ const updateProductsOfCart = async (req, res) => {
     const products = req.body;
     const { status, payload, description } = await cartsService.updateProductsOfCart(cid, products);
     if (status === "success") {
+      req.logger.http(`Proceso exitoso updateProductsOfCart con parametro ${cid}`);
+      req.logger.info(`updateProductsOfCart exitoso`);
       res.send({ status, payload });
     } else {
+      req.logger.error(`Falló el GET. Revisar parametros cid:${cid}`);
       res.status(400).send({ status, description });
     }
   } catch (error) {
+    req.logger.fatal(`Ocurrió un error fatal en la ejecucion del proceso. 
+    message:${error}`);
     res.status(500).send({ status: "error", description: error.toString() });
   }
 };
@@ -98,11 +120,16 @@ const updateProductQuantityFromCart = async (req, res) => {
     const newQuantity = req.body;
     const { status, payload, description } = await cartsService.updateProductOfCartQuantity(cid, pid, newQuantity);
     if (status === "success") {
+      req.logger.http(`Proceso exitoso updateProductQuantityFromCart con parametro ${cid} y ${pid}`);
+      req.logger.info(`updateProductQuantityFromCart exitoso`);
       res.send({ status, payload });
     } else {
+      req.logger.error(`Falló el GET. Revisar parametros cid:${cid}, pid:${pid} y newQuantity:${newQuantity}`);
       res.status(400).send({ status, description });
     }
   } catch (error) {
+    req.logger.fatal(`Ocurrió un error fatal en la ejecucion del proceso. 
+    message:${error}`);
     res.status(500).send({ status: "error", description: error.toString() });
   }
 };
@@ -112,11 +139,16 @@ const resetCart = async (req, res) => {
     const { cid } = req.params;
     const { status, payload, description } = await cartsService.deleteAllProductsFromCart(cid);
     if (status === "success") {
+      req.logger.http(`Proceso exitoso resetCart con parametro ${cid}`);
+      req.logger.info(`resetCart exitoso`);
       res.send({ status, payload });
     } else {
+      req.logger.error(`Falló el GET. Revisar parametros cid:${cid}`);
       res.status(400).send({ status, description });
     }
   } catch (error) {
+    req.logger.fatal(`Ocurrió un error fatal en la ejecucion del proceso. 
+    message:${error}`);
     res.status(500).send({ status: "error", description: error.toString() });
   }
 };
@@ -124,6 +156,8 @@ const resetCart = async (req, res) => {
 const confirmPurchase = async (req, res) => {
   const { cid } = req.params;
   const { status, payload } = await cartsService.confirmPurchase(cid);
+  req.logger.http(`Proceso exitoso confirmPurchase con parametro ${cid}`);
+  req.logger.info(`confirmPurchase exitoso`);
   res.send({ status, payload });
 };
 

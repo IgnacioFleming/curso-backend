@@ -12,7 +12,7 @@ const errorHandler = (err, req, res, next) => {
       break;
 
     default:
-      res.status(400).send({ status: "error", error: "Unhandled Error" });
+      res.status(400).send({ status: "error", error: `Unhandled error: ${err}` });
       break;
   }
 };

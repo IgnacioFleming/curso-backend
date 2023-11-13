@@ -12,6 +12,8 @@ import passport from "passport";
 import initializePassport from "./config/passport.js";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middlewares/errors/index.js";
+import { addLogger } from "./utils/logger.js";
+import loggerRouter from "./routes/logger.js";
 
 const app = express();
 
@@ -22,8 +24,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.use(cookieParser());
+app.use(addLogger);
 initializePassport();
 app.use("/", viewsRouter);
+app.use("/logs", loggerRouter);
 app.use("/api/carts", cartsRouter);
 app.use(passport.initialize());
 app.use("/api/sessions", sessionRouter);

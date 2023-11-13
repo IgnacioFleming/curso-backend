@@ -23,12 +23,15 @@ const storage = multer.diskStorage({
 export const passportCall = (strategy) => {
   return async (req, res, next) => {
     passport.authenticate(strategy, { session: false }, (err, user, info) => {
-      if (err) return next(err);
+      if (err) {
+        req.logger.error("Error fatal al autenticarse");
+        return next(err);
+      }
       if (!user) {
-        console.log({
+        req.logger.warning(`{
           status: "error",
-          error: info.message ? info.message : info.toString(),
-        });
+          error: ${info.message ? info.message : info.toString()},
+        }`);
         return res.redirect("/login");
       }
       req.user = user;

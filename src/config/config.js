@@ -5,6 +5,11 @@ dotenv.config();
 if (options.mode === "file") {
   process.env.PERSISTENCE = "FILE";
 }
+if (options.env === "dev") {
+  process.env.ENVIROMENT = "DEV";
+} else {
+  process.env.ENVIROMENT = "PROD";
+}
 
 export default {
   mongo_url: process.env.MONGO_URL,
@@ -15,4 +20,5 @@ export default {
   clientSecret: process.env.clientSecret,
   callbackURL: process.env.callbackURL,
   persistence: process.env.PERSISTENCE,
+  enviroment: process.env.ENVIROMENT,
 };

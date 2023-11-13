@@ -23,9 +23,12 @@ const getProducts = async (req, res) => {
         nextLink: result.nextLink,
       });
     } else {
+      req.logger.error(`Falló el GET.`);
       res.status(400).send({ status: result.status, description: result.description });
     }
   } catch (error) {
+    req.logger.fatal(`Ocurrió un error fatal en la ejecucion del proceso. 
+    message:${error}`);
     res.status(500).send({ status: "error", description: error.toString() });
   }
 };
@@ -36,6 +39,8 @@ const getProductById = async (req, res) => {
     const { status, payload, description } = await productsService.getProductById(pid);
     status === "error" ? res.status(400).send({ status, description }) : res.send({ status, payload });
   } catch (error) {
+    req.logger.fatal(`Ocurrió un error fatal en la ejecucion del proceso. 
+    message:${error}`);
     res.status(500).send({ status: "error", description: error.toString() });
   }
 };
@@ -61,9 +66,12 @@ const addProduct = async (req, res, next) => {
     if (status === "success") {
       res.send({ status, payload });
     } else {
+      req.logger.error(`Falló el GET. Revisar el body del request.`);
       res.status(400).send({ status, description });
     }
   } catch (error) {
+    req.logger.fatal(`Ocurrió un error fatal en la ejecucion del proceso. 
+    message:${error}`);
     next(error);
   }
 };
@@ -78,9 +86,12 @@ const updateProduct = async (req, res) => {
     if (status === "success") {
       res.send({ status, payload });
     } else {
+      req.logger.error(`Falló el GET. Revisar parametros pid:${pid}`);
       res.status(400).send({ status, description });
     }
   } catch (error) {
+    req.logger.fatal(`Ocurrió un error fatal en la ejecucion del proceso. 
+    message:${error}`);
     res.status(500).send({ status: "error", description: error.toString() });
   }
 };
@@ -92,12 +103,15 @@ const deleteProduct = async (req, res) => {
     if (status === "success") {
       res.send({ status, payload });
     } else {
+      req.logger.error(`Falló el GET. Revisar parametros pid:${pid}`);
       res.status(400).send({
         status,
         description: "Error al intentar eliminar el producto",
       });
     }
   } catch (error) {
+    req.logger.fatal(`Ocurrió un error fatal en la ejecucion del proceso. 
+    message:${error}`);
     res.status(500).send({ status: "error", description: error.toString() });
   }
 };
@@ -110,6 +124,8 @@ const mockingProducts = async (req, res) => {
     }
     res.send({ status: "success", payload: mockedProducts });
   } catch (error) {
+    req.logger.fatal(`Ocurrió un error fatal en la ejecucion del proceso. 
+    message:${error}`);
     res.status(500).send({ status: "error", description: error.toString() });
   }
 };

@@ -5,7 +5,8 @@
   "main": "desafio-manejo-de-archivos.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/app.js"
+    "start": "nodemon src/app.js --env prod",
+    "dev": "nodemon src/app.js --env dev"
   },
   "repository": {
     "type": "git",
@@ -36,7 +37,8 @@
     "passport-github2": "^0.1.12",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
-    "socket.io": "^4.7.2"
+    "socket.io": "^4.7.2",
+    "winston": "^3.11.0"
   },
   "type": "module"
 }

@@ -13,10 +13,12 @@ const renderRealTimeProducts = (req, res) => {
 };
 
 const renderChat = (req, res) => {
+  req.logger.warning("Acceso concedido a chat. Ruta privada");
   res.render("chat", {});
 };
 
 const renderProducts = async (req, res) => {
+  req.logger.warning("Acceso concedido a products. Ruta privada");
   const { limit, page, sort, query } = req.query;
   const result = await productsService.getProducts(limit, page, sort, query);
   const products = result.payload.map((product) => {
@@ -96,6 +98,7 @@ const renderLogin = (req, res) => {
 };
 
 const renderProfile = async (req, res) => {
+  req.logger.warning("Acceso concedido a profile. Ruta privada");
   const user = req.session.user;
   res.render("profile", user);
 };

@@ -3,7 +3,7 @@ import { ticketModel } from "../models/ticket.model.js";
 import config from "../../config/config.js";
 import mongoose from "mongoose";
 let productsService;
-switch (config.persistence) {
+switch (config.database.persistence) {
   case "MONGO":
     const { default: ProductsMongo } = await import("./productManager.mongoDB.js");
     productsService = new ProductsMongo();

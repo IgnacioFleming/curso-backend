@@ -2,11 +2,11 @@ import config from "../config/config.js";
 import mongoose from "mongoose";
 export let productsPersistence;
 export let cartsPersistence;
-switch (config.persistence) {
+switch (config.database.persistence) {
   case "MONGO":
     const { default: ProductsMongo } = await import("./MongoDB/productManager.mongoDB.js");
     const { default: CartsMongo } = await import("./MongoDB/cartManager.mongoDB.js");
-    const connection = mongoose.connect(config.mongo_url);
+    const connection = mongoose.connect(config.database.mongo_url);
     productsPersistence = ProductsMongo;
     cartsPersistence = CartsMongo;
     break;

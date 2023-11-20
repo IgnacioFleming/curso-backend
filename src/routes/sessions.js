@@ -20,4 +20,6 @@ router.get("/failedRegister", sessionsController.handleFailedRegister);
 
 router.get("/logout", sessionsController.handleLogout);
 
+router.post("/sendRestorePassEmail/:email", sessionsController.sendEmailToRestorePass);
+
 export default router;

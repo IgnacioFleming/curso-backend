@@ -36,7 +36,7 @@ const initializePassport = () => {
     "login",
     new LocalStrategy({ usernameField: "email" }, async (username, password, done) => {
       try {
-        if (username === config.admin_user && password === config.admin_password) {
+        if (username === config.passport.admin_user && password === config.passport.admin_password) {
           const user = {
             email: username,
             status: "active",
@@ -62,9 +62,9 @@ const initializePassport = () => {
     "github",
     new GitHubStrategy(
       {
-        clientID: config.clientId,
-        clientSecret: config.clientSecret,
-        callbackURL: config.callbackURL,
+        clientID: config.passport.clientId,
+        clientSecret: config.passport.clientSecret,
+        callbackURL: config.passport.callbackURL,
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
@@ -95,7 +95,7 @@ const initializePassport = () => {
     new JWTStrategy(
       {
         jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-        secretOrKey: config.jwt_secret_key,
+        secretOrKey: config.passport.jwt_secret_key,
       },
       async (jwt_payload, done) => {
         try {

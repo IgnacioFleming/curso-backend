@@ -1,7 +1,7 @@
 import passport from "passport";
 import local from "passport-local";
 import { userModel } from "../dao/models/user.model.js";
-import { createHash, isValidPassword, cookieExtractor } from "../utils.js";
+import { createHash, isValidPassword, cookieExtractor, tokenExtractor } from "../utils.js";
 import mongoose from "mongoose";
 import GitHubStrategy from "passport-github2";
 import jwt from "passport-jwt";
@@ -101,6 +101,23 @@ const initializePassport = () => {
         try {
           const user = new UserDto(jwt_payload);
           return done(null, user);
+        } catch (error) {
+          return done(error);
+        }
+      }
+    )
+  );
+
+  passport.use(
+    "restorePass",
+    new JWTStrategy(
+      {
+        jwtFromRequest: ExtractJWT.fromExtractors([tokenExtractor]),
+        secretOrKey: config.passport.jwt_secret_key,
+      },
+      async (jwt_payload, done) => {
+        try {
+          return done(null, jwt_payload);
         } catch (error) {
           return done(error);
         }

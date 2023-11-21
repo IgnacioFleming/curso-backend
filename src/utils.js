@@ -48,6 +48,16 @@ export const cookieExtractor = (req) => {
   return token;
 };
 
+export const tokenExtractor = (req) => {
+  let token = null;
+  const auth = req.headers;
+  console.log(auth);
+  if (req && req.headers) {
+    token = req.params.token;
+  }
+  return token;
+};
+
 export const adminAuthorizations = async (req, res, next) => {
   if (!req.user) return res.status(401).send({ status: "error", error: "Unauthorized" });
   if (req.user.role === "admin") {

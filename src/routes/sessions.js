@@ -22,4 +22,6 @@ router.get("/logout", sessionsController.handleLogout);
 
 router.post("/sendRestorePassEmail/:email", sessionsController.sendEmailToRestorePass);
 
+router.post("/restorePass/:newPass", passportCall("restorePass"), sessionsController.restorePass);
+
 export default router;

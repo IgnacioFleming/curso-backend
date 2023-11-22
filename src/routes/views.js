@@ -13,5 +13,6 @@ router.get("/carts/:cid", passportCall("jwt"), viewsController.renderCart);
 router.get("/register", viewsController.renderRegister);
 router.get("/login", viewsController.renderLogin);
 router.get("/profile", passportCall("jwt"), viewsController.renderProfile);
+router.get("/forgottenPass", viewsController.renderForgottenPass);
 
 export default router;

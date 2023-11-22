@@ -22,7 +22,7 @@ const initializePassport = () => {
         if (user) {
           return done(null, false);
         }
-        data.password = createHash(password);
+        data.password = await createHash(password);
         data.role = "usuario";
         const result = await userModel.create(data);
         return done(null, result);
@@ -48,7 +48,7 @@ const initializePassport = () => {
         }
         const user = await userModel.findOne({ email: username }).lean();
         if (!user) return done(null, false, { message: "No se encontró el usuario" });
-        const validation = isValidPassword(password, user);
+        const validation = await isValidPassword(password, user);
 
         if (!validation) return done(null, false, { message: "Contraseña invalida" });
         return done(null, user);

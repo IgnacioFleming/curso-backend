@@ -7,9 +7,9 @@ import passport from "passport";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export const createHash = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+export const createHash = async (password) => bcrypt.hash(password, bcrypt.genSaltSync(10));
 
-export const isValidPassword = (password, user) => bcrypt.compareSync(password, user.password);
+export const isValidPassword = async (password, user) => bcrypt.compare(password, user.password);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -50,9 +50,7 @@ export const cookieExtractor = (req) => {
 
 export const tokenExtractor = (req) => {
   let token = null;
-  const auth = req.headers;
-  console.log(auth);
-  if (req && req.headers) {
+  if (req && req.params.token) {
     token = req.params.token;
   }
   return token;

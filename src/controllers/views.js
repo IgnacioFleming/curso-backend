@@ -103,6 +103,10 @@ const renderProfile = async (req, res) => {
   res.render("profile", user);
 };
 
+const renderForgottenPass = async (req, res) => {
+  res.render("forgottenPass");
+};
+
 export default {
   renderCart,
   renderChat,
@@ -114,4 +118,5 @@ export default {
   renderRealTimeProducts,
   renderRealTimeProducts,
   renderRegister,
+  renderForgottenPass,
 };

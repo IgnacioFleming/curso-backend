@@ -7,5 +7,9 @@ form.addEventListener("submit", (e) => {
     method: "POST",
   })
     .then((res) => res.json())
-    .then((json) => console.log(json));
+    .then((json) => {
+      console.log(json);
+      form.reset();
+      window.location.href = "/login";
+    });
 });

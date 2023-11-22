@@ -2,3 +2,7 @@ error: Prueba de log del nivel error
 fatal: Prueba de log del nivel fatal
 error: Prueba de log del nivel error
 fatal: Prueba de log del nivel fatal
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:TypeError: Cannot read properties of undefined (reading 'toString')
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:Error: Error: MongoServerError: E11000 duplicate key error collection: ecommerce.products index: code_1 dup key: { code: "1" }

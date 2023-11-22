@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { adminAuthorizations, passportCall, uploader } from "../utils.js";
+import { passportCall, uploader } from "../utils.js";
 import productsController from "../controllers/products.js";
+import { applyPolicy } from "../middlewares/errors/policies/policies.js";
 
 const router = Router();
 
@@ -10,10 +11,10 @@ router.get("/mockingproducts", productsController.mockingProducts);
 
 router.get("/:pid", productsController.getProductById);
 
-router.post("/", passportCall("jwt"), adminAuthorizations, uploader.single("thumbnails"), productsController.addProduct);
+router.post("/", passportCall("jwt"), applyPolicy(["ADMIN", "PREMIUM"]), uploader.single("thumbnails"), productsController.addProduct);
 
-router.put("/:pid", passportCall("jwt"), adminAuthorizations, productsController.updateProduct);
+router.put("/:pid", passportCall("jwt"), applyPolicy(["ADMIN", "PREMIUM"]), productsController.updateProduct);
 
-router.delete("/:pid", passportCall("jwt"), adminAuthorizations, productsController.deleteProduct);
+router.delete("/:pid", passportCall("jwt"), applyPolicy(["ADMIN", "PREMIUM"]), productsController.deleteProduct);
 
 export default router;

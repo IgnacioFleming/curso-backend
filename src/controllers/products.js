@@ -62,6 +62,11 @@ const addProduct = async (req, res, next) => {
     if (req.file) {
       newProduct.thumbnails = [req.file.path];
     }
+
+    if (req.user.role === "premium") {
+      newProduct.owner = req.user.email;
+    }
+
     const { status, description, payload } = await productsService.addProduct(newProduct);
     if (status === "success") {
       res.send({ status, payload });

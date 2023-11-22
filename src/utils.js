@@ -27,6 +27,13 @@ export const passportCall = (strategy) => {
         req.logger.error("Error fatal al autenticarse");
         return next(err);
       }
+      if (strategy === "restorePass" && !user) {
+        req.logger.warning(`{
+          status: "error",
+          error: ${info.message ? info.message : info.toString()},
+        }`);
+        return res.redirect("/forgottenPass");
+      }
       if (!user) {
         req.logger.warning(`{
           status: "error",
@@ -54,24 +61,6 @@ export const tokenExtractor = (req) => {
     token = req.params.token;
   }
   return token;
-};
-
-export const adminAuthorizations = async (req, res, next) => {
-  if (!req.user) return res.status(401).send({ status: "error", error: "Unauthorized" });
-  if (req.user.role === "admin") {
-    return next();
-  } else {
-    return res.status(403).send({ status: "error", error: "No permissions" });
-  }
-};
-
-export const userAuthorizations = async (req, res, next) => {
-  if (!req.user) return res.status(401).send({ status: "error", error: "Unauthorized" });
-  if (req.user.role === "usuario") {
-    return next();
-  } else {
-    return res.status(403).send({ status: "error", error: "No permissions" });
-  }
 };
 
 export const uploader = multer({ storage });

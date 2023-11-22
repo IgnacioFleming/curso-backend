@@ -1,12 +1,13 @@
 import { Router } from "express";
-import { passportCall, userAuthorizations } from "../utils.js";
+import { passportCall } from "../utils.js";
 import viewsController from "../controllers/views.js";
+import { applyPolicy } from "../middlewares/errors/policies/policies.js";
 
 const router = Router();
 
 router.get("/", passportCall("jwt"), viewsController.renderHome);
 router.get("/realTimeProducts", passportCall("jwt"), viewsController.renderRealTimeProducts);
-router.get("/chat", passportCall("jwt"), userAuthorizations, viewsController.renderChat);
+router.get("/chat", passportCall("jwt"), applyPolicy(["USUARIO"]), viewsController.renderChat);
 router.get("/products", passportCall("jwt"), viewsController.renderProducts);
 router.get("/products/:pid", passportCall("jwt"), viewsController.renderProductDetail);
 router.get("/carts/:cid", passportCall("jwt"), viewsController.renderCart);

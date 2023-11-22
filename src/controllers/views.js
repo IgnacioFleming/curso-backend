@@ -107,6 +107,11 @@ const renderForgottenPass = async (req, res) => {
   res.render("forgottenPass");
 };
 
+const restorePass = async (req, res) => {
+  const { email } = req.user;
+  res.render("restorePass", { email });
+};
+
 export default {
   renderCart,
   renderChat,
@@ -119,4 +124,5 @@ export default {
   renderRealTimeProducts,
   renderRegister,
   renderForgottenPass,
+  restorePass,
 };

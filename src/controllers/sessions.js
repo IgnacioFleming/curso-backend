@@ -6,6 +6,7 @@ import { createHash, isValidPassword } from "../utils.js";
 
 const handleLogin = async (req, res) => {
   const { user } = req;
+  console.log("user de login", user);
   const token = jwt.sign(user, config.passport.jwt_secret_key, {
     expiresIn: "1h",
   });
@@ -28,8 +29,13 @@ const handleFailedLogin = async (req, res) => {
 
 const handleGithubCallback = async (req, res) => {
   const { user } = req;
-  user.status = "active";
-  req.session.user = user;
+  const plainUser = user.toObject();
+
+  const token = jwt.sign(plainUser, config.passport.jwt_secret_key, {
+    expiresIn: "1h",
+  });
+  res.cookie("sessionCookie", token, { maxAge: 3600000, httpOnly: true });
+
   res.redirect("/products");
 };
 
@@ -81,7 +87,7 @@ const restorePass = async (req, res) => {
   const hashedNewPass = await createHash(password);
   const updatedUser = { ...user, password: hashedNewPass };
   const result = await userModel.updateOne({ _id: updatedUser._id }, updatedUser);
-  res.send({ status: "success", payload: result });
+  res.send({ status: "success", payload: "Se restableción con exito su contraseña" });
 };
 
 export default {

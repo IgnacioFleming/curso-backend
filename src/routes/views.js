@@ -14,5 +14,6 @@ router.get("/register", viewsController.renderRegister);
 router.get("/login", viewsController.renderLogin);
 router.get("/profile", passportCall("jwt"), viewsController.renderProfile);
 router.get("/forgottenPass", viewsController.renderForgottenPass);
+router.get("/restorePass/:token", passportCall("restorePass"), viewsController.restorePass);
 
 export default router;

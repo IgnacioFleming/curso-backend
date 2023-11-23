@@ -6,3 +6,13 @@ fatal: Ocurrió un error fatal en la ejecucion del proceso.
     message:TypeError: Cannot read properties of undefined (reading 'toString')
 fatal: Ocurrió un error fatal en la ejecucion del proceso. 
     message:Error: Error: MongoServerError: E11000 duplicate key error collection: ecommerce.products index: code_1 dup key: { code: "1" }
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:TypeError: Cannot read properties of undefined (reading 'owner')
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:Error: Error: MongoServerError: E11000 duplicate key error collection: 64f0ebd781e1847551c16c71_ecommerce.products index: code_1 dup key: { code: "seede" }
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:Error: Error: MongoServerError: E11000 duplicate key error collection: 64f0ebd781e1847551c16c71_ecommerce.products index: code_1 dup key: { code: "seede" }
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:Error: Error: MongoServerError: E11000 duplicate key error collection: 64f0ebd781e1847551c16c71_ecommerce.products index: code_1 dup key: { code: "sadasdf" }
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:Error: Error: MongoServerError: E11000 duplicate key error collection: 64f0ebd781e1847551c16c71_ecommerce.products index: code_1 dup key: { code: "sadasdf" }

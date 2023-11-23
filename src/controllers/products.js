@@ -86,6 +86,8 @@ const updateProduct = async (req, res) => {
     const { pid } = req.params;
     const newProduct = req.body;
     delete newProduct?.id;
+    const product = await productsService.getProductById(pid);
+    if (req.user.role === "premium" && product.payload.owner !== req.user.email) return res.status(403).send({ status: "error", error: "No es posible editar un producto que no pertenezca al usuario" });
     const { status, description, payload } = await productsService.updateProduct(pid, newProduct);
 
     if (status === "success") {
@@ -104,6 +106,8 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const { pid } = req.params;
+    const product = await productsService.getProductById(pid);
+    if (req.user.role === "premium" && product.payload.owner !== req.user.email) return res.status(403).send({ status: "error", error: "No es posible eliminar un producto que no pertenezca al usuario" });
     const { status, payload } = await productsService.deleteProduct(pid);
     if (status === "success") {
       res.send({ status, payload });

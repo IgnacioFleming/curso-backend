@@ -1,4 +1,4 @@
-import { cartsService } from "../dao/repositories/index.js";
+import { cartsService, productsService } from "../dao/repositories/index.js";
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
 import { generateCartsError } from "../services/errors/info.js";
@@ -58,6 +58,10 @@ const addProductToCart = async (req, res, next) => {
         code: EErrors.INVALID_PARAMS_ERROR,
       });
     }
+    if (req.user.role === "premium") {
+      const product = await productsService.getProductById(pid);
+      if (product.payload.owner === req.user.email) return res.status(400).send({ status: "error", error: "Como usuario premium no podés agregar un producto propio" });
+    }
     const { status, description, payload } = await cartsService.addProductToCart(cid, pid);
     if (status === "success") {
       req.logger.http(`Proceso exitoso addProductToCart con parametro ${cid} y ${pid}`);
@@ -97,7 +101,20 @@ const deleteProductFromCart = async (req, res) => {
 const updateProductsOfCart = async (req, res) => {
   try {
     const { cid } = req.params;
-    const products = req.body;
+    let products = req.body;
+    let notPremiumProducts;
+    if (req.user.role === "premium") {
+      notPremiumProducts = await Promise.all(
+        products.map(async (e) => {
+          const data = await productsService.getProductById(e.product);
+          if (data.payload.owner !== req.user.email) {
+            return e;
+          }
+        })
+      );
+      products = notPremiumProducts.filter((e) => e != null);
+    }
+
     const { status, payload, description } = await cartsService.updateProductsOfCart(cid, products);
     if (status === "success") {
       req.logger.http(`Proceso exitoso updateProductsOfCart con parametro ${cid}`);

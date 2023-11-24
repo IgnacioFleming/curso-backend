@@ -9,15 +9,15 @@ router.post("/", cartsController.createCart);
 
 router.get("/:cid", cartsController.getCartById);
 
-router.post("/:cid/products/:pid", passportCall("jwt"), applyPolicy(["USUARIO"]), cartsController.addProductToCart);
+router.post("/:cid/products/:pid", passportCall("jwt"), applyPolicy(["USUARIO", "PREMIUM"]), cartsController.addProductToCart);
 
-router.delete("/:cid/products/:pid", passportCall("jwt"), applyPolicy(["USUARIO"]), cartsController.deleteProductFromCart);
+router.delete("/:cid/products/:pid", passportCall("jwt"), applyPolicy(["USUARIO", "PREMIUM"]), cartsController.deleteProductFromCart);
 
-router.put("/:cid", passportCall("jwt"), applyPolicy(["USUARIO"]), cartsController.updateProductsOfCart);
+router.put("/:cid", passportCall("jwt"), applyPolicy(["USUARIO", "PREMIUM"]), cartsController.updateProductsOfCart);
 
-router.put("/:cid/products/:pid", passportCall("jwt"), applyPolicy(["USUARIO"]), cartsController.updateProductQuantityFromCart);
+router.put("/:cid/products/:pid", passportCall("jwt"), applyPolicy(["USUARIO", "PREMIUM"]), cartsController.updateProductQuantityFromCart);
 
-router.delete("/:cid", passportCall("jwt"), applyPolicy(["USUARIO"]), cartsController.resetCart);
+router.delete("/:cid", passportCall("jwt"), applyPolicy(["USUARIO", "PREMIUM"]), cartsController.resetCart);
 
 router.post("/:cid/purchase", cartsController.confirmPurchase);
 

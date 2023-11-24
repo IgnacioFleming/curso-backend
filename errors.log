@@ -16,3 +16,11 @@ fatal: Ocurrió un error fatal en la ejecucion del proceso.
     message:Error: Error: MongoServerError: E11000 duplicate key error collection: 64f0ebd781e1847551c16c71_ecommerce.products index: code_1 dup key: { code: "sadasdf" }
 fatal: Ocurrió un error fatal en la ejecucion del proceso. 
     message:Error: Error: MongoServerError: E11000 duplicate key error collection: 64f0ebd781e1847551c16c71_ecommerce.products index: code_1 dup key: { code: "sadasdf" }
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:Error: Error: MongoServerError: E11000 duplicate key error collection: 64f0ebd781e1847551c16c71_ecommerce.products index: code_1 dup key: { code: "1654654dfadfasdf" }
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:ReferenceError: e is not defined
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:ReferenceError: notPremiumProducts is not defined
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:ReferenceError: e is not defined

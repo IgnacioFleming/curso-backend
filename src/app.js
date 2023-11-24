@@ -2,6 +2,7 @@ import express from "express";
 import productsRouter from "./routes/products.js";
 import cartsRouter from "./routes/carts.js";
 import viewsRouter from "./routes/views.js";
+import usersRouter from "./routes/users.js";
 import __dirname from "./utils.js";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
@@ -32,6 +33,7 @@ app.use("/api/carts", cartsRouter);
 app.use(passport.initialize());
 app.use("/api/sessions", sessionRouter);
 app.use("/api/products", productsRouter);
+app.use("/api/users", usersRouter);
 app.use(errorHandler);
 
 const server = app.listen(8080, () => {

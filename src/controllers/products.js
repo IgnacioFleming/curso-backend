@@ -95,7 +95,7 @@ const updateProduct = async (req, res) => {
     if (status === "success") {
       res.send({ status, payload });
     } else {
-      req.logger.error(`Falló el GET. Revisar parametros pid:${pid}`);
+      req.logger.error(`Falló el PUT. Revisar parametros pid:${pid}`);
       res.status(400).send({ status, description });
     }
   } catch (error) {

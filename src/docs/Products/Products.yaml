@@ -1,0 +1,248 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los productos dados de alta.
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Los productos fueron obtenidos exitosamente de la base de datos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: String
+                  payload:
+                    type: array
+                    items:
+                      $ref: "#components/schemas/Product"
+                  totalPages:
+                    type: integer
+                  prevPage:
+                    type: integer
+                  nextPage:
+                    type: integer
+                  page:
+                    type: integer
+                  hasPrevPage:
+                    type: boolean
+                  hasNextPage:
+                    type: boolean
+                  prevLink:
+                    type: string
+                  nextLink:
+                    type: string
+        "500":
+          description: Ocurrió un error fatal a la hora de correr el proceso.
+    post:
+      summary: Da de alta un producto de acuerdo al body enviado. Se necesita Token en Cookie.
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/addProduct"
+      responses:
+        "200":
+          description: El producto fue agregado de manera exitosa.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: String
+                  payload:
+                    $ref: "#components/schemas/Product"
+        "400":
+          description: Hubo un error en los campos del body o algun campo faltante.
+        "500":
+          description: Ocurrió un error fatal a la hora de correr el proceso.
+  /api/products/{pid}:
+    get:
+      summary: Obtiene el producto de acuerdo al Id provisto.
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto que se busca.
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: El producto fue obtenido de manera exitosa.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: String
+                  payload:
+                    $ref: "#components/schemas/Product"
+        "400":
+          description: Hubo un error en el parametro enviado.
+        "500":
+          description: Ocurrió un error fatal a la hora de correr el proceso.
+    put:
+      summary: Edita el producto de correspondiente al Id provisto de acuerdo al body enviado
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto a actualizar.
+          schema:
+            $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/addProduct"
+      responses:
+        "200":
+          description: El producto fue editado de manera exitosa.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: String
+                  payload:
+                    type: object
+                    properties:
+                      acknowledged:
+                        type: boolean
+                      modifiedCount:
+                        type: number
+                      upsertedId:
+                        type: null
+                      upsertedCount:
+                        type: number
+                      matchedCount:
+                        type: string
+        "400":
+          description: Hubo un error en el parametro, en los campos del body o algun campo faltante.
+        "500":
+          description: Ocurrió un error fatal a la hora de correr el proceso.
+    delete:
+      summary: Elimina un producto de acuerdo al Id provisto.
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto que se quiere eliminar.
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: El producto fue eliminado de manera exitosa.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    type: object
+                    properties:
+                      acknowledged:
+                        type: boolean
+                      deletedCount:
+                        type: number
+        "400":
+          description: Hubo un error en el parametro enviado.
+        "500":
+          description: Ocurrió un error fatal a la hora de correr el proceso.
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id generado automaticamente por Mongo.
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripción del producto
+        price:
+          type: Number
+          description: Precio unitario del producto
+        category:
+          type: String
+          description: Categoría a la cual pertenece el producto
+        code:
+          type: String
+          description: Código único para distinguir el producto
+        stock:
+          type: Number
+          description: Cantidad de stock del producto
+        status:
+          type: Boolean
+          description: Booleano que indica si el producto está activo o no
+        thumbnails:
+          type: array
+          description: Array de strings correspondientes a la dirección de cada imagen asociada al producto
+        owner:
+          type: String
+          description: Indica el email del dueño del producto, puede ser un Usuario Premium o por defecto admin
+      example:
+        _id: ObjectId("64f8ec59d251dcc66a00e8b6")
+        title: "monitor"
+        description: "samsung"
+        price: 15000
+        category: "hardware"
+        code: "ABC123456"
+        stock: 6
+        status: true
+        thumbnails: []
+        owner: "admin"
+  requestBodies:
+    addProduct:
+      type: object
+      properties:
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripción del producto
+        price:
+          type: Number
+          description: Precio unitario del producto
+        category:
+          type: String
+          description: Categoría a la cual pertenece el producto
+        code:
+          type: String
+          description: Código único para distinguir el producto
+        stock:
+          type: Number
+          description: Cantidad de stock del producto
+        status:
+          type: Boolean
+          description: Booleano que indica si el producto está activo o no
+      example:
+        title: "monitor"
+        description: "samsung"
+        price: 15000
+        category: "hardware"
+        code: "ABC123456"
+        stock: 6
+        status: true

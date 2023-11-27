@@ -5,11 +5,11 @@ import { applyPolicy } from "../middlewares/errors/policies/policies.js";
 
 const router = Router();
 
-router.get("/", productsController.getProducts);
+router.get("/", passportCall("jwt"), applyPolicy(["PUBLIC"]), productsController.getProducts);
 
 router.get("/mockingproducts", productsController.mockingProducts);
 
-router.get("/:pid", productsController.getProductById);
+router.get("/:pid", passportCall("jwt"), applyPolicy(["PUBLIC"]), productsController.getProductById);
 
 router.post("/", passportCall("jwt"), applyPolicy(["ADMIN", "PREMIUM"]), uploader.single("thumbnails"), productsController.addProduct);
 

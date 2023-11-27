@@ -37,6 +37,7 @@ const getProductById = async (req, res) => {
   try {
     const { pid } = req.params;
     const { status, payload, description } = await productsService.getProductById(pid);
+    if (payload === null) return res.status(400).send({ status: "error", description: "No existe el producto en la base" });
     status === "error" ? res.status(400).send({ status, description }) : res.send({ status, payload });
   } catch (error) {
     req.logger.fatal(`Ocurrió un error fatal en la ejecucion del proceso. 

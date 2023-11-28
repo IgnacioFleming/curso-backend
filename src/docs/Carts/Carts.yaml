@@ -1,0 +1,329 @@
+paths:
+  /api/carts:
+    post:
+      summary: Crea un carrito vacío
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: El carrito fue creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    type: object
+                    properties:
+                      products:
+                        type: array
+                      _id:
+                        type: string
+                        format: objectid
+                      _v:
+                        type: number
+        "500":
+          description: Ocurrió un error fatal a la hora de correr el proceso.
+  /api/carts/{cid}:
+    get:
+      summary: busca un carrito segun el id provisto.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito que se busca
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Se obtuvo el carrito de manera exitosa.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    type: array
+                    items:
+                      $ref: "#components/schemas/Cart"
+        "400":
+          description: Hubo un error en los campos del body o algun campo faltante.
+        "500":
+          description: Ocurrió un error fatal a la hora de correr el proceso.
+    delete:
+      summary: Elimina todos los productos del carrito de acuerdo al Id provisto.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito que se quiere vaciar.
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: El producto fue eliminado de manera exitosa.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    type: object
+                    properties:
+                      acknowledged:
+                        type: boolean
+                      modifiedCount:
+                        type: number
+                      upsertedId:
+                        type: null
+                      upsertedCount:
+                        type: number
+                      matchedCount:
+                        type: number
+        "400":
+          description: Hubo un error en el parametro enviado.
+        "500":
+          description: Ocurrió un error fatal a la hora de correr el proceso.
+    put:
+      summary: Edita los productos de un carrito creado
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito a actualizar.
+          schema:
+            $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/updateProductsOfCart"
+      responses:
+        "200":
+          description: El producto fue editado de manera exitosa.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: String
+                  payload:
+                    type: object
+                    properties:
+                      acknowledged:
+                        type: boolean
+                      modifiedCount:
+                        type: number
+                      upsertedId:
+                        type: null
+                      upsertedCount:
+                        type: number
+                      matchedCount:
+                        type: string
+        "400":
+          description: Hubo un error en el parametro, en los campos del body o algun campo faltante.
+        "500":
+          description: Ocurrió un error fatal a la hora de correr el proceso.
+  /api/products/{pid}:
+    get:
+      summary: Obtiene el producto de acuerdo al Id provisto.
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto que se busca.
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: El producto fue obtenido de manera exitosa.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: String
+                  payload:
+                    $ref: "#components/schemas/Product"
+        "400":
+          description: Hubo un error en el parametro enviado.
+        "500":
+          description: Ocurrió un error fatal a la hora de correr el proceso.
+    put:
+      summary: Edita el producto de correspondiente al Id provisto de acuerdo al body enviado
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto a actualizar.
+          schema:
+            $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/addProduct"
+      responses:
+        "200":
+          description: El producto fue editado de manera exitosa.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: String
+                  payload:
+                    type: object
+                    properties:
+                      acknowledged:
+                        type: boolean
+                      modifiedCount:
+                        type: number
+                      upsertedId:
+                        type: null
+                      upsertedCount:
+                        type: number
+                      matchedCount:
+                        type: string
+        "400":
+          description: Hubo un error en el parametro, en los campos del body o algun campo faltante.
+        "500":
+          description: Ocurrió un error fatal a la hora de correr el proceso.
+    delete:
+      summary: Elimina un producto de acuerdo al Id provisto.
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto que se quiere eliminar.
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: El producto fue eliminado de manera exitosa.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    type: object
+                    properties:
+                      acknowledged:
+                        type: boolean
+                      deletedCount:
+                        type: number
+        "400":
+          description: Hubo un error en el parametro enviado.
+        "500":
+          description: Ocurrió un error fatal a la hora de correr el proceso.
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id generado automaticamente por Mongo.
+        products:
+          type: array
+          description: Array con los productos agregados al carrito
+          items:
+            type: object
+            properties:
+              product:
+                $ref: "#components/schemas/Product"
+              quantity:
+                type: number
+      example:
+        _id: ObjectId("6504f745b07752b35e65c069")
+        products:
+          - product: "65038c7a113efadaace93934"
+            quantity: 15
+          - product: "65038d0fb9f0a329d961020c"
+            quantity: 7
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id generado automaticamente por Mongo.
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripción del producto
+        price:
+          type: Number
+          description: Precio unitario del producto
+        category:
+          type: String
+          description: Categoría a la cual pertenece el producto
+        code:
+          type: String
+          description: Código único para distinguir el producto
+        stock:
+          type: Number
+          description: Cantidad de stock del producto
+        status:
+          type: Boolean
+          description: Booleano que indica si el producto está activo o no
+        thumbnails:
+          type: array
+          description: Array de strings correspondientes a la dirección de cada imagen asociada al producto
+        owner:
+          type: String
+          description: Indica el email del dueño del producto, puede ser un Usuario Premium o por defecto admin
+      example:
+        _id: ObjectId("64f8ec59d251dcc66a00e8b6")
+        title: "monitor"
+        description: "samsung"
+        price: 15000
+        category: "hardware"
+        code: "ABC123456"
+        stock: 6
+        status: true
+        thumbnails: array
+        owner: "admin"
+  requestBodies:
+    updateProductsOfCart:
+      type: array
+      items:
+        - product:
+            type: ObjectId
+            description: ID del producto.
+          quantity:
+            type: number
+            description: cantidad del producto
+      example:
+        - product: "64fa4d681128fa3686b90a8a"
+          quantity: 8
+        - product: "65038c7a113efadaace93935"
+          quantity: 4

@@ -30,3 +30,26 @@ fatal: Ocurrió un error fatal en la ejecucion del proceso.
     message:Error: Error: MongoServerError: E11000 duplicate key error collection: ecommerce.products index: code_1 dup key: { code: "ABC123456" }
 fatal: Ocurrió un error fatal en la ejecucion del proceso. 
     message:Error: Error: MongoServerError: E11000 duplicate key error collection: 64f0ebd781e1847551c16c71_ecommerce.products index: code_1 dup key: { code: "ABC123456" }
+error: Falló el GET. Revisar parametros cid:6504f745b07752b35e65c069 y pid:64fa4d681128fa3686b90a8a
+error: Falló el GET. Revisar parametros cid:6504f745b07752b35e65c069 y pid:64fa4d681128fa3686b90a8a
+error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
+error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
+error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
+error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
+error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
+error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
+error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
+error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
+error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
+error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
+error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:Error: Error: TypeError: e.product.lean is not a function
+error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
+error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
+error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:Error: Error: TypeError: Cannot read properties of undefined (reading 'toString')
+error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
+error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
+error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067, pid:65038d0fb9f0a329d9610216 y newQuantity:[object Object]

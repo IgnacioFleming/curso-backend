@@ -46,8 +46,6 @@ class CartManager {
       }
       const cart = await cartModel.findOne({ _id: cartId });
       const productIndex = cart.products.findIndex((e) => e.product.toString() === productId);
-      console.log(productIndex);
-      console.log(productId);
       if (productIndex === -1) {
         const newProduct = { product: productId, quantity: 1 };
         cart.products.push(newProduct);
@@ -76,7 +74,7 @@ class CartManager {
         };
       }
       const cart = await cartModel.findOne({ _id: cartId });
-      const productIndex = cart.products.findIndex((e) => e.product === productId);
+      const productIndex = cart.products.findIndex((e) => e.product.toString() === productId);
       if (productIndex === -1) {
         return {
           status: "error",
@@ -110,14 +108,13 @@ class CartManager {
   updateProductOfCartQuantity = async (cartId, productId, quantity) => {
     try {
       const cart = await cartModel.findOne({ _id: cartId });
-      const productIndex = cart.products.findIndex((e) => e.product === productId);
+      const productIndex = cart.products.findIndex((e) => e.product.toString() === productId);
       if (productIndex === -1) {
         return {
           status: "error",
           description: "El producto a modificar no existe en el carrito",
         };
       }
-      console.log(cart.products);
       cart.products[productIndex].quantity = quantity.quantity;
       const result = await cartModel.updateOne({ _id: cartId }, cart);
       return { status: "success", payload: result };
@@ -138,17 +135,15 @@ class CartManager {
 
   confirmPurchase = async (cartId) => {
     const { payload: cart } = await this.getCartById(cartId);
+    if (!cart) return { status: "error", description: "Hay un error en el ID provisto" };
     let amount = 0;
     const remainingCart = [];
     await Promise.all(
       cart.products.map(async (e) => {
         if (e.quantity <= e.product.stock) {
-          console.log("este es el id", e.product._id.toString());
           amount += e.quantity * e.product.price;
           e.product.stock -= e.quantity;
           const result = await productsService.updateProduct(e.product._id.toString(), e.product);
-
-          console.log(result);
           return;
         } else {
           remainingCart.push(e);
@@ -156,7 +151,6 @@ class CartManager {
         }
       })
     );
-    console.log(amount);
     if (remainingCart.length !== 0) {
       const newTicket = {
         code: new mongoose.Types.ObjectId(),
@@ -175,9 +169,8 @@ class CartManager {
       amount,
       purchaser: "User",
     };
-    console.log(newTicket);
     const result = await ticketModel.create(newTicket);
-    console.log("el ticket es", result);
+    await cartModel.deleteOne({ _id: cartId });
     return { status: "success", payload: "La compra se procesó correctamente" };
   };
 }

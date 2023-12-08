@@ -6,7 +6,6 @@ import { createHash, isValidPassword } from "../utils.js";
 
 const handleLogin = async (req, res) => {
   const { user } = req;
-  console.log("user de login", user);
   const token = jwt.sign(user, config.passport.jwt_secret_key, {
     expiresIn: "1h",
   });

@@ -15,15 +15,16 @@ const ExtractJWT = jwt.ExtractJwt;
 const initializePassport = () => {
   passport.use(
     "register",
-    new LocalStrategy({ passReqToCallback: true, usernameField: "email" }, async (req, username, password, done) => {
+    new LocalStrategy({ passReqToCallback: true, usernameField: "email", session: false }, async (req, username, password, done) => {
       try {
+        console.log("pase por el register");
         let data = req.body;
         const user = await userModel.findOne({ email: username });
         if (user) {
           return done(null, false);
         }
         data.password = await createHash(password);
-        data.role = "usuario";
+        data.role = data.role || "usuario";
         const result = await userModel.create(data);
         return done(null, result);
       } catch (error) {

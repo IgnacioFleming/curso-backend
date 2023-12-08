@@ -7,6 +7,7 @@ if (options.mode === "file") {
 }
 if (options.env === "dev") {
   process.env.ENVIROMENT = "DEV";
+  process.env.MONGO_URL = process.env.TEST_MONGO_URL;
 } else {
   process.env.ENVIROMENT = "PROD";
 }
@@ -28,6 +29,8 @@ export default {
     clientId: process.env.clientId,
     clientSecret: process.env.clientSecret,
     callbackURL: process.env.callbackURL,
+    test_user_email: process.env.TEST_USER_EMAIL,
+    test_user_password: process.env.TEST_USER_PASSWORD,
   },
   enviroment: process.env.ENVIROMENT,
 };

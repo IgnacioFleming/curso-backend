@@ -14,7 +14,7 @@ router.get("/github", passport.authenticate("github", { scope: ["user:email"] })
 
 router.get("/githubCallback", passport.authenticate("github", { session: false, failureRedirect: "/api/sessions/login" }), sessionsController.handleGithubCallback);
 
-router.post("/register", passport.authenticate("register", { failureRedirect: "/api/sessions/failedRegister" }), sessionsController.handleRegister);
+router.post("/register", passport.authenticate("register", { session: false, failureRedirect: "/api/sessions/failedRegister" }), sessionsController.handleRegister);
 
 router.get("/failedRegister", sessionsController.handleFailedRegister);
 

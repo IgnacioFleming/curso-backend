@@ -2,7 +2,11 @@ import chai from "chai";
 import supertest from "supertest";
 import config from "../src/config/config.js";
 import { generateMockedProduct } from "../src/mocks/products.js";
+import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 import { userModel } from "../src/dao/models/user.model.js";
+
+const connection = mongoose.connect("mongodb+srv://ifleming816:Ricardo55,.@codercluster.zf1jrhg.mongodb.net/test");
 
 const expect = chai.expect;
 const requester = supertest("http://localhost:8080");
@@ -46,7 +50,7 @@ describe("Testing de mi App Ecommerce", () => {
     });
   });
   describe("Test de Router de carts", async () => {
-    before(async () => await cookieSetter(config.passport.test_user_email, config.passport.test_user_password));
+    before(async () => await cookieSetter("pgrillo@example.com", "123"));
 
     it("Al crear un nuevo carrito, se debe crear un carrito con una propiedad products que debe ser un array vacio", async () => {
       const { statusCode, ok, _body } = await requester.post("/api/carts").set("Cookie", [`${cookie.name}=${cookie.value}`]);
@@ -73,11 +77,12 @@ describe("Testing de mi App Ecommerce", () => {
       expect(resetedCart.payload.products).to.be.deep.equal([]);
     });
   });
-  describe("Test de Router de Sessions", () => {
-    before(function () {
+  describe("Test de Router de Sessions", async () => {
+    before(async function () {
       this.timeout(20000);
+      await mongoose.connection.collections.users.drop();
     });
-    it("Al realizar un registro de usuario debe devolver un status 200", async () => {
+    it("Al realizar un registro de usuario debe devolver un status 200 y debe tener id de mongo", async () => {
       const user = {
         first_name: "Pepe",
         last_name: "Grillo",
@@ -86,9 +91,27 @@ describe("Testing de mi App Ecommerce", () => {
         age: 25,
       };
       const { statusCode, ok, _body } = await requester.post("/api/sessions/register").send(user);
+      const userDB = await userModel.findOne({ email: user.email });
 
       expect(statusCode).to.be.equal(200);
-      expect(_body.status).to.be.equal("success");
+      expect(userDB).to.have.property("_id");
+    });
+    it("Al realizar un login debo obtener un token y al verificarlo debe tratarse de un email y password valido", async () => {
+      const user = {
+        email: "pgrillo@example.com",
+        password: "123",
+      };
+      const result = await requester.post("/api/sessions/login").send(user);
+      const cookie = result.headers["set-cookie"][0];
+      const token = cookie.split("=")[1].split(";")[0];
+      const jwt_payload = jwt.verify(token, config.passport.jwt_secret_key);
+      expect(jwt_payload.email).to.be.equal(user.email);
+    });
+    it("Al llamar a la ruta current debo obtener un status 200 y el mismo email de usuario guardado en la cookie inicial", async () => {
+      const { statusCode, ok, _body } = await requester.get("/api/sessions/current").set("Cookie", [`${cookie.name}=${cookie.value}`]);
+      expect(statusCode).to.be.equal(200);
+      expect(ok).to.be.ok;
+      expect(_body.email).to.be.equal("pgrillo@example.com");
     });
   });
 });

@@ -17,7 +17,6 @@ const initializePassport = () => {
     "register",
     new LocalStrategy({ passReqToCallback: true, usernameField: "email", session: false }, async (req, username, password, done) => {
       try {
-        console.log("pase por el register");
         let data = req.body;
         const user = await userModel.findOne({ email: username });
         if (user) {

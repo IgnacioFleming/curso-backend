@@ -2,6 +2,7 @@ import chai from "chai";
 import supertest from "supertest";
 import config from "../src/config/config.js";
 import { generateMockedProduct } from "../src/mocks/products.js";
+import { userModel } from "../src/dao/models/user.model.js";
 
 const expect = chai.expect;
 const requester = supertest("http://localhost:8080");
@@ -46,6 +47,7 @@ describe("Testing de mi App Ecommerce", () => {
   });
   describe("Test de Router de carts", async () => {
     before(async () => await cookieSetter(config.passport.test_user_email, config.passport.test_user_password));
+
     it("Al crear un nuevo carrito, se debe crear un carrito con una propiedad products que debe ser un array vacio", async () => {
       const { statusCode, ok, _body } = await requester.post("/api/carts").set("Cookie", [`${cookie.name}=${cookie.value}`]);
       expect(statusCode).to.be.equal(200);
@@ -69,6 +71,24 @@ describe("Testing de mi App Ecommerce", () => {
       expect(cartWithProducts.payload.products).to.be.not.deep.equal([]);
       expect(statusCode).to.be.equal(200);
       expect(resetedCart.payload.products).to.be.deep.equal([]);
+    });
+  });
+  describe("Test de Router de Sessions", () => {
+    before(function () {
+      this.timeout(20000);
+    });
+    it("Al realizar un registro de usuario debe devolver un status 200", async () => {
+      const user = {
+        first_name: "Pepe",
+        last_name: "Grillo",
+        email: "pgrillo@example.com",
+        password: "123",
+        age: 25,
+      };
+      const { statusCode, ok, _body } = await requester.post("/api/sessions/register").send(user);
+
+      expect(statusCode).to.be.equal(200);
+      expect(_body.status).to.be.equal("success");
     });
   });
 });

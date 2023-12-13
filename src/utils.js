@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
       case "document":
       case "id":
       case "address":
-      case "account-statement":
+      case "accountStatement":
         dest = "/public/documents";
         break;
       case "profile":

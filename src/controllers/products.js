@@ -61,9 +61,7 @@ const addProduct = async (req, res, next) => {
       });
     }
     if (req.files) {
-      newProduct.thumbnails = req.files.map((e) => {
-        e.path;
-      });
+      newProduct.thumbnails = req.files.map((e) => e.path);
     }
 
     if (req.user.role === "premium") {

@@ -16,12 +16,15 @@ const userSchema = new mongoose.Schema({
     ref: "carts",
   },
   role: String,
-  documents: [
-    {
-      name: String,
-      reference: String,
-    },
-  ],
+  documents: {
+    type: [
+      {
+        name: String,
+        reference: String,
+      },
+    ],
+    default: [],
+  },
   last_connection: String,
 });
 

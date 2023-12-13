@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { passportCall, uploader } from "../utils.js";
 import productsController from "../controllers/products.js";
-import { applyPolicy } from "../middlewares/errors/policies/policies.js";
+import { applyPolicy } from "../middlewares/policies/policies.js";
 
 const router = Router();
 

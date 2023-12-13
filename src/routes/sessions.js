@@ -18,7 +18,7 @@ router.post("/register", passport.authenticate("register", { session: false, fai
 
 router.get("/failedRegister", sessionsController.handleFailedRegister);
 
-router.get("/logout", sessionsController.handleLogout);
+router.get("/logout", passportCall("jwt"), sessionsController.handleLogout);
 
 router.post("/sendRestorePassEmail/:email", sessionsController.sendEmailToRestorePass);
 

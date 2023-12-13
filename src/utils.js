@@ -13,7 +13,21 @@ export const isValidPassword = async (password, user) => bcrypt.compare(password
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, __dirname + "/public/images");
+    let dest;
+    switch (file.fieldname) {
+      case "document":
+      case "id":
+      case "address":
+      case "account-statement":
+        dest = "/public/documents";
+        break;
+      case "profile":
+        dest = "/public/profiles";
+        break;
+      case "thumbnail":
+        dest = "/public/products";
+    }
+    cb(null, __dirname + dest);
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);

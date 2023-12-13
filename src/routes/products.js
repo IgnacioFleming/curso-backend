@@ -11,7 +11,7 @@ router.get("/mockingproducts", productsController.mockingProducts);
 
 router.get("/:pid", passportCall("jwt"), applyPolicy(["PUBLIC"]), productsController.getProductById);
 
-router.post("/", passportCall("jwt"), applyPolicy(["ADMIN", "PREMIUM"]), uploader.single("thumbnails"), productsController.addProduct);
+router.post("/", passportCall("jwt"), applyPolicy(["ADMIN", "PREMIUM"]), uploader.array("thumbnail"), productsController.addProduct);
 
 router.put("/:pid", passportCall("jwt"), applyPolicy(["ADMIN", "PREMIUM"]), productsController.updateProduct);
 

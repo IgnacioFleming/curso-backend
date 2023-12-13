@@ -49,7 +49,8 @@ const handleFailedRegister = async (req, res) => {
   res.send({ error: "Register Failed" });
 };
 
-const handleLogout = (req, res) => {
+const handleLogout = async (req, res) => {
+  const user = await userModel.updateOne({ email: req.user.email }, { $set: { last_connection: Date() } });
   res.clearCookie("sessionCookie").redirect("/login");
 };
 

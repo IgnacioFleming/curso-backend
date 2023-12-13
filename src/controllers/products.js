@@ -60,8 +60,10 @@ const addProduct = async (req, res, next) => {
         code: EErrors.INVALID_TYPES_ERROR,
       });
     }
-    if (req.file) {
-      newProduct.thumbnails = [req.file.path];
+    if (req.files) {
+      newProduct.thumbnails = req.files.map((e) => {
+        e.path;
+      });
     }
 
     if (req.user.role === "premium") {

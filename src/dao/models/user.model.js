@@ -16,6 +16,13 @@ const userSchema = new mongoose.Schema({
     ref: "carts",
   },
   role: String,
+  documents: [
+    {
+      name: String,
+      reference: String,
+    },
+  ],
+  last_connection: String,
 });
 
 export const userModel = mongoose.model(userCollection, userSchema);

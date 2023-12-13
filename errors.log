@@ -53,3 +53,4 @@ fatal: Ocurrió un error fatal en la ejecucion del proceso.
 error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
 error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067 y pid:65038d0fb9f0a329d9610216
 error: Falló el GET. Revisar parametros cid:6504f744b07752b35e65c067, pid:65038d0fb9f0a329d9610216 y newQuantity:[object Object]
+error: Error fatal al autenticarse

@@ -1,4 +1,4 @@
-import { cartsService, productsService } from "../dao/repositories/index.js";
+import { cartsService, productsService } from "../services/index.js";
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
 import { generateCartsError } from "../services/errors/info.js";

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import config from "../config/config.js";
-import MailingService from "../services/mails/mailingService.js";
+import { mailingService } from "../services/index.js";
 import { userModel } from "../dao/models/user.model.js";
 import { createHash, isValidPassword } from "../utils.js";
 
@@ -60,14 +60,13 @@ const sendEmailToRestorePass = async (req, res) => {
   const user = await userModel.findOne({ email });
   if (!user) return res.status(400).send({ status: "error", error: "No se puede restablecer un usuario no registrado" });
   const token = jwt.sign({ email }, config.passport.jwt_secret_key, { expiresIn: "1h" });
-  const mailer = new MailingService();
   const message = `
   <p>Estimado Usuario,<br/><br/>
   Para dar curso al restablecimiento de su mail por favor hacer click en el siguiente boton:
   <p><br/><br/>
   <a href="http://localhost:8080/restorePass/${token}"><button>Restablecer Contraseña</button></a>
   `;
-  const result = await mailer.sendSimpleMail({
+  const result = await mailingService.sendSimpleMail({
     from: config.mailing.user,
     to: email,
     html: message,

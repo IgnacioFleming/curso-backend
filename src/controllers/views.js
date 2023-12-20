@@ -1,9 +1,4 @@
-// import CartManager from "../dao/MongoDB/cartManager.mongoDB.js";
-// import ProductManager from "../dao/MongoDB/productManager.mongoDB.js";
-import { cartsService } from "../dao/repositories/index.js";
-import { productsService } from "../dao/repositories/index.js";
-// const PM = new ProductManager();
-// const CM = new CartManager();
+import { cartsService, productsService } from "../services/index.js";
 const renderHome = (req, res) => {
   res.render("home", {});
 };

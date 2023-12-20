@@ -1,5 +1,7 @@
+import config from "../config/config.js";
 import UserDto from "../dao/dto/user.dto.js";
 import { userModel } from "../dao/models/user.model.js";
+import { mailingService } from "../services/index.js";
 
 export const shiftUserRole = async (req, res) => {
   const { uid } = req.params;
@@ -49,18 +51,25 @@ export const getAllUsers = async (req, res) => {
 
 export const deleteInactiveUsers = async (req, res) => {
   const users = await userModel.find();
+  if (users.length === 0) return res.status(400).send({ status: "error", payload: "No se encontraron usuarios" });
   const limitDate = Date.now() - 3600 * 1000 * 48;
-  const deletedUsers = await Promise.all(
+  let deletedUsers = await Promise.all(
     users.map(async (user) => {
-      console.log("last connection ", Date.parse(user.last_connection));
-      console.log("validation date ", limitDate);
-      console.log("assertion", user.last_connection > limitDate);
-      if (user.last_connection <= limitDate) {
+      if (Date.parse(user.last_connection) <= limitDate) {
+        const emailBody = `
+        <p>Estimado ${user.first_name}<p>
+        <p>Dado que lleva más de 48 horas sin actividad, como somos algo impacientes, decidimos eliminar su cuenta,<p/>
+        <p>Espero sepa entender,<p/>
+        <p>Saludos</p>
+        `;
+        mailingService.sendSimpleMail({ from: config.mailing.user, subject: "Eliminacion de cuenta inactiva", to: user.email, html: emailBody });
         await userModel.findByIdAndDelete(user._id);
         return user._id;
       }
+      return null;
     })
   );
+  deletedUsers = deletedUsers.filter((id) => id != null);
 
-  res.send({ status: "success", payload: `Los usuarios eliminados son: ${deletedUsers}` });
+  res.send({ status: "success", payload: deletedUsers.length === 0 ? "No se encontraron usuarios inactivos" : `Los usuarios eliminados son: ${deletedUsers}` });
 };

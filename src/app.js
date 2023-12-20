@@ -6,7 +6,7 @@ import usersRouter from "./routes/users.js";
 import __dirname from "./utils.js";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
-import { productsService } from "./dao/repositories/index.js";
+import { productsService } from "./services/index.js";
 import { messagesModel } from "./dao/models/message.model.js";
 import sessionRouter from "./routes/sessions.js";
 import passport from "passport";

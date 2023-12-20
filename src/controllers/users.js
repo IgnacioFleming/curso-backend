@@ -1,3 +1,4 @@
+import UserDto from "../dao/dto/user.dto.js";
 import { userModel } from "../dao/models/user.model.js";
 
 export const shiftUserRole = async (req, res) => {
@@ -38,4 +39,28 @@ export const uploadDocuments = async (req, res) => {
   } catch (error) {
     res.status(500).send({ status: "error", description: error.toString() });
   }
+};
+
+export const getAllUsers = async (req, res) => {
+  const users = await userModel.find();
+  const usersDTO = users.map((user) => new UserDto(user));
+  res.send({ status: "success", payload: usersDTO });
+};
+
+export const deleteInactiveUsers = async (req, res) => {
+  const users = await userModel.find();
+  const limitDate = Date.now() - 3600 * 1000 * 48;
+  const deletedUsers = await Promise.all(
+    users.map(async (user) => {
+      console.log("last connection ", Date.parse(user.last_connection));
+      console.log("validation date ", limitDate);
+      console.log("assertion", user.last_connection > limitDate);
+      if (user.last_connection <= limitDate) {
+        await userModel.findByIdAndDelete(user._id);
+        return user._id;
+      }
+    })
+  );
+
+  res.send({ status: "success", payload: `Los usuarios eliminados son: ${deletedUsers}` });
 };

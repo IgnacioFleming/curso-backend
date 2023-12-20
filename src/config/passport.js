@@ -24,6 +24,7 @@ const initializePassport = () => {
         }
         data.password = await createHash(password);
         data.role = data.role || "usuario";
+        data.last_connection = Date();
         const result = await userModel.create(data);
         return done(null, result);
       } catch (error) {
@@ -78,6 +79,7 @@ const initializePassport = () => {
               email: profile._json.email,
               password: "",
               role: "usuario",
+              last_connection: Date(),
             };
             const result = await userModel.create(newUser);
             return done(null, result);

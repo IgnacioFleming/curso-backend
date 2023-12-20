@@ -1,3 +1,4 @@
+import { userModel } from "../dao/models/user.model.js";
 import { cartsService, productsService } from "../services/index.js";
 const renderHome = (req, res) => {
   res.render("home", {});
@@ -107,6 +108,17 @@ const restorePass = async (req, res) => {
   res.render("restorePass", { email });
 };
 
+const userHandler = async (req, res) => {
+  const users = await userModel.find().lean();
+  res.render("users", {
+    users,
+    style: "users.css",
+    delete: async (id) => {
+      await userModel.findByIdAndDelete(id);
+    },
+  });
+};
+
 export default {
   renderCart,
   renderChat,
@@ -120,4 +132,5 @@ export default {
   renderRegister,
   renderForgottenPass,
   restorePass,
+  userHandler,
 };

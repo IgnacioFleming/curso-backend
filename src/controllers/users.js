@@ -3,7 +3,7 @@ import UserDto from "../dao/dto/user.dto.js";
 import { userModel } from "../dao/models/user.model.js";
 import { mailingService } from "../services/index.js";
 
-export const shiftUserRole = async (req, res) => {
+const shiftUserRole = async (req, res) => {
   const { uid } = req.params;
   const user = await userModel.findById(uid);
   if (!user) return res.status(400).send({ status: "error", error: "El usuario no existe en la base o no es posible modificar su rol" });
@@ -24,7 +24,7 @@ export const shiftUserRole = async (req, res) => {
   res.send({ status: "success", payload: `Se cambió el rol del usuario a '${user.role}'` });
 };
 
-export const uploadDocuments = async (req, res) => {
+const uploadDocuments = async (req, res) => {
   try {
     const keys = Object.keys(req.files);
     let documents = [];
@@ -43,13 +43,13 @@ export const uploadDocuments = async (req, res) => {
   }
 };
 
-export const getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res) => {
   const users = await userModel.find();
   const usersDTO = users.map((user) => new UserDto(user));
   res.send({ status: "success", payload: usersDTO });
 };
 
-export const deleteInactiveUsers = async (req, res) => {
+const deleteInactiveUsers = async (req, res) => {
   const users = await userModel.find();
   if (users.length === 0) return res.status(400).send({ status: "error", payload: "No se encontraron usuarios" });
   const limitDate = Date.now() - 3600 * 1000 * 48;
@@ -72,4 +72,18 @@ export const deleteInactiveUsers = async (req, res) => {
   deletedUsers = deletedUsers.filter((id) => id != null);
 
   res.send({ status: "success", payload: deletedUsers.length === 0 ? "No se encontraron usuarios inactivos" : `Los usuarios eliminados son: ${deletedUsers}` });
+};
+
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  const result = await userModel.findByIdAndDelete(id);
+  res.send({ status: "success", payload: "Usuario eliminado correctamente" });
+};
+
+export default {
+  shiftUserRole,
+  uploadDocuments,
+  getAllUsers,
+  deleteInactiveUsers,
+  deleteUser,
 };

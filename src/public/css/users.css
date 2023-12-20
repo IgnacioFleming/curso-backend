@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  gap: 20px;
+  margin-top: 50px;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 15px;
+  border: solid 1px black;
+  font-size: large;
+}
+
+form {
+  margin: 10px;
+}

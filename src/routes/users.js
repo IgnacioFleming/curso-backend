@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { deleteInactiveUsers, getAllUsers, shiftUserRole, uploadDocuments } from "../controllers/users.js";
+import usersController from "../controllers/users.js";
 import { passportCall, uploader } from "../utils.js";
 import { applyPolicy } from "../middlewares/policies/policies.js";
 
@@ -8,12 +8,13 @@ const multerCategories = [{ name: "document" }, { name: "id" }, { name: "address
 const router = Router();
 router.use(passportCall("jwt"), applyPolicy(["ADMIN"]));
 
-router.put("/premium/:uid", shiftUserRole);
+router.put("/premium/:uid", usersController.shiftUserRole);
 
-router.post("/:uid/documents", uploader.fields(multerCategories), uploadDocuments);
+router.post("/:uid/documents", uploader.fields(multerCategories), usersController.uploadDocuments);
 
-router.get("/", getAllUsers);
+router.get("/", usersController.getAllUsers);
 
-router.delete('/',deleteInactiveUsers)
+router.delete("/", usersController.deleteInactiveUsers);
+router.delete("/:id", usersController.deleteUser);
 
 export default router;

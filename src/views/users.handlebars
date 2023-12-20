@@ -1,0 +1,25 @@
+<script>
+  async function deleteUser(id){ try{ const result = await fetch(`/api/users/${id}`,{ method:"DELETE", headers:{ 'Content-Type':'application/json' } }).then(res=>res.json()).then(json=>{console.log(json); location.reload(); }) } catch (error){ console.log(error) } }; async function changeRole(id){ try{ const result = await fetch(`/api/users/premium/${id}`,{method:"PUT",headers:{ 'Content-Type':'application/json' } }) .then(res=>res.json()) .then(json=>{ if(json.status === 'error'){alert(JSON.stringify(json))} location.reload() }) }catch (error){alert(error)} };
+</script>
+<h1>Lista de Usuarios</h1>
+<div>
+  <button>Eliminar Usuarios Inactivos</button>
+</div>
+<div class="container">
+  {{#each users}}
+    <div class="card">
+      <div>Nombre: <strong>{{this.first_name}}</strong></div>
+      <div>Apellido: <strong>{{this.last_name}}</strong></div>
+      <div>Email: <strong>{{this.email}}</strong></div>
+      <div>Edad: <strong>{{this.age}}</strong></div>
+      <div>Rol: <strong>{{this.role}}</strong></div>
+      {{#if this.documents}}
+        <div>Presentó Documentación: <strong>SI</strong></div>
+      {{else}}
+        <div>Presentó Documentación: <strong>NO</strong></div>
+      {{/if}}
+      <button onclick="changeRole('{{this._id}}')">Cambiar Rol</button>
+      <button onclick="deleteUser('{{this._id}}')">Eliminar</button>
+    </div>
+  {{/each}}
+</div>

@@ -2,6 +2,7 @@ import { productModel } from "../models/product.model.js";
 class ProductManager {
   constructor() {}
   async getProducts(limit = 10, queryPage = 1, sort, query) {
+    console.log(queryPage);
     try {
       if (isNaN(limit) || limit <= 0) {
         return {
@@ -23,7 +24,6 @@ class ProductManager {
       const options = { limit, page: queryPage };
       sort && (options.sort = { price: sort });
       const { docs, totalPages, page, prevPage, nextPage, hasPrevPage, hasNextPage } = await productModel.paginate(query, options);
-
       let prevLink;
       const stringQuery = JSON.stringify(query);
       if (hasPrevPage) {

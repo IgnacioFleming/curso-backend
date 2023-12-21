@@ -2,9 +2,9 @@ export default class ProductsRepository {
   constructor(dao) {
     this.dao = dao;
   }
-  async getProducts() {
+  async getProducts(limit = 10, queryPage = 1, sort, query) {
     try {
-      const result = await this.dao.getProducts();
+      const result = await this.dao.getProducts(limit, queryPage, sort, query);
       return result;
     } catch (error) {
       throw new Error(error);

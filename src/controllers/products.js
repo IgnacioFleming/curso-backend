@@ -1,13 +1,13 @@
-import { productsService } from "../services/index.js";
+import { mailingService, productsService } from "../services/index.js";
 import { generateMockedProduct } from "../mocks/products.js";
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
 import { generateProductsError } from "../services/errors/info.js";
+import config from "../config/config.js";
 
 const getProducts = async (req, res) => {
   try {
-    const { limit, sort, query } = req.query;
-    const queryPage = req.query.page;
+    const { limit, sort, query, page: queryPage } = req.query;
     const result = await productsService.getProducts(limit, queryPage, sort, query);
     if (result.status === "success") {
       res.send({
@@ -109,9 +109,18 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const { pid } = req.params;
+    const product = await productsService.getProductById(pid);
     if (req.user.role === "premium") {
-      const product = await productsService.getProductById(pid);
       if (product.payload.owner !== req.user.email) return res.status(403).send({ status: "error", error: "No es posible eliminar un producto que no pertenezca al usuario" });
+    }
+
+    if (product.payload.owner !== "admin" || undefined) {
+      const html = `<p>Estimado Usuario,</p>
+                    <p>El producto ${product.payload.title} con código ${product.payload.code} fue eliminado.</p>
+                    <p>Saludos</p>
+                    `;
+
+      await mailingService.sendSimpleMail({ from: config.mailing.user, to: product.payload.owner, subject: "Eliminación de Producto", html });
     }
     const { status, payload } = await productsService.deleteProduct(pid);
     if (status === "success") {

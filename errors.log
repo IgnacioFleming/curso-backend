@@ -59,3 +59,19 @@ fatal: Ocurrió un error fatal en la ejecucion del proceso.
     message:Error: Error: MongoServerError: E11000 duplicate key error collection: ecommerce.products index: code_1 dup key: { code: "pepino" }
 error: Error fatal al autenticarse
 error: Error fatal al autenticarse
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:ReferenceError: admin is not defined
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:Error: No recipients defined
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:Error: No recipients defined
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:Error: No recipients defined
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:Error: No recipients defined
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:Error: No recipients defined
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:Error: No recipients defined
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:Error: No recipients defined

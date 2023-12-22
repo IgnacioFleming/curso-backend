@@ -13,7 +13,7 @@ export const generateProductsError = (product) => {
 export const generateCartsError = (cartId, productId) => {
   return `Uno o todos los parametros enviados fueron numericos.
     Se esperaba:
-    * :cid: debe recibir un ObjectId. cid es un ObjectId? :  ${cartId}.
-    * :pid: debe recibir un ObjectId. pid es un ObjectId? :  ${productId}.
+    * :cid: debe recibir un ObjectId. Se recibió:  ${cartId}.
+    * :pid: debe recibir un ObjectId. Se recibió :  ${productId}.
     `;
 };

@@ -26,12 +26,13 @@ const renderProducts = async (req, res) => {
       _id: product._id,
       price: product.price,
       category: product.category,
+      isAuthorized: req.user.role === "premium" || req.user.role === "admin" ? true : false,
     };
   });
 
   const { first_name, last_name, role } = req.user;
   const isAdmin = role === "admin";
-
+  const cart = req.user.cart;
   res.render("products", {
     products,
     style: "products.css",
@@ -50,6 +51,7 @@ const renderProducts = async (req, res) => {
     last_name,
     isAdmin,
     role,
+    cart,
   });
 };
 
@@ -57,7 +59,6 @@ const renderProductDetail = async (req, res) => {
   const { pid } = req.params;
   const product = await productsService.getProductById(pid);
   const { title, description, price, category, code, stock, status, _id } = product.payload;
-
   res.render("productDetail", {
     title,
     description,
@@ -68,6 +69,7 @@ const renderProductDetail = async (req, res) => {
     status,
     _id,
     style: "productDetail.css",
+    cart: req.user.cart,
   });
 };
 
@@ -82,7 +84,8 @@ const renderCart = async (req, res) => {
       quantity: element.quantity,
     };
   });
-  res.render("cart", { style: "cart.css", products });
+  const totalValue = products.reduce((acc, value) => acc + value.price * value.quantity, 0);
+  res.render("cart", { style: "cart.css", products, totalValue });
 };
 
 const renderRegister = (req, res) => {

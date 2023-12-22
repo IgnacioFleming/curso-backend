@@ -7,6 +7,7 @@ import GitHubStrategy from "passport-github2";
 import jwt from "passport-jwt";
 import config from "./config.js";
 import UserDto from "../dao/dto/user.dto.js";
+import { cartsService } from "../services/index.js";
 const ObjectId = mongoose.Types.ObjectId;
 
 const LocalStrategy = local.Strategy;
@@ -25,6 +26,8 @@ const initializePassport = () => {
         data.password = await createHash(password);
         data.role = data.role || "usuario";
         data.last_connection = Date();
+        const newCart = await cartsService.createCart();
+        data.cart = newCart.payload._id;
         const result = await userModel.create(data);
         return done(null, result);
       } catch (error) {
@@ -72,6 +75,7 @@ const initializePassport = () => {
         try {
           const user = await userModel.findOne({ email: profile._json.email });
           if (!user) {
+            const newCart = await cartsService.createCart();
             const newUser = {
               first_name: profile._json.name,
               last_name: "",
@@ -80,6 +84,7 @@ const initializePassport = () => {
               password: "",
               role: "usuario",
               last_connection: Date(),
+              cart: newCart.payload._id,
             };
             const result = await userModel.create(newUser);
             return done(null, result);

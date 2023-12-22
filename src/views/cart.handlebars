@@ -6,6 +6,11 @@
       <div>Producto: {{this.product}}</div>
       <div>Código: {{this.code}}</div>
       <div>Precio: ${{this.price}}</div>
+      <div>Cantidad: {{this.quantity}}</div>
     </div>
   {{/each}}
+  <div class="totalValue"><strong>Total: ${{totalValue}}</strong></div>
+  <div>
+    <a href="/products"><button>Volver</button></a>
+  </div>
 </div>

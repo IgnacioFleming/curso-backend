@@ -75,3 +75,103 @@ fatal: Ocurrió un error fatal en la ejecucion del proceso.
     message:Error: No recipients defined
 fatal: Ocurrió un error fatal en la ejecucion del proceso. 
     message:Error: No recipients defined
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:ReferenceError: req is not defined
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:[object Object]
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:[object Object]
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:[object Object]
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:[object Object]
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:[object Object]
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:[object Object]
+fatal: Ocurrió un error fatal en la ejecucion del proceso.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:[object Object]
+fatal: Ocurrió un error fatal en la ejecucion del proceso.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:[object Object]
+fatal: Ocurrió un error fatal en la ejecucion del proceso.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:[object Object]
+fatal: Ocurrió un error fatal en la validacion del parametro.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la validacion del parametro.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:[object Object]
+fatal: Ocurrió un error fatal en la validacion del parametro.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:[object Object]
+fatal: Ocurrió un error fatal en la validacion del parametro.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:[object Object]
+fatal: Ocurrió un error fatal en la validacion del parametro.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:{"message":"Alguno o ambos parametros no corresponden a la clase ObjectId","cause":"Uno o todos los parametros enviados fueron numericos.\n    Se esperaba:\n    * :cid: debe recibir un ObjectId. Se recibió:  NotFound.\n    * :pid: debe recibir un ObjectId. Se recibió :  65038c7a113efadaace93934.\n    ","name":"Parametro numerico","code":4}
+fatal: Ocurrió un error fatal en la validacion del parametro.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:{"message":"Alguno o ambos parametros no corresponden a la clase ObjectId","cause":"Uno o todos los parametros enviados fueron numericos.\n    Se esperaba:\n    * :cid: debe recibir un ObjectId. Se recibió:  NotFound.\n    * :pid: debe recibir un ObjectId. Se recibió :  65038c7a113efadaace93934.\n    ","name":"Parametro numerico","code":4}
+fatal: Ocurrió un error fatal en la validacion del parametro.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la validacion del parametro.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:{"message":"Alguno o ambos parametros no corresponden a la clase ObjectId","cause":"Uno o todos los parametros enviados fueron numericos.\n    Se esperaba:\n    * :cid: debe recibir un ObjectId. Se recibió:  NotFound.\n    * :pid: debe recibir un ObjectId. Se recibió :  65038c7a113efadaace93934.\n    ","name":"Parametro numerico","code":4}
+fatal: Ocurrió un error fatal en la validacion del parametro.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:{"message":"Alguno o ambos parametros no corresponden a la clase ObjectId","cause":"Uno o todos los parametros enviados fueron numericos.\n    Se esperaba:\n    * :cid: debe recibir un ObjectId. Se recibió:  NotFound.\n    * :pid: debe recibir un ObjectId. Se recibió :  65038c7a113efadaace93934.\n    ","name":"Parametro numerico","code":4}
+fatal: Ocurrió un error fatal en la validacion del parametro.
+      message:BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:{"message":"Alguno o ambos parametros no corresponden a la clase ObjectId","cause":"Uno o todos los parametros enviados fueron numericos.\n    Se esperaba:\n    * :cid: debe recibir un ObjectId. Se recibió:  NotFound.\n    * :pid: debe recibir un ObjectId. Se recibió :  65038c7a113efadaace93934.\n    ","name":"Parametro numerico","code":4}
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:{}
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:{}

@@ -58,6 +58,7 @@ const sendEmailToRestorePass = async (req, res) => {
   const { email } = req.params;
   console.log(email);
   const user = await userModel.findOne({ email });
+  console.log(user);
   if (!user) return res.status(400).send({ status: "error", error: "No se puede restablecer un usuario no registrado" });
   const token = jwt.sign({ email }, config.passport.jwt_secret_key, { expiresIn: "1h" });
   const message = `
@@ -68,6 +69,7 @@ const sendEmailToRestorePass = async (req, res) => {
   `;
   const result = await mailingService.sendSimpleMail({
     from: config.mailing.user,
+    subject: "Restablece tu contraseña",
     to: email,
     html: message,
   });

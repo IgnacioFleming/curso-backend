@@ -1,11 +1,13 @@
 const addToCart = document.getElementById("addToCart");
 addToCart.addEventListener("click", () => {
-  let cartId = "6504f744b07752b35e65c067";
+  const cartId = addToCart.getAttribute("data-cart-id") || "NotFound";
   const productId = addToCart.getAttribute("data-product-id");
 
   fetch(`/api/carts/${cartId}/products/${productId}`, {
     method: "POST",
   })
     .then((response) => response.json())
-    .then((data) => console.log(data));
+    .then((data) => {
+      console.log(data);
+    });
 });

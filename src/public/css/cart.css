@@ -16,3 +16,10 @@
   padding-left: 10%;
   align-items: center;
 }
+div strong {
+  font-size: xx-large;
+}
+
+.totalValue {
+  margin: 20px;
+}

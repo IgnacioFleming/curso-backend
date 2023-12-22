@@ -151,18 +151,7 @@ class CartManager {
         }
       })
     );
-    if (remainingCart.length !== 0) {
-      const newTicket = {
-        code: new mongoose.Types.ObjectId(),
-        purchase_datetime: new Date().toString(),
-        amount,
-        purchaser: "User",
-      };
-      const result = await ticketModel.create(newTicket);
-      await this.updateProductsOfCart(cartId, remainingCart);
-      const ids = remainingCart.map((e) => e.product._id);
-      return { status: "success", payload: ids };
-    }
+    // if (remainingCart.length !== 0) {
     const newTicket = {
       code: new mongoose.Types.ObjectId(),
       purchase_datetime: new Date().toString(),
@@ -170,8 +159,19 @@ class CartManager {
       purchaser: "User",
     };
     const result = await ticketModel.create(newTicket);
-    await cartModel.deleteOne({ _id: cartId });
-    return { status: "success", payload: "La compra se procesó correctamente" };
+    await this.updateProductsOfCart(cartId, remainingCart);
+    const ids = remainingCart.length !== 0 && remainingCart.map((e) => e.product._id);
+    // return { status: "success", payload: ids };
+    // }
+    // const newTicket = {
+    //   code: new mongoose.Types.ObjectId(),
+    //   purchase_datetime: new Date().toString(),
+    //   amount,
+    //   purchaser: "User",
+    // };
+    // const result = await ticketModel.create(newTicket);
+    // await cartModel.deleteOne({ _id: cartId });
+    return { status: "success", payload: remainingCart.length === 0 ? "La compra se procesó correctamente" : ids };
   };
 }
 

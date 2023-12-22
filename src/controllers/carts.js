@@ -3,6 +3,7 @@ import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
 import { generateCartsError } from "../services/errors/info.js";
 import mongoose from "mongoose";
+import { userModel } from "../dao/models/user.model.js";
 const createCart = async (req, res) => {
   try {
     const { status, payload } = await cartsService.createCart();
@@ -32,29 +33,27 @@ const getCartById = async (req, res) => {
   }
 };
 
-const objectIdValidation = (id) => {
-  try {
-    const ObjectId = mongoose.Types.ObjectId;
-    const objectId = new ObjectId(id);
-    return true;
-  } catch (error) {
-    req.logger.fatal(`Ocurrió un error fatal en la ejecucion del proceso. 
-    message:${error}`);
-    return false;
-  }
-};
-
 const addProductToCart = async (req, res, next) => {
+  const objectIdValidation = (id) => {
+    try {
+      const ObjectId = mongoose.Types.ObjectId;
+      const objectId = new ObjectId(id);
+      if (objectId) return true;
+      return false;
+    } catch (error) {
+      req.logger.fatal(`Ocurrió un error fatal en la validacion del parametro.
+      message:${error.toString()}`);
+      return false;
+    }
+  };
   try {
     const { cid } = req.params;
     const { pid } = req.params;
-
     if (objectIdValidation(cid) === false || objectIdValidation(pid) === false) {
-      req.logger.debug("paso por el if de objectIdValidation");
       CustomError.createError({
         name: "Parametro numerico",
-        cause: generateCartsError(objectIdValidation(cid), objectIdValidation(pid)),
-        message: "Alguno o todos los parametros enviados son un numero, debes enviar string",
+        cause: generateCartsError(cid, pid),
+        message: "Alguno o ambos parametros no corresponden a la clase ObjectId",
         code: EErrors.INVALID_PARAMS_ERROR,
       });
     }
@@ -73,7 +72,7 @@ const addProductToCart = async (req, res, next) => {
     }
   } catch (error) {
     req.logger.fatal(`Ocurrió un error fatal en la ejecucion del proceso. 
-    message:${error}`);
+    message:${JSON.stringify(error)}`);
     next(error);
   }
 };

@@ -7,6 +7,9 @@
   <p>Te mostramos aquí los productos de nuestra tienda</p>
 {{/if}}
 
+<p>Para acceder a tu carrito accedé aquí:</p>
+<a href="/carts/{{cart}}"><button>Ver Carrito</button></a>
+
 <p>Podés cerrar tu sesión desde aquí:</p>
 
 <button onclick="window.location.href = '/api/sessions/logout'">Logout</button>
@@ -28,10 +31,12 @@
 
     {{/if}}
     <a href="/products/{{this._id}}"> <button>Ver Detalle</button></a>
-    <button onclick="deleteUser('{{this._id}}')">Eliminar</button>
+
+    {{#if this.isAuthorized}}
+      <button onclick="deleteUser('{{this._id}}')">Eliminar</button>
+    {{/if}}
   </div>
 {{/each}}
-
 <div>
   {{#if hasPrevPage}}
     <span><a href="{{prevLink}}"><button>Anterior</button></a></span>

@@ -1,3 +1,4 @@
+import { ticketModel } from "../dao/models/ticket.model.js";
 import { userModel } from "../dao/models/user.model.js";
 import { cartsService, productsService } from "../services/index.js";
 const renderHome = (req, res) => {
@@ -88,8 +89,9 @@ const renderCart = async (req, res) => {
       cid,
     };
   });
+  const cartIsNotEmpty = products.length !== 0;
   const totalValue = products.reduce((acc, value) => acc + value.price * value.quantity, 0);
-  res.render("cart", { style: "cart.css", products, totalValue, cid });
+  res.render("cart", { style: "cart.css", products, totalValue, cid, cartIsNotEmpty });
 };
 
 const renderRegister = (req, res) => {
@@ -126,6 +128,14 @@ const userHandler = async (req, res) => {
   });
 };
 
+const getTickets = async (req, res) => {
+  let order = 1;
+  const tickets = (await ticketModel.find().lean()).map((ticket) => {
+    return { ...ticket, order: order++ };
+  });
+  res.render("tickets", { tickets });
+};
+
 export default {
   renderCart,
   renderChat,
@@ -140,4 +150,5 @@ export default {
   renderForgottenPass,
   restorePass,
   userHandler,
+  getTickets,
 };

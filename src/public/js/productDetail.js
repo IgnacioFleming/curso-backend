@@ -11,5 +11,8 @@ addToCart.addEventListener("click", () => {
       if (data.status === "error") {
         alert(JSON.stringify(data.error));
       }
+      if (data.status === "success") {
+        console.log("Producto agregado al carrito");
+      }
     });
 });

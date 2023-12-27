@@ -18,7 +18,6 @@ const handleLogin = async (req, res) => {
 };
 
 const showCurrentUser = async (req, res) => {
-  console.log(req.user);
   res.send(req.user);
 };
 
@@ -56,9 +55,7 @@ const handleLogout = async (req, res) => {
 
 const sendEmailToRestorePass = async (req, res) => {
   const { email } = req.params;
-  console.log(email);
   const user = await userModel.findOne({ email });
-  console.log(user);
   if (!user) return res.status(400).send({ status: "error", error: "No se puede restablecer un usuario no registrado" });
   const token = jwt.sign({ email }, config.passport.jwt_secret_key, { expiresIn: "1h" });
   const message = `
@@ -73,7 +70,6 @@ const sendEmailToRestorePass = async (req, res) => {
     to: email,
     html: message,
   });
-  console.log(result);
   res.send({ status: "success", payload: message });
 };
 

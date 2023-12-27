@@ -1,0 +1,17 @@
+<h1>Ordenes de Compra</h1>
+<div style="display: flex; flex-wrap:wrap">
+
+  {{#each tickets}}
+    <div style="margin: 20px; border:solid black 1px; padding:5px; width:300px">
+      <div>Número de Orden: <strong>{{this.order}}</strong></div>
+      <div>Código de la Orden: <strong>{{this.code}}</strong></div>
+      <div>Fecha de compra: <strong>{{this.purchase_datetime}}</strong></div>
+      <div>Total de la compra: <strong>${{this.amount}}</strong></div>
+      <div>Comprador: <strong>{{this.purchaser}}</strong></div>
+
+    </div>
+  {{/each}}
+</div>
+<div>
+  <a href="/products"><button style="font-size:30px;">Volver</button></a>
+</div>

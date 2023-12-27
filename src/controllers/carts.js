@@ -171,11 +171,20 @@ const resetCart = async (req, res) => {
 
 const confirmPurchase = async (req, res) => {
   const { cid } = req.params;
-  const { status, payload, description } = await cartsService.confirmPurchase(cid);
+  const { status, payload, description } = await cartsService.confirmPurchase(cid, req.user.email);
   if (status === "error") return res.status(400).send({ status, description });
   req.logger.http(`Proceso exitoso confirmPurchase con parametro ${cid}`);
   req.logger.info(`confirmPurchase exitoso`);
-  res.send({ status, payload });
+  res.send({
+    status,
+    payload: payload.productsNotProcessedCodes
+      ? `
+      Su compra se procesó correctamente. 
+      Su codigo de pedido es: ${payload.result._id}.
+      No se procesaron los siguientes productos por falta de stock: ${payload.productsNotProcessedCodes.join(",")}
+      `
+      : `Su compra se procesó correctamente. Su codigo de pedido es: ${payload.result._id}`,
+  });
 };
 
 export default {

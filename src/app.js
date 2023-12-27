@@ -54,7 +54,6 @@ socketServer.on("connection", (socket) => {
     productsService.addProduct(data);
   });
   socket.on("deleteProduct", (data) => {
-    console.log("la data es", data);
     productsService.deleteProduct(data).then((result) => console.log(result));
   });
 });
@@ -66,7 +65,6 @@ socketServer.on("connection", async (socket) => {
   socket.on("new-message", async (data) => {
     await messagesModel.create(data);
     const messages = await messagesModel.find();
-    console.log("los mensajes de la db son", messages);
     socketServer.emit("log-messages", messages);
   });
 });

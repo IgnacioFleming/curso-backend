@@ -133,7 +133,7 @@ class CartManager {
     }
   };
 
-  confirmPurchase = async (cartId) => {
+  confirmPurchase = async (cartId, purchaser) => {
     const { payload: cart } = await this.getCartById(cartId);
     if (!cart) return { status: "error", description: "Hay un error en el ID provisto" };
     let amount = 0;
@@ -151,27 +151,17 @@ class CartManager {
         }
       })
     );
-    // if (remainingCart.length !== 0) {
     const newTicket = {
       code: new mongoose.Types.ObjectId(),
       purchase_datetime: new Date().toString(),
       amount,
-      purchaser: "User",
+      purchaser,
     };
     const result = await ticketModel.create(newTicket);
     await this.updateProductsOfCart(cartId, remainingCart);
-    const ids = remainingCart.length !== 0 && remainingCart.map((e) => e.product._id);
-    // return { status: "success", payload: ids };
-    // }
-    // const newTicket = {
-    //   code: new mongoose.Types.ObjectId(),
-    //   purchase_datetime: new Date().toString(),
-    //   amount,
-    //   purchaser: "User",
-    // };
-    // const result = await ticketModel.create(newTicket);
-    // await cartModel.deleteOne({ _id: cartId });
-    return { status: "success", payload: remainingCart.length === 0 ? "La compra se procesó correctamente" : ids };
+    const productsNotProcessedCodes = remainingCart.length !== 0 && remainingCart.map((e) => e.product.code);
+    if (newTicket.amount === 0) return { status: "error", description: "No se confirmó ningun producto por falta de stock" };
+    return { status: "success", payload: { result, productsNotProcessedCodes } };
   };
 }
 

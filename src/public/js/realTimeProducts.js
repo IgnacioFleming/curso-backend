@@ -65,7 +65,6 @@ const deleteProduct = document.getElementById("deleteProduct");
 const id = document.getElementById("id");
 deleteProduct.addEventListener("submit", (e) => {
   e.preventDefault();
-  console.log(id);
   socket.emit("deleteProduct", id.value);
   deleteProduct.reset();
 });

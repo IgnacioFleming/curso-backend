@@ -13,9 +13,12 @@
   <div class="totalValue"><strong>Total: ${{totalValue}}</strong></div>
   <div>
     <a href="/products"><button>Volver</button></a>
-    <button onclick="resetCart('{{cid}}')">Vaciar Carrito</button>
+    {{#if cartIsNotEmpty}}
+      <button onclick="resetCart('{{cid}}')">Vaciar Carrito</button>
+      <button onclick="confirmPurchase('{{cid}}')">Terminar Compra</button>
+    {{/if}}
   </div>
 </div>
 <script>
-  const deleteProduct = async (cid, pid)=>{ const result = await fetch(`/api/carts/${cid}/products/${pid}`,{method:'DELETE'});console.log( await result.json()); return location.reload(); }; const resetCart = async (cid)=>{ const result = await fetch(`/api/carts/${cid}`,{method:'DELETE'}); console.log(await result.json()); return location.reload() }
+  const deleteProduct = async (cid, pid)=>{ const result = await fetch(`/api/carts/${cid}/products/${pid}`,{method:'DELETE'});console.log( await result.json()); return location.reload(); }; const resetCart = async (cid)=>{ const result = await fetch(`/api/carts/${cid}`,{method:'DELETE'}); console.log(await result.json()); return location.reload() }; const confirmPurchase = async (cid)=>{ const result = await fetch(`/api/carts/${cid}/purchase`,{method:'POST'}); const res = await result.json(); if(res.status === 'success'){alert(res.payload)}else{alert(res.description)} return location.reload();}
 </script>

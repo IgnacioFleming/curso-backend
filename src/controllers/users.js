@@ -36,7 +36,6 @@ const uploadDocuments = async (req, res) => {
         });
       });
     });
-    console.log(documents);
 
     await userModel.updateOne({ email: req.user.email }, { $push: { documents } });
     res.send({ status: "success", payload: "Los documentos fueron cargados exitosamente" });

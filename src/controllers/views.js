@@ -32,6 +32,7 @@ const renderProducts = async (req, res) => {
 
   const { first_name, last_name, role } = req.user;
   const isAdmin = role === "admin";
+  const isUser = role === "usuario" || role === "premium";
   const cart = req.user.cart;
   res.render("products", {
     products,
@@ -50,6 +51,7 @@ const renderProducts = async (req, res) => {
     first_name,
     last_name,
     isAdmin,
+    isUser,
     role,
     cart,
   });
@@ -82,10 +84,12 @@ const renderCart = async (req, res) => {
       price: element.product.price,
       code: element.product.code,
       quantity: element.quantity,
+      _id: element.product._id,
+      cid,
     };
   });
   const totalValue = products.reduce((acc, value) => acc + value.price * value.quantity, 0);
-  res.render("cart", { style: "cart.css", products, totalValue });
+  res.render("cart", { style: "cart.css", products, totalValue, cid });
 };
 
 const renderRegister = (req, res) => {

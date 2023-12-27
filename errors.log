@@ -175,3 +175,9 @@ fatal: Ocurrió un error fatal en la ejecucion del proceso.
     message:{}
 fatal: Ocurrió un error fatal en la ejecucion del proceso. 
     message:{}
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:Error: Error: CastError: Cast to ObjectId failed for value "products" (type string) at path "_id" for model "carts"
+fatal: Ocurrió un error fatal en la ejecucion del proceso. 
+    message:Error: Error: CastError: Cast to ObjectId failed for value "products" (type string) at path "_id" for model "carts"
+error: Falló el GET. Revisar parametros cid:6585f8ad1f6c5e83a47686b2 y pid:6585fa7412d9cdcabb30b274
+error: Falló el GET. Revisar parametros cid:6585f8ad1f6c5e83a47686b2 y pid:6585fa7412d9cdcabb30b274

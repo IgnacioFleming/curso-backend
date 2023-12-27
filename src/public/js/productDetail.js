@@ -8,6 +8,8 @@ addToCart.addEventListener("click", () => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      if (data.status === "error") {
+        alert(JSON.stringify(data.error));
+      }
     });
 });

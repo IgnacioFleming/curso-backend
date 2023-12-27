@@ -7,10 +7,15 @@
       <div>Código: {{this.code}}</div>
       <div>Precio: ${{this.price}}</div>
       <div>Cantidad: {{this.quantity}}</div>
+      <div><button onclick="deleteProduct('{{this.cid}}','{{this._id}}')">Eliminar</button></div>
     </div>
   {{/each}}
   <div class="totalValue"><strong>Total: ${{totalValue}}</strong></div>
   <div>
     <a href="/products"><button>Volver</button></a>
+    <button onclick="resetCart('{{cid}}')">Vaciar Carrito</button>
   </div>
 </div>
+<script>
+  const deleteProduct = async (cid, pid)=>{ const result = await fetch(`/api/carts/${cid}/products/${pid}`,{method:'DELETE'});console.log( await result.json()); return location.reload(); }; const resetCart = async (cid)=>{ const result = await fetch(`/api/carts/${cid}`,{method:'DELETE'}); console.log(await result.json()); return location.reload() }
+</script>

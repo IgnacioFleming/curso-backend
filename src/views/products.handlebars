@@ -6,10 +6,10 @@
 {{else}}
   <p>Te mostramos aquí los productos de nuestra tienda</p>
 {{/if}}
-
-<p>Para acceder a tu carrito accedé aquí:</p>
-<a href="/carts/{{cart}}"><button>Ver Carrito</button></a>
-
+{{#if isUser}}
+  <p>Para acceder a tu carrito accedé aquí:</p>
+  <a href="/carts/{{cart}}"><button>Ver Carrito</button></a>
+{{/if}}
 <p>Podés cerrar tu sesión desde aquí:</p>
 
 <button onclick="window.location.href = '/api/sessions/logout'">Logout</button>

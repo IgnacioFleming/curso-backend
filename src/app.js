@@ -17,6 +17,8 @@ import { addLogger } from "./utils/logger.js";
 import loggerRouter from "./routes/logger.js";
 import swaggerUiExpress from "swagger-ui-express";
 import { specs } from "./config/swagger.js";
+
+const PORT = process.env.PORT || 8080;
 const app = express();
 
 app.engine("handlebars", handlebars.engine());
@@ -38,8 +40,8 @@ app.use("/api/users", usersRouter);
 app.use(errorHandler);
 app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
-const server = app.listen(8080, () => {
-  console.log("Levantado el servidor 8080");
+const server = app.listen(PORT, () => {
+  console.log(`Levantado el servidor ${PORT}`);
 });
 
 const socketServer = new Server(server);

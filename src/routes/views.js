@@ -7,7 +7,7 @@ const router = Router();
 
 router.get("/", passportCall("jwt"), viewsController.renderHome);
 router.get("/realTimeProducts", passportCall("jwt"), viewsController.renderRealTimeProducts);
-router.get("/chat", passportCall("jwt"), applyPolicy(["USUARIO"]), viewsController.renderChat);
+router.get("/chat", passportCall("jwt"), applyPolicy(["USUARIO", "PREMIUM"]), viewsController.renderChat);
 router.get("/products", passportCall("jwt"), viewsController.renderProducts);
 router.get("/products/:pid", passportCall("jwt"), viewsController.renderProductDetail);
 router.get("/carts/:cid", passportCall("jwt"), viewsController.renderCart);

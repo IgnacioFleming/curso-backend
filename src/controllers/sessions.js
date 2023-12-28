@@ -61,7 +61,7 @@ const sendEmailToRestorePass = async (req, res) => {
   <p>Estimado Usuario,<br/><br/>
   Para dar curso al restablecimiento de su mail por favor hacer click en el siguiente boton:
   <p><br/><br/>
-  <a href="http://localhost:8080/restorePass/${token}"><button>Restablecer Contraseña</button></a>
+  <a href="${process.env.URL}/restorePass/${token}"><button>Restablecer Contraseña</button></a>
   `;
   const result = await mailingService.sendSimpleMail({
     from: process.env.USER,

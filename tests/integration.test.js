@@ -1,6 +1,5 @@
 import chai from "chai";
 import supertest from "supertest";
-import config from "../src/config/config.js";
 import { generateMockedProduct } from "../src/mocks/products.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
@@ -23,7 +22,7 @@ const cookieSetter = async (email, password) => {
 
 describe("Testing de mi App Ecommerce", () => {
   describe("Test de Router de products", async () => {
-    before(async () => await cookieSetter(config.passport.admin_user, config.passport.admin_password));
+    before(async () => await cookieSetter(process.env.ADMIN_USER, process.env.ADMIN_PASSWORD));
     it("El servicio GET de productos debe devolver un status 200 y un payload de tipo array", async () => {
       const { statusCode, ok, _body } = await requester.get("/api/products").set("Cookie", [`${cookie.name}=${cookie.value}`]);
       expect(statusCode).to.be.equal(200);
@@ -104,7 +103,7 @@ describe("Testing de mi App Ecommerce", () => {
       const result = await requester.post("/api/sessions/login").send(user);
       const cookie = result.headers["set-cookie"][0];
       const token = cookie.split("=")[1].split(";")[0];
-      const jwt_payload = jwt.verify(token, config.passport.jwt_secret_key);
+      const jwt_payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
       expect(jwt_payload.email).to.be.equal(user.email);
     });
     it("Al llamar a la ruta current debo obtener un status 200 y el mismo email de usuario guardado en la cookie inicial", async () => {

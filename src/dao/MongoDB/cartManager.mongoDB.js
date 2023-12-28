@@ -1,9 +1,8 @@
 import { cartModel } from "../models/cart.model.js";
 import { ticketModel } from "../models/ticket.model.js";
-import config from "../../config/config.js";
 import mongoose from "mongoose";
 let productsService;
-switch (config.database.persistence) {
+switch (process.env.PERSISTENCE) {
   case "MONGO":
     const { default: ProductsMongo } = await import("./productManager.mongoDB.js");
     productsService = new ProductsMongo();

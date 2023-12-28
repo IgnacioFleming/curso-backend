@@ -5,7 +5,6 @@ import { createHash, isValidPassword, cookieExtractor, tokenExtractor } from "..
 import mongoose from "mongoose";
 import GitHubStrategy from "passport-github2";
 import jwt from "passport-jwt";
-import config from "./config.js";
 import UserDto from "../dao/dto/user.dto.js";
 import { cartsService } from "../services/index.js";
 const ObjectId = mongoose.Types.ObjectId;
@@ -40,7 +39,7 @@ const initializePassport = () => {
     "login",
     new LocalStrategy({ usernameField: "email" }, async (username, password, done) => {
       try {
-        if (username === config.passport.admin_user && password === config.passport.admin_password) {
+        if (username === process.env.ADMIN_USER && password === process.env.ADMIN_PASSWORD) {
           const user = {
             email: username,
             status: "active",
@@ -67,9 +66,9 @@ const initializePassport = () => {
     "github",
     new GitHubStrategy(
       {
-        clientID: config.passport.clientId,
-        clientSecret: config.passport.clientSecret,
-        callbackURL: config.passport.callbackURL,
+        clientID: process.env.clientId,
+        clientSecret: process.env.clientSecret,
+        callbackURL: process.env.callbackURL,
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
@@ -103,7 +102,7 @@ const initializePassport = () => {
     new JWTStrategy(
       {
         jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-        secretOrKey: config.passport.jwt_secret_key,
+        secretOrKey: process.env.JWT_SECRET_KEY,
       },
       async (jwt_payload, done) => {
         try {
@@ -121,7 +120,7 @@ const initializePassport = () => {
     new JWTStrategy(
       {
         jwtFromRequest: ExtractJWT.fromExtractors([tokenExtractor]),
-        secretOrKey: config.passport.jwt_secret_key,
+        secretOrKey: process.env.JWT_SECRET_KEY,
       },
       async (jwt_payload, done) => {
         try {

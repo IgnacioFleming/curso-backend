@@ -14,8 +14,7 @@ class ProductManager {
     }
   }
   async addProduct(newproduct) {
-    let { title, description, price, code, stock, status, category } =
-      newproduct;
+    let { title, description, price, code, stock, status, category } = newproduct;
     const statusValidation = status ?? "Sin status";
     if (statusValidation === "Sin status") {
       return {
@@ -41,10 +40,7 @@ class ProductManager {
           };
         }
       }
-      newproduct.id =
-        parsedProducts.length === 0
-          ? 1
-          : parsedProducts[parsedProducts.length - 1].id + 1;
+      newproduct.id = parsedProducts.length === 0 ? 1 : parsedProducts[parsedProducts.length - 1].id + 1;
       parsedProducts.push(newproduct);
       await fs.promises.writeFile(this.path, JSON.stringify(parsedProducts));
     } else {
@@ -63,9 +59,7 @@ class ProductManager {
     }
     const products = await fs.promises.readFile(this.path, "utf-8");
     const productsParsed = JSON.parse(products);
-    const productFound = productsParsed.find(
-      (element) => element.id === productId
-    );
+    const productFound = productsParsed.find((element) => element.id === productId);
     return productFound || "Not Found";
   }
 
@@ -82,9 +76,7 @@ class ProductManager {
       };
     }
     const index = productsParsed.findIndex((e) => e.id === productId);
-    const productFound = productsParsed.find(
-      (element) => element.id === productId
-    );
+    const productFound = productsParsed.find((element) => element.id === productId);
     if (!productFound) {
       return {
         status: "error",

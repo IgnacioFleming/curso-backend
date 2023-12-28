@@ -16,8 +16,9 @@ form.addEventListener("submit", (e) => {
     .then((data) => {
       if (data.status === "success") {
         return (window.location.href = "/products");
+      } else {
+        alert(data.error);
+        form.reset();
       }
-      alert(data.error);
-      form.reset();
     });
 });

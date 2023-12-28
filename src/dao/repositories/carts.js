@@ -58,9 +58,9 @@ export default class CartsRepository {
       throw new Error(error);
     }
   }
-  async confirmPurchase(cid) {
+  async confirmPurchase(cid, purchaser) {
     try {
-      const result = await this.dao.confirmPurchase(cid);
+      const result = await this.dao.confirmPurchase(cid, purchaser);
       return result;
     } catch (error) {
       throw new Error(error);

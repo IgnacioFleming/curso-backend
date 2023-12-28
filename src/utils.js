@@ -53,7 +53,7 @@ export const passportCall = (strategy) => {
           status: "error",
           error: ${info.message ? info.message : info.toString()},
         }`);
-        return res.redirect("/login");
+        return res.send({ status: "error", error: info.message ? info.message : info.toString() });
       }
       req.user = user;
       next();

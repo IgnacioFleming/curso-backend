@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 export let productsPersistence;
 export let cartsPersistence;
 

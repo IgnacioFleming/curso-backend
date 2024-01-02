@@ -1,6 +1,7 @@
 import { Router } from "express";
 import usersController from "../controllers/users.js";
-import { passportCall, uploader } from "../utils.js";
+import { passportCall } from "../middlewares/auth/passportCall.js";
+import { uploader } from "../utils.js";
 import { applyPolicy } from "../middlewares/policies/policies.js";
 
 const multerCategories = [{ name: "document" }, { name: "id" }, { name: "address" }, { name: "accountStatement" }, { name: "profile" }];

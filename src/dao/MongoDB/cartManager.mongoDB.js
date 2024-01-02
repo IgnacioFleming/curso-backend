@@ -1,17 +1,8 @@
 import { cartModel } from "../models/cart.model.js";
+import { productModel } from "../models/product.model.js";
 import { ticketModel } from "../models/ticket.model.js";
 import mongoose from "mongoose";
-let productsService;
-switch (process.env.PERSISTENCE) {
-  case "MONGO":
-    const { default: ProductsMongo } = await import("./productManager.mongoDB.js");
-    productsService = new ProductsMongo();
-    break;
-  case "FILE":
-    const { default: ProductsFile } = await import("../FileSystem/productManager.fs.js");
-    productsService = new ProductsFile();
-    break;
-}
+
 class CartManager {
   constructor() {}
 
@@ -36,8 +27,8 @@ class CartManager {
 
   addProductToCart = async (cartId, productId) => {
     try {
-      const product = await productsService.getProductById(productId);
-      if (product.status === "error") {
+      const product = await productModel.findById(productId);
+      if (!product) {
         return {
           status: "error",
           description: "El id provisto no corresponde a un producto existente en la base de datos",
@@ -65,8 +56,8 @@ class CartManager {
 
   deleteProductFromCart = async (cartId, productId) => {
     try {
-      const product = await productsService.getProductById(productId);
-      if (product.status === "error") {
+      const product = await productModel.findById(productId);
+      if (!product) {
         return {
           status: "error",
           description: "El id provisto no corresponde a un producto existente en la base de datos",
@@ -142,7 +133,7 @@ class CartManager {
         if (e.quantity <= e.product.stock) {
           amount += e.quantity * e.product.price;
           e.product.stock -= e.quantity;
-          const result = await productsService.updateProduct(e.product._id.toString(), e.product);
+          const result = await productModel.updateOne({ _id: e.product._id.toString() }, e.product);
           return;
         } else {
           remainingCart.push(e);

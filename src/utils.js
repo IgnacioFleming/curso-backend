@@ -2,7 +2,8 @@ import multer from "multer";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import bcrypt from "bcrypt";
-import passport from "passport";
+import dotenv from "dotenv";
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -33,41 +34,6 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   },
 });
-
-export const passportCall = (strategy) => {
-  return async (req, res, next) => {
-    passport.authenticate(strategy, { session: false }, (err, user, info) => {
-      if (err) {
-        req.logger.error("Error fatal al autenticarse");
-        return next(err);
-      }
-      if (strategy === "restorePass" && !user) {
-        req.logger.warning(`{
-          status: "error",
-          error: ${info.message ? info.message : info.toString()},
-        }`);
-        return res.redirect("/forgottenPass");
-      }
-      if (!user && strategy === "login") {
-        req.logger.warning(`{
-          status: "error",
-          error: ${info.message ? info.message : info.toString()},
-        }`);
-        return res.send({ status: "error", error: info.message ? info.message : info.toString() });
-      }
-      if (!user) {
-        req.logger.warning(`{
-          status: "error",
-          error: ${info.message ? info.message : info.toString()},
-        }`);
-
-        return res.redirect("/login");
-      }
-      req.user = user;
-      next();
-    })(req, res, next);
-  };
-};
 
 export const cookieExtractor = (req) => {
   let token = null;

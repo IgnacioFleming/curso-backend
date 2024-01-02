@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { passportCall } from "../utils.js";
+import { passportCall } from "../middlewares/auth/passportCall.js";
 import viewsController from "../controllers/views.js";
 import { applyPolicy } from "../middlewares/policies/policies.js";
 

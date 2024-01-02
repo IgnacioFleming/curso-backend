@@ -3,7 +3,6 @@ import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
 import { generateCartsError } from "../services/errors/info.js";
 import mongoose from "mongoose";
-import { userModel } from "../dao/models/user.model.js";
 const createCart = async (req, res) => {
   try {
     const { status, payload } = await cartsService.createCart();
